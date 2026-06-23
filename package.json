@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "@hotwired/turbo": "^8.0.23",
+    "@tailwindcss/vite": "^4.3.1",
+    "stimulus-vite-helpers": "^3.1.0",
+    "tailwindcss": "^4.3.1",
+    "vite": "^8.1.0",
+    "vite-plugin-full-reload": "^1.2.0",
+    "vite-plugin-ruby": "^5.2.2",
+    "vite-plugin-stimulus-hmr": "^3.0.0"
+  }
+}
