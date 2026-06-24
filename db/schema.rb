@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_23_120002) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_23_120003) do
   create_table "feeds", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "last_accessed_at", default: 0, null: false
@@ -37,5 +37,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_23_120002) do
     t.index ["published_at"], name: "index_posts_on_published_at"
   end
 
+  create_table "read_posts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "post_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_read_posts_on_post_id", unique: true
+  end
+
   add_foreign_key "posts", "feeds"
+  add_foreign_key "read_posts", "posts", on_delete: :cascade
 end
