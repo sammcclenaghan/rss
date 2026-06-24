@@ -45,4 +45,43 @@ module ApplicationHelper
     query["unread"] = "1" if enable
     query.empty? ? request.path : "#{request.path}?#{query.to_query}"
   end
+
+  # Clamps a feed's configured colour to a lightness range that stays legible
+  # on both the dark (gray-900) and light (gray-50) backgrounds. Near-black
+  # values like "#000000" would otherwise vanish in dark mode. Non-hex colours
+  # (CSS names) are returned unchanged.
+  def legible_feed_color(color)
+    rgb = hex_to_rgb(color)
+    return color unless rgb
+
+    h, s, l = rgb_to_hsl(*rgb)
+    "hsl(#{h.round}, #{(s * 100).round}%, #{(l.clamp(0.5, 0.8) * 100).round}%)"
+  end
+
+  private
+    def hex_to_rgb(color)
+      hex = color.to_s.delete_prefix("#")
+      hex = hex.chars.map { |c| c * 2 }.join if hex.length == 3
+      return nil unless hex.match?(/\A[0-9a-fA-F]{6}\z/)
+
+      [ hex[0, 2], hex[2, 2], hex[4, 2] ].map { |pair| pair.to_i(16) }
+    end
+
+    def rgb_to_hsl(red, green, blue)
+      r, g, b = red / 255.0, green / 255.0, blue / 255.0
+      max, min = [ r, g, b ].minmax.reverse
+      lightness = (max + min) / 2.0
+      return [ 0.0, 0.0, lightness ] if max == min
+
+      delta = max - min
+      saturation = lightness > 0.5 ? delta / (2 - max - min) : delta / (max + min)
+      hue =
+        case max
+        when r then (g - b) / delta + (g < b ? 6 : 0)
+        when g then (b - r) / delta + 2
+        else (r - g) / delta + 4
+        end
+
+      [ hue * 60, saturation, lightness ]
+    end
 end

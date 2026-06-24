@@ -3,7 +3,7 @@
      data-feed-poll-url-value="<%= feed_cfg.url %>"
      data-feed-poll-reloading-value="<%= feed_cfg.reloading? %>">
   <% unread_count = @unread_counts&.fetch(feed_cfg.feed.id, 0).to_i %>
-  <h4 class="font-bold text-black dark:text-gray-400" style="color: <%= feed_cfg.color %>">
+  <h4 class="font-bold text-black dark:text-gray-400" style="color: <%= legible_feed_color(feed_cfg.color) %>">
     <%= link_to feed_cfg.name, feed_posts_path(feed_cfg.encoded_url) %>
     <% if unread_count > 0 %>
       <span class="text-xs ml-1 text-gray-500 dark:text-gray-500 font-normal"><%= unread_count %> unread</span>
