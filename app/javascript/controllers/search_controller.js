@@ -5,7 +5,7 @@ import { Controller } from '@hotwired/stimulus'
 // query can be refined without clicking back into the box.
 export default class extends Controller {
   static targets = ['input']
-  static values = { delay: { type: Number, default: 200 } }
+  static values = { delay: { type: Number, default: 150 } }
 
   connect() {
     // After a search navigation the form re-renders with the query value; put
