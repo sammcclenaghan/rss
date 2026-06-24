@@ -3,7 +3,7 @@ class PostsController < ApplicationController
 
   def index
     @display_feeds = @provider.all
-    @display_feeds.reload_outdated
+    @display_feeds.reload_outdated unless turbo_frame_request?
 
     render_posts_for @provider.visible
   end
@@ -11,7 +11,7 @@ class PostsController < ApplicationController
   def tag
     @tag = params[:tag]
     @display_feeds = @provider.for_tag(@tag)
-    @display_feeds.reload_outdated
+    @display_feeds.reload_outdated unless turbo_frame_request?
 
     render_posts_for @display_feeds
   end
@@ -19,7 +19,7 @@ class PostsController < ApplicationController
   def feed
     @selected_feed = Feed::Config.decode_feed_url(params[:feed])
     @display_feeds = @provider.for_url(@selected_feed)
-    @display_feeds.reload_outdated
+    @display_feeds.reload_outdated unless turbo_frame_request?
 
     render_posts_for @display_feeds
   end
@@ -32,8 +32,25 @@ class PostsController < ApplicationController
     def render_posts_for(post_feeds)
       @page = [ params[:page].to_i, 1 ].max
       @query = params[:query].to_s
-      @posts = Post::Fetcher.new.latest(feed_list: post_feeds, page: @page, query: @query)
+      @unread_only = params[:unread].present?
+      @posts = Post::Fetcher.new.latest(
+        feed_list: post_feeds, page: @page, query: @query, unread_only: @unread_only
+      )
 
-      render :index, formats: :html
+      # Turbo Frame requests (search, pagination, unread toggle) only need
+      # the frame contents — skip layout rendering and sidebar-only work.
+      unless turbo_frame_request?
+        @unread_counts = unread_counts_for(@display_feeds)
+      end
+
+      render :index, formats: :html, layout: !turbo_frame_request?
+    end
+
+    # Unread post count per feed id, for the sidebar badges.
+    def unread_counts_for(feed_list)
+      ids = feed_list.feed_ids
+      return {} if ids.empty?
+
+      Post.for_feeds(ids).unread.group(:feed_id).count
     end
 end

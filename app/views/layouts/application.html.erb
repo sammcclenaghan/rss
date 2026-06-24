@@ -22,6 +22,30 @@
     <%= vite_javascript_tag 'application' %>
     <%= vite_stylesheet_tag 'application.css' %>
 
+    <%# Apply saved format preference before first paint so the browser never
+        renders the card layout when card is not the user's preferred format. %>
+    <script>
+    (function(){
+      var f=localStorage.getItem('post-format');
+      if(!f||f==='card')return;
+      var W={card:'max-w-lg',list:'max-w-2xl',compact:'w-full'},
+          M={card:'format-card',list:'format-list',compact:'format-compact'};
+      if(!M[f])return;
+      function apply(){
+        var el=document.querySelector('[data-format-selector-target="container"]');
+        if(!el)return false;
+        el.classList.remove('format-card','format-list','format-compact',
+                            'max-w-lg','max-w-2xl','w-full');
+        el.classList.add(M[f],W[f]);
+        return true;
+      }
+      if(apply())return;
+      var obs=new MutationObserver(function(){if(apply())obs.disconnect()});
+      obs.observe(document.documentElement,{childList:true,subtree:true});
+      setTimeout(function(){obs.disconnect()},1e3);
+    })();
+    </script>
+
   </head>
 
   <body class="h-full">
