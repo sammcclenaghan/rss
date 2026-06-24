@@ -1,4 +1,5 @@
 <% feed_cfg = post.respond_to?(:feed_config) ? post.feed_config : nil %>
+<% description = format_post_description(post) %>
 <div class="rss-post p-4 block border border-transparent hover:border-gray-200 hover:bg-gray-100 dark:hover:border-gray-700 dark:hover:bg-gray-800 rounded hover:relative hover:z-20 -my-px <%= "is-read" if post.read? %>"
      data-controller="post-read"
      data-post-read-url-value="<%= post_read_path(post.id) %>"
@@ -9,7 +10,7 @@
     <% if feed_cfg %>
       <%= link_to feed_cfg.name,
           feed_posts_path(feed_cfg.encoded_url),
-          style: "color: #{feed_cfg.color}",
+          style: "color: #{legible_feed_color(feed_cfg.color)}",
           class: "font-bold text-xs block" %>
       <div class="px-2">&bull;</div>
     <% end %>
@@ -48,7 +49,7 @@
       <h3 class="font-bold text-black dark:text-gray-300">
         <a href="<%= post.url %>" target="_blank" data-action="post-read#markRead" class="hover:underline"><%= post.title %></a>
       </h3>
-      <p class="text-gray-600 dark:text-gray-400"><%= format_post_description(post) %></p>
+      <p class="text-gray-600 dark:text-gray-400"><%= description %></p>
     </div>
   </div>
 
@@ -65,14 +66,15 @@
     <h3 class="font-bold text-black dark:text-gray-300 text-lg">
       <a href="<%= post.url %>" target="_blank" data-action="post-read#markRead" class="hover:underline"><%= post.title %></a>
     </h3>
-    <p class="text-gray-600 dark:text-gray-400"><%= format_post_description(post) %></p>
+    <p class="text-gray-600 dark:text-gray-400"><%= description %></p>
   </div>
 
-  <%# Body — Compact mode (inline) %>
-  <div class="format-compact-only">
+  <%# Body — Compact mode (inline, clipped to a single line). The wrapper paints
+      the ellipsis, so colour it to match the description. %>
+  <div class="format-compact-only whitespace-nowrap overflow-hidden text-ellipsis text-gray-600 dark:text-gray-400">
     <h3 class="font-bold text-black dark:text-gray-300 inline">
       <a href="<%= post.url %>" target="_blank" data-action="post-read#markRead" class="hover:underline"><%= post.title %></a>
     </h3>
-    <p class="text-gray-600 dark:text-gray-400 inline ml-2 text-sm"><%= format_post_description(post) %></p>
+    <p class="text-gray-600 dark:text-gray-400 inline ml-2 text-sm"><%= description %></p>
   </div>
 </div>
