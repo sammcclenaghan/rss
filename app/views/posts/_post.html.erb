@@ -1,0 +1,69 @@
+<% feed_cfg = post.respond_to?(:feed_config) ? post.feed_config : nil %>
+<div class="rss-post p-4 block border border-transparent hover:border-gray-200 hover:bg-gray-100 dark:hover:border-gray-700 dark:hover:bg-gray-800 rounded hover:relative hover:z-20 -my-px">
+
+  <%# Meta row %>
+  <div class="flex text-sm text-gray-600 dark:text-gray-400 items-center flex-wrap">
+    <% if feed_cfg %>
+      <%= link_to feed_cfg.name,
+          feed_posts_path(feed_cfg.encoded_url),
+          style: "color: #{feed_cfg.color}",
+          class: "font-bold text-xs block" %>
+      <div class="px-2">&bull;</div>
+    <% end %>
+    <div class="italic" title="<%= Time.at(post.published_at).iso8601 %>">
+      <%= time_ago_in_words(Time.at(post.published_at)) %> ago
+    </div>
+    <% if feed_cfg&.tags&.any? %>
+      <div class="px-2 hidden md:block">&bull;</div>
+      <div class="flex gap-2 basis-full md:basis-auto">
+        <% feed_cfg.tags.each do |tag| %>
+          <%= link_to tag, tag_posts_path(tag.delete("#")), class: "inline-block" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <%# Body — List mode (thumbnail side by side) %>
+  <div class="format-list-only flex items-center gap-5">
+    <% if post.thumbnail.present? %>
+      <div class="w-32 shrink-0">
+        <a href="<%= post.url %>" target="_blank" class="block overflow-hidden rounded my-2 border dark:border-black">
+          <img src="/storage/<%= post.thumbnail %>"
+               loading="lazy"
+               class="w-full object-cover saturate-50 h-16"
+               alt="<%= post.title %>">
+        </a>
+      </div>
+    <% end %>
+    <div class="min-w-0">
+      <h3 class="font-bold text-black dark:text-gray-300">
+        <a href="<%= post.url %>" target="_blank" class="hover:underline"><%= post.title %></a>
+      </h3>
+      <p class="text-gray-600 dark:text-gray-400"><%= post.description %></p>
+    </div>
+  </div>
+
+  <%# Body — Card mode (thumbnail above) %>
+  <div class="format-card-only">
+    <% if post.thumbnail.present? %>
+      <a href="<%= post.url %>" target="_blank" class="block overflow-hidden rounded my-2 border dark:border-black">
+        <img src="/storage/<%= post.thumbnail %>"
+             loading="lazy"
+             class="w-full object-cover saturate-50 h-32 md:h-48 lg:h-64"
+             alt="<%= post.title %>">
+      </a>
+    <% end %>
+    <h3 class="font-bold text-black dark:text-gray-300 text-lg">
+      <a href="<%= post.url %>" target="_blank" class="hover:underline"><%= post.title %></a>
+    </h3>
+    <p class="text-gray-600 dark:text-gray-400"><%= post.description %></p>
+  </div>
+
+  <%# Body — Compact mode (inline) %>
+  <div class="format-compact-only">
+    <h3 class="font-bold text-black dark:text-gray-300 inline">
+      <a href="<%= post.url %>" target="_blank" class="hover:underline"><%= post.title %></a>
+    </h3>
+    <p class="text-gray-600 dark:text-gray-400 inline ml-2 text-sm"><%= post.description %></p>
+  </div>
+</div>

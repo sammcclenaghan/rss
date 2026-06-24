@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+/* Tailwind v4 only scans from the stylesheet's source tree by default here.
+   Explicitly include Rails templates/helpers so utility classes in ERB are
+   generated in both dev and production builds. */
+@source "../../views";
+@source "../../helpers";
+@source "../../controllers";
+
+/* The reference app is built on Tailwind v3, whose default border color is
+   gray-200. Tailwind v4 changed the default to currentColor, which would make
+   every uncolored `border` inherit the (dark) text color. Restore the v3
+   behavior so borders match the reference design. */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+/* Matches the Inertia mount point (#app) height in the reference app so the
+   md:h-full / md:overflow-auto scroll regions resolve against a full-height
+   ancestor chain. */
+#app { height: 100%; }
+
+/* Post thumbnails are desaturated by default and return to full color on
+   hover (mirrors `.rss-post:hover img { @apply saturate-100 }`). The image's
+   `saturate-50` utility already applies the filter composition that reads this
+   variable, so overriding it here restores full saturation on hover. */
+.rss-post:hover img {
+  @apply saturate-100;
+}
+
+/* The post list renders all three body layouts and shows only the one matching
+   the active format. Card is the default; the format-selector controller swaps
+   the `format-*` marker class on the container. */
+.format-list-only,
+.format-compact-only { display: none; }
+
+.format-list .format-card-only { display: none; }
+.format-list .format-list-only { display: flex; }
+
+.format-compact .format-card-only { display: none; }
+.format-compact .format-compact-only { display: block; }
+
+/* Compact view tightens each post's vertical padding (the reference adds
+   `py-2` to the post in compact mode). */
+.format-compact .rss-post {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
