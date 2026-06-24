@@ -40,13 +40,25 @@
         <% end %>
       </div>
 
-      <%# Tags %>
-      <% tags = @display_feeds.flat_map(&:tags).uniq.sort %>
-      <% if tags.any? %>
-        <div class="mb-8">
+      <%# Tags — most-used first; the long tail collapses behind "Show all". %>
+      <% tag_counts = @display_feeds.flat_map(&:tags).tally %>
+      <% sorted_tags = tag_counts.keys.sort_by { |t| [ -tag_counts[t], t ] } %>
+      <% if sorted_tags.any? %>
+        <div class="mb-8" data-controller="reveal">
           <h2 class="font-bold mb-2 dark:text-gray-400">Tags</h2>
-          <% tags.each do |tag| %>
-            <%= link_to tag, tag_posts_path(tag.delete("#")), class: "inline-block mr-3 font-bold text-gray-600 dark:text-gray-500" %>
+          <% sorted_tags.first(12).each do |tag| %>
+            <%= link_to tag, tag_posts_path(tag.delete("#")), class: "inline-block mr-3 font-bold text-gray-600 dark:text-gray-500 hover:text-black dark:hover:text-gray-300" %>
+          <% end %>
+          <% if sorted_tags.size > 12 %>
+            <span data-reveal-target="more" class="hidden">
+              <% sorted_tags.drop(12).each do |tag| %>
+                <%= link_to tag, tag_posts_path(tag.delete("#")), class: "inline-block mr-3 font-bold text-gray-600 dark:text-gray-500 hover:text-black dark:hover:text-gray-300" %>
+              <% end %>
+            </span>
+            <button type="button" data-reveal-target="trigger" data-action="reveal#show"
+                    class="inline-block mt-1 text-sm text-gray-500 dark:text-gray-500 hover:text-black dark:hover:text-gray-300 cursor-pointer">
+              Show all (<%= sorted_tags.size %>)
+            </button>
           <% end %>
         </div>
       <% end %>
@@ -75,7 +87,7 @@
             / #<%= @tag %>
           <% end %>
           <% if @selected_feed.present? && @display_feeds.length == 1 %>
-            / <span style="color: <%= @display_feeds.first.color %>"><%= @display_feeds.first.name %></span>
+            / <span style="color: <%= legible_feed_color(@display_feeds.first.color) %>"><%= @display_feeds.first.name %></span>
           <% end %>
           <% if @query.present? %>
             / ?= <%= @query %>
