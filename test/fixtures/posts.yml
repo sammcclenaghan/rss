@@ -1,0 +1,26 @@
+recent_xkcd:
+  feed: xkcd
+  title: A Recent Comic
+  description: Something funny happened.
+  url: https://xkcd.com/3262/
+  guid: https://xkcd.com/3262/
+  thumbnail: ""
+  published_at: <%= 2.days.ago.to_i %>
+
+old_xkcd:
+  feed: xkcd
+  title: An Ancient Comic
+  description: This one is very old.
+  url: https://xkcd.com/1/
+  guid: https://xkcd.com/1/
+  thumbnail: "thumbs/1/1.png"
+  published_at: <%= 400.days.ago.to_i %>
+
+basecamp_post:
+  feed: basecamp
+  title: Shape Up
+  description: A book about product development.
+  url: https://example.com/basecamp/shape-up
+  guid: shape-up-guid
+  thumbnail: ""
+  published_at: <%= 1.day.ago.to_i %>

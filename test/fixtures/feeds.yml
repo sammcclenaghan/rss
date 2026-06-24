@@ -1,0 +1,10 @@
+# Timestamps are unix epoch integers (last_fetched_at / last_accessed_at).
+xkcd:
+  url: https://xkcd.com/rss.xml
+  last_fetched_at: 0
+  last_accessed_at: 0
+
+basecamp:
+  url: https://example.com/basecamp/feed.xml
+  last_fetched_at: <%= Time.current.to_i %>
+  last_accessed_at: <%= Time.current.to_i %>

@@ -1,0 +1,8 @@
+# Sample RSS feeds
+# Format: URL Name[color] #tag1 #tag2
+https://world.hey.com/dhh/feed.xml DHH[#e84c3d] #rails #tech
+https://blog.samaltman.com/feed.xml Sam_Altman[#000000] #tech #ai
+https://xkcd.com/rss.xml xkcd[#96A8C8] #comics
+
+# Hidden feeds (preceded by -) don't show posts by default
+-https://example.com/feed.xml Example[#999] #test
