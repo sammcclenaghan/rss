@@ -15,7 +15,9 @@
 /* Post thumbnails are desaturated by default and return to full color on
    hover (mirrors `.rss-post:hover img { @apply saturate-100 }`). The image's
    `saturate-50` utility already applies the filter composition that reads this
-   variable, so overriding it here restores full saturation on hover. */
+   variable, so overriding it here restores full saturation on hover. The
+   transition smooths the desaturate→saturate swap so it feels intentional. */
+.rss-post img { transition: filter 200ms ease; }
 .rss-post:hover img {
   @apply saturate-100;
 }

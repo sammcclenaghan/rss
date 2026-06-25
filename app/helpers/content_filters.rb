@@ -10,7 +10,6 @@ module ContentFilters
   end
 
   PostDescription = Pipeline.new(
-    ContentFilters::SanitizeHtml,
-    ContentFilters::FixRelativeUrls
+    ContentFilters::TextSummary
   )
 end

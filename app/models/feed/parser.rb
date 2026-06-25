@@ -67,8 +67,7 @@ class Feed
       end
 
       def format_description(html)
-        plain = ActionController::Base.helpers.strip_tags(decode(html))
-        truncate(plain.gsub(/\s+/, " ").strip, MAX_DESCRIPTION)
+        ContentFilters::TextSummary.apply(html, length: MAX_DESCRIPTION)
       end
 
       def decode(string)
