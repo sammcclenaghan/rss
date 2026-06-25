@@ -24,6 +24,14 @@ class PostsController < ApplicationController
     render_posts_for @display_feeds
   end
 
+  # Reader view: the full captured article. Opening a post marks it read,
+  # mirroring the list's click-to-read behaviour.
+  def show
+    @post = Post.includes(:content, :feed).find(params[:id])
+    @feed_config = @provider.get(@post.feed.url)
+    ReadPost.find_or_create_by(post_id: @post.id)
+  end
+
   private
     def set_provider
       @provider = Feed::Provider.from_app_config

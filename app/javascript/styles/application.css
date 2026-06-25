@@ -59,3 +59,142 @@
     box-shadow: inset 3px 0 0 0 #6b7280; /* gray-500 */
   }
 }
+
+/* ── Reader view ───────────────────────────────────────────────────────────
+   The article is the page. App chrome stays sans; the article body switches
+   to a serif reading face so an article reads like one. --feed-accent is set
+   inline per article (the source feed's own colour) and tints the eyebrow,
+   links, and blockquote rule — the page's only colour, drawn from its source. */
+.reader-article {
+  --reader-fg: #1f2937;     /* gray-800 */
+  --reader-muted: #6b7280;  /* gray-500 */
+  --reader-rule: #e5e7eb;   /* gray-200 */
+  --feed-accent: #6b7280;   /* overridden inline per feed */
+}
+@media (prefers-color-scheme: dark) {
+  .reader-article {
+    --reader-fg: #d1d5db;   /* gray-300 */
+    --reader-muted: #9ca3af; /* gray-400 */
+    --reader-rule: #374151; /* gray-700 */
+  }
+}
+
+.reader-eyebrow {
+  display: inline-block;
+  color: var(--feed-accent);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.reader-content {
+  font-family: Charter, "Bitstream Charter", "Iowan Old Style", "Source Serif Pro",
+    Georgia, Cambria, "Times New Roman", serif;
+  font-size: 1.1875rem; /* 19px */
+  line-height: 1.7;
+  color: var(--reader-fg);
+  overflow-wrap: break-word;
+}
+.reader-content > :first-child { margin-top: 0; }
+.reader-content p,
+.reader-content ul,
+.reader-content ol,
+.reader-content blockquote,
+.reader-content pre,
+.reader-content figure,
+.reader-content table { margin-block: 1.4em; }
+
+.reader-content h1,
+.reader-content h2,
+.reader-content h3,
+.reader-content h4 {
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-block: 1.9em 0.6em;
+  color: var(--reader-fg);
+}
+.reader-content h1 { font-size: 1.6em; }
+.reader-content h2 { font-size: 1.35em; }
+.reader-content h3 { font-size: 1.15em; }
+.reader-content h4 { font-size: 1em; }
+
+.reader-content a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--feed-accent);
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 0.08em;
+}
+.reader-content a:hover { color: var(--feed-accent); }
+
+.reader-content img,
+.reader-content video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.6em auto;
+  border-radius: 0.5rem;
+}
+
+.reader-content figure { text-align: center; }
+.reader-content figcaption {
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 0.8125rem;
+  color: var(--reader-muted);
+  margin-top: 0.6em;
+}
+
+.reader-content blockquote {
+  border-left: 3px solid var(--feed-accent);
+  padding-left: 1.1em;
+  color: var(--reader-muted);
+  font-style: italic;
+}
+
+.reader-content ul,
+.reader-content ol { padding-left: 1.4em; }
+.reader-content ul { list-style: disc; }
+.reader-content ol { list-style: decimal; }
+.reader-content li { margin-block: 0.4em; }
+.reader-content li::marker { color: var(--reader-muted); }
+
+.reader-content hr {
+  border: 0;
+  border-top: 1px solid var(--reader-rule);
+  margin-block: 2.4em;
+}
+
+.reader-content code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.86em;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  padding: 0.15em 0.35em;
+  border-radius: 0.25rem;
+}
+.reader-content pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.86em;
+  line-height: 1.55;
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  padding: 1em 1.1em;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+.reader-content pre code { background: none; padding: 0; font-size: 1em; }
+
+.reader-content table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 0.95em;
+}
+.reader-content th,
+.reader-content td {
+  border: 1px solid var(--reader-rule);
+  padding: 0.5em 0.7em;
+  text-align: left;
+}

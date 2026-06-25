@@ -1,0 +1,14 @@
+{
+  "name": "rss-extract",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mercury Parser HTTP sidecar for the RSS reader (feedbin/extract style).",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@jocmp/mercury-parser": "^2.4.6",
+    "express": "^4.19.2"
+  }
+}

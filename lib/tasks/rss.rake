@@ -17,6 +17,30 @@ namespace :rss do
     end
   end
 
+  desc "Re-fetch every feed to backfill post content (content:encoded / <content>)"
+  task backfill_content: :environment do
+    count = 0
+    Feed.find_each do |feed|
+      RefreshFeedJob.perform_later(feed)
+      count += 1
+    end
+    puts "Enqueued a content backfill refresh for #{count} feed(s)."
+  end
+
+  desc "Extract full article content for every post that is still missing it"
+  task extract_missing_content: :environment do
+    unless Rails.configuration.x.rss.extract_url.present?
+      abort "EXTRACT_URL is not set — start the extraction sidecar first (see extract/)."
+    end
+
+    count = 0
+    Post.where.missing(:content).find_each do |post|
+      ExtractPostContentJob.perform_later(post)
+      count += 1
+    end
+    puts "Enqueued extraction for #{count} post(s) missing content."
+  end
+
   desc "Fetch and parse a feed URL without saving (rss:test_feed[URL])"
   task :test_feed, [ :url ] => :environment do |_task, args|
     abort "Usage: bin/rails rss:test_feed[https://example.com/feed.xml]" if args[:url].blank?

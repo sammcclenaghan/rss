@@ -86,7 +86,7 @@ export default class extends Controller {
   }
 
   open() {
-    this.current()?.querySelector('a[target="_blank"]')?.click()
+    this.current()?.querySelector('[data-post-open]')?.click()
   }
 
   toggleRead() {

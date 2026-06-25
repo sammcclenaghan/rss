@@ -8,10 +8,16 @@ Rails.application.routes.draw do
   get "tag/:tag", to: "posts#tag", as: :tag_posts
   get "feed/*feed", to: "posts#feed", as: :feed_posts, format: false
 
+  # Reader view for a single post
+  get "posts/:id", to: "posts#show", as: :post
+
   # Read/unread state
   post "posts/read_all", to: "reads#create_all", as: :read_all_posts
   post "posts/:id/read", to: "reads#create", as: :post_read
   delete "posts/:id/read", to: "reads#destroy"
+
+  # Background job dashboard (Solid Queue)
+  mount MissionControl::Jobs::Engine, at: "/jobs"
 
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check

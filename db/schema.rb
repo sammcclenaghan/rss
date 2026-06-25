@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_23_120003) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_24_120004) do
   create_table "feeds", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "last_accessed_at", default: 0, null: false
@@ -20,6 +20,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_23_120003) do
     t.index ["last_accessed_at"], name: "index_feeds_on_last_accessed_at"
     t.index ["last_fetched_at"], name: "index_feeds_on_last_fetched_at"
     t.index ["url"], name: "index_feeds_on_url", unique: true
+  end
+
+  create_table "post_contents", force: :cascade do |t|
+    t.text "body", default: "", null: false
+    t.datetime "created_at", null: false
+    t.integer "post_id", null: false
+    t.string "source", limit: 20, default: "", null: false
+    t.datetime "updated_at", null: false
+    t.integer "word_count", default: 0, null: false
+    t.index ["post_id"], name: "index_post_contents_on_post_id", unique: true
   end
 
   create_table "posts", force: :cascade do |t|
@@ -44,6 +54,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_23_120003) do
     t.index ["post_id"], name: "index_read_posts_on_post_id", unique: true
   end
 
+  add_foreign_key "post_contents", "posts", on_delete: :cascade
   add_foreign_key "posts", "feeds"
   add_foreign_key "read_posts", "posts", on_delete: :cascade
 end

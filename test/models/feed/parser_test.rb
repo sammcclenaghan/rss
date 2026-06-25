@@ -84,6 +84,35 @@ class Feed::ParserTest < ActiveSupport::TestCase
     assert title.end_with?("...")
   end
 
+  test "captures content:encoded as the raw content for RSS items" do
+    rss = <<~XML
+      <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+        <channel><item>
+          <title>Full</title>
+          <link>https://example.com/full</link>
+          <guid>full</guid>
+          <pubDate>Tue, 10 Jun 2025 09:00:00 +0000</pubDate>
+          <description>Short teaser.</description>
+          <content:encoded><![CDATA[<p>The <b>full</b> article body.</p>]]></content:encoded>
+        </item></channel>
+      </rss>
+    XML
+
+    post = @parser.parse(rss).first
+    assert_equal "<p>The <b>full</b> article body.</p>", post.raw_content
+    assert_equal "Short teaser.", post.description
+  end
+
+  test "captures <content> as the raw content for Atom entries" do
+    post = @parser.parse(file_fixture_content("atom_feed.xml")).last
+    assert_equal "Falls back to content when no summary.", post.raw_content
+  end
+
+  test "does not capture the summary as raw content" do
+    post = @parser.parse(file_fixture_content("atom_feed.xml")).first
+    assert_equal "", post.raw_content
+  end
+
   test "returns an empty array for malformed xml" do
     assert_empty @parser.parse("this is not xml at all <<<")
   end

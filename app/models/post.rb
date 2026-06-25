@@ -3,10 +3,15 @@ class Post < ApplicationRecord
 
   belongs_to :feed
   has_one :read_post, dependent: :delete
+  has_one :content, class_name: "Post::Content", dependent: :delete
 
   # Transient presentation metadata (the post's ConfiguredFeed), attached at
   # query time. Not persisted.
   attr_accessor :feed_config
+
+  # Transient full article HTML carried from Feed::Parser to Feed::Refresher,
+  # which sanitizes it into the post's Content record. Not persisted directly.
+  attr_accessor :raw_content
 
   # Transient read flag, batch-loaded by Post::Fetcher to avoid per-post
   # queries. nil means "not loaded"; `read?` then falls back to a lookup.

@@ -1,0 +1,73 @@
+<% content_for :title, @post.title %>
+<% accent = legible_feed_color(@feed_config&.color).presence || "#6b7280" %>
+<% mins = reading_time(@post) %>
+
+<div class="min-h-full flex flex-col bg-white dark:bg-gray-900">
+  <%# Chrome — always-present way back and out. Stays sans, like the rest of
+      the app; the article below is what changes voice. %>
+  <header class="sticky top-0 z-10 border-b border-gray-200 dark:border-gray-800
+                 bg-white/85 dark:bg-gray-900/85 backdrop-blur">
+    <div class="max-w-2xl mx-auto px-5 h-12 flex items-center justify-between gap-4 text-sm">
+      <%= link_to root_path, data: { turbo_frame: "_top" },
+            class: "font-bold text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-gray-200" do %>
+        &larr; Posts
+      <% end %>
+      <%= link_to @post.url, target: "_blank", rel: "noopener",
+            class: "font-bold text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-gray-200" do %>
+        View original &#8599;
+      <% end %>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    <article class="reader-article max-w-2xl mx-auto px-5 py-10 md:py-16" style="--feed-accent: <%= accent %>">
+      <%# Header %>
+      <% if @feed_config %>
+        <%= link_to @feed_config.name, feed_posts_path(@feed_config.encoded_url),
+              class: "reader-eyebrow hover:underline" %>
+      <% end %>
+
+      <h1 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight leading-tight text-balance
+                 text-black dark:text-gray-100">
+        <%= @post.title %>
+      </h1>
+
+      <div class="mt-3 flex items-center flex-wrap gap-x-2.5 gap-y-1 text-sm text-gray-500 dark:text-gray-400">
+        <time datetime="<%= @post.published_at_time.iso8601 %>">
+          <%= @post.published_at_time.strftime("%B %-d, %Y") %>
+        </time>
+        <% if mins %>
+          <span aria-hidden="true">&middot;</span>
+          <span><%= mins %> min read</span>
+        <% end %>
+      </div>
+
+      <hr class="mt-6 mb-9 border-gray-200 dark:border-gray-800">
+
+      <%# Body %>
+      <% if @post.content&.body.present? %>
+        <div class="reader-content"><%= raw @post.content.body %></div>
+      <% else %>
+        <div class="reader-content"><p><%= format_post_description(@post) %></p></div>
+        <p class="mt-8 text-gray-500 dark:text-gray-400">
+          Full text isn&rsquo;t saved for this article yet.
+          <%= link_to "Read the original", @post.url, target: "_blank", rel: "noopener",
+                style: "color: #{accent}", class: "font-bold hover:underline" %>.
+        </p>
+      <% end %>
+
+      <%# Footer %>
+      <footer class="mt-14 pt-6 border-t border-gray-200 dark:border-gray-800
+                     flex items-center justify-between gap-4 text-sm">
+        <%= link_to root_path, data: { turbo_frame: "_top" },
+              class: "font-bold text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-gray-200" do %>
+          &larr; Back to posts
+        <% end %>
+        <%= link_to @post.url, target: "_blank", rel: "noopener",
+              style: "color: #{accent}", class: "font-bold hover:underline" do %>
+          Read on <%= @feed_config&.name&.tr("_", " ") || "the original site" %> &#8599;
+        <% end %>
+      </footer>
+    </article>
+  </main>
+</div>

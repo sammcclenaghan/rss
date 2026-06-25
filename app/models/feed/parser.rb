@@ -7,6 +7,12 @@ class Feed
     MAX_DESCRIPTION = 200
     MIN_VALID_TIMESTAMP = 1000
 
+    # Where the full article HTML lives. Only genuine full-content elements —
+    # never the summary/description, which is a teaser, not the article. After
+    # remove_namespaces!, content:encoded is just <encoded>.
+    RSS_CONTENT = %w[encoded].freeze
+    ATOM_CONTENT = %w[content].freeze
+
     def parse(data)
       doc = Nokogiri::XML(data.to_s.strip)
       doc.remove_namespaces!
@@ -29,7 +35,8 @@ class Feed
         attributes = format == :atom ? atom_attributes(item) : rss_attributes(item)
         return unless valid?(attributes)
 
-        Post.new(attributes)
+        raw_content = attributes.delete(:raw_content)
+        Post.new(attributes).tap { |post| post.raw_content = raw_content }
       end
 
       def rss_attributes(item)
@@ -37,6 +44,7 @@ class Feed
         {
           title: truncate(text(item, "title"), MAX_TITLE),
           description: format_description(text(item, "description")),
+          raw_content: full_content(item, RSS_CONTENT),
           url: link,
           guid: text(item, "guid").presence || link,
           published_at: parse_time(text(item, "pubDate"), :rfc2822)
@@ -49,6 +57,7 @@ class Feed
         {
           title: truncate(decode(text(item, "title")), MAX_TITLE),
           description: format_description(text(item, "summary").presence || text(item, "content")),
+          raw_content: full_content(item, ATOM_CONTENT),
           url: link,
           guid: text(item, "id").presence || link,
           published_at: parse_time(published, :iso8601)
@@ -57,6 +66,12 @@ class Feed
 
       def text(item, selector)
         item.at_xpath(selector)&.text.to_s.strip
+      end
+
+      # Raw, untruncated article HTML from the first populated selector. Left
+      # unsanitized here; Feed::Refresher runs it through ContentFilters.
+      def full_content(item, selectors)
+        selectors.filter_map { |selector| text(item, selector).presence }.first.to_s
       end
 
       def parse_time(string, format)

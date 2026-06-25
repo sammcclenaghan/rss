@@ -1,0 +1,28 @@
+# Runs the Rails app together with the Mercury extraction sidecar.
+#
+#   RAILS_MASTER_KEY=$(cat config/master.key) docker compose up --build
+#
+# The extract service is only reachable on the internal compose network; the
+# Rails app talks to it at http://extract:3000/parse. Set EXTRACT_TOKEN to
+# require a shared secret on that call.
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      EXTRACT_URL: http://extract:3000/parse
+      EXTRACT_TOKEN: ${EXTRACT_TOKEN:-}
+      SOLID_QUEUE_IN_PUMA: "true"
+    volumes:
+      - ./storage:/rails/storage
+    depends_on:
+      - extract
+
+  extract:
+    build: ./extract
+    environment:
+      EXTRACT_TOKEN: ${EXTRACT_TOKEN:-}
+    expose:
+      - "3000"
