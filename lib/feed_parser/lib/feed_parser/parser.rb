@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 require_relative "parser/atom"
+require_relative "parser/rss"
 
 module FeedParser
   module Parser
-    PARSERS = [Atom].freeze
+    PARSERS = [Atom, RSS].freeze
 
     module_function
 

@@ -11,11 +11,13 @@ module FeedParser
     :feed_url,
     :updated,
     :authors,
+    :categories,
     :links,
     :entries
   ) do
     def initialize(id: nil, title: nil, description: nil, url: nil, feed_url: nil,
-                   updated: nil, authors: EMPTY_ARRAY, links: EMPTY_ARRAY, entries: EMPTY_ARRAY)
+                   updated: nil, authors: EMPTY_ARRAY, categories: EMPTY_ARRAY,
+                   links: EMPTY_ARRAY, entries: EMPTY_ARRAY)
       super
     end
   end

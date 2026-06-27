@@ -16,11 +16,13 @@ class AtomTest < Minitest::Test
         <name>Ada Lovelace</name>
         <email>ada@example.com</email>
       </author>
+      <category term="ruby" scheme="https://example.com/tags" label="Ruby" />
       <entry>
         <id>tag:example.com,2026:entry-1</id>
         <title>First post</title>
         <link href="https://example.com/first" />
         <summary>Hello summary</summary>
+        <category term="atom" />
         <content type="html">&lt;p&gt;Hello&lt;/p&gt;</content>
         <published>2026-06-25T10:00:00Z</published>
         <updated>2026-06-25T11:00:00Z</updated>
@@ -45,7 +47,8 @@ class AtomTest < Minitest::Test
       title: "Home",
       length: 42,
     ), feed.links.fetch(1)
-    assert_equal [{ name: "Ada Lovelace", email: "ada@example.com" }.freeze], feed.authors
+    assert_equal [FeedParser::Person.new(name: "Ada Lovelace", email: "ada@example.com")], feed.authors
+    assert_equal [FeedParser::Category.new(term: "ruby", scheme: "https://example.com/tags", label: "Ruby")], feed.categories
     assert_equal Time.utc(2026, 6, 26, 12, 34, 56), feed.updated
   end
 
@@ -59,11 +62,12 @@ class AtomTest < Minitest::Test
     assert_equal "<p>Hello</p>", entry.content
     assert_equal Time.utc(2026, 6, 25, 10, 0, 0), entry.published
     assert_equal Time.utc(2026, 6, 25, 11, 0, 0), entry.updated
+    assert_equal [FeedParser::Category.new(term: "atom")], entry.categories
   end
 
   def test_rejects_non_atom_xml
     error = assert_raises(FeedParser::ParseError) do
-      FeedParser.parse("<rss><channel /></rss>")
+      FeedParser.parse("<html />")
     end
 
     assert_equal "unsupported feed format", error.message

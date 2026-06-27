@@ -25,7 +25,8 @@ module FeedParser
         url: link_href(root, rel: "alternate") || link_href(root),
         feed_url: link_href(root, rel: "self"),
         updated: time(text(root, "atom:updated")),
-        authors: authors(root),
+        authors: people(root, "author"),
+        categories: categories(root),
         links: links(root),
         entries: REXML::XPath.match(root, "atom:entry", NS).map { |entry| parse_entry(entry) },
       )
@@ -42,7 +43,8 @@ module FeedParser
         content: text(node, "atom:content"),
         published: time(text(node, "atom:published")),
         updated: time(text(node, "atom:updated")),
-        authors: authors(node),
+        authors: people(node, "author"),
+        categories: categories(node),
         links: links(node),
       )
     end
@@ -97,14 +99,27 @@ module FeedParser
       nil
     end
 
-    def authors(node)
-      REXML::XPath.match(node, "atom:author", NS).filter_map do |author|
-        name = text(author, "atom:name")
-        email = text(author, "atom:email")
-        uri = text(author, "atom:uri")
+    def people(node, element_name)
+      REXML::XPath.match(node, "atom:#{element_name}", NS).filter_map do |person|
+        name = text(person, "atom:name")
+        email = text(person, "atom:email")
+        uri = text(person, "atom:uri")
         next if name.nil? && email.nil? && uri.nil?
 
-        { name: name, email: email, uri: uri }.compact.freeze
+        Person.new(name: name, email: email, uri: uri)
+      end.freeze
+    end
+
+    def categories(node)
+      REXML::XPath.match(node, "atom:category", NS).filter_map do |element|
+        term = present_attribute(element, "term")
+        next unless term
+
+        Category.new(
+          term: term,
+          scheme: present_attribute(element, "scheme"),
+          label: present_attribute(element, "label"),
+        )
       end.freeze
     end
 
