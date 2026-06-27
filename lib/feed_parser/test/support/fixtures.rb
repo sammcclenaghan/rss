@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module FixtureHelpers
-  FIXTURE_ROOT = File.expand_path("../fixtures", __dir__)
+  FIXTURE_ROOT = File.expand_path('../fixtures', __dir__)
 
   def fixture_path(relative_path)
     File.join(FIXTURE_ROOT, relative_path)

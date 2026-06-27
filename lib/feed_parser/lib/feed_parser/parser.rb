@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "parser/atom"
-require_relative "parser/rss"
+require_relative 'parser/atom'
+require_relative 'parser/rss'
 
 module FeedParser
   module Parser
@@ -11,7 +11,7 @@ module FeedParser
 
     def parse(xml)
       parser = PARSERS.find { |candidate| candidate.able_to_parse?(xml) }
-      raise ParseError, "unsupported feed format" unless parser
+      raise ParseError, 'unsupported feed format' unless parser
 
       parser.parse(xml)
     end

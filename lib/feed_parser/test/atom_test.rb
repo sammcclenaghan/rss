@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "test_helper"
+require 'test_helper'
 
 class AtomTest < Minitest::Test
   SAMPLE = <<~XML
@@ -33,43 +33,44 @@ class AtomTest < Minitest::Test
   def test_parses_atom_feed_metadata
     feed = FeedParser.parse(SAMPLE)
 
-    assert_equal "tag:example.com,2026:feed", feed.id
-    assert_equal "Example Atom", feed.title
-    assert_equal "A small feed", feed.description
-    assert_equal "https://example.com/", feed.url
-    assert_equal "https://example.com/feed.atom", feed.feed_url
-    assert_equal ["https://example.com/feed.atom", "https://example.com/"], feed.links.map(&:href)
+    assert_equal 'tag:example.com,2026:feed', feed.id
+    assert_equal 'Example Atom', feed.title
+    assert_equal 'A small feed', feed.description
+    assert_equal 'https://example.com/', feed.url
+    assert_equal 'https://example.com/feed.atom', feed.feed_url
+    assert_equal ['https://example.com/feed.atom', 'https://example.com/'], feed.links.map(&:href)
     assert_equal FeedParser::Link.new(
-      href: "https://example.com/",
-      rel: "alternate",
-      type: "text/html",
-      hreflang: "en",
-      title: "Home",
-      length: 42,
+      href: 'https://example.com/',
+      rel: 'alternate',
+      type: 'text/html',
+      hreflang: 'en',
+      title: 'Home',
+      length: 42
     ), feed.links.fetch(1)
-    assert_equal [FeedParser::Person.new(name: "Ada Lovelace", email: "ada@example.com")], feed.authors
-    assert_equal [FeedParser::Category.new(term: "ruby", scheme: "https://example.com/tags", label: "Ruby")], feed.categories
+    assert_equal [FeedParser::Person.new(name: 'Ada Lovelace', email: 'ada@example.com')], feed.authors
+    assert_equal [FeedParser::Category.new(term: 'ruby', scheme: 'https://example.com/tags', label: 'Ruby')],
+                 feed.categories
     assert_equal Time.utc(2026, 6, 26, 12, 34, 56), feed.updated
   end
 
   def test_parses_atom_entries
     entry = FeedParser.parse(SAMPLE).entries.fetch(0)
 
-    assert_equal "tag:example.com,2026:entry-1", entry.id
-    assert_equal "First post", entry.title
-    assert_equal "https://example.com/first", entry.url
-    assert_equal "Hello summary", entry.summary
-    assert_equal "<p>Hello</p>", entry.content
+    assert_equal 'tag:example.com,2026:entry-1', entry.id
+    assert_equal 'First post', entry.title
+    assert_equal 'https://example.com/first', entry.url
+    assert_equal 'Hello summary', entry.summary
+    assert_equal '<p>Hello</p>', entry.content
     assert_equal Time.utc(2026, 6, 25, 10, 0, 0), entry.published
     assert_equal Time.utc(2026, 6, 25, 11, 0, 0), entry.updated
-    assert_equal [FeedParser::Category.new(term: "atom")], entry.categories
+    assert_equal [FeedParser::Category.new(term: 'atom')], entry.categories
   end
 
   def test_rejects_non_atom_xml
     error = assert_raises(FeedParser::ParseError) do
-      FeedParser.parse("<html />")
+      FeedParser.parse('<html />')
     end
 
-    assert_equal "unsupported feed format", error.message
+    assert_equal 'unsupported feed format', error.message
   end
 end
