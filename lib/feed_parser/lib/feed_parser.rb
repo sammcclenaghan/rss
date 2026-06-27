@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "feed_parser/atom"
+require_relative "feed_parser/link"
 require_relative "feed_parser/feed"
 require_relative "feed_parser/entry"
+require_relative "feed_parser/parser"
 
 module FeedParser
   class ParseError < StandardError; end
@@ -10,6 +11,6 @@ module FeedParser
   module_function
 
   def parse(xml)
-    Atom.parse(xml)
+    Parser.parse(xml)
   end
 end

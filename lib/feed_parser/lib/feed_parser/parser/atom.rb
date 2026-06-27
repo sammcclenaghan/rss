@@ -9,6 +9,10 @@ module FeedParser
 
     module_function
 
+    def able_to_parse?(xml)
+      %r{<feed\b[^>]*\sxmlns\s*=\s*["'](?:https?://www\.w3\.org/2005/Atom|http://purl\.org/atom/ns#)["']}i.match?(xml)
+    end
+
     def parse(xml)
       document = REXML::Document.new(xml)
       root = document.root
@@ -18,8 +22,8 @@ module FeedParser
         id: text(root, "atom:id"),
         title: text(root, "atom:title"),
         description: text(root, "atom:subtitle"),
-        url: link(root, rel: "alternate") || link(root),
-        feed_url: link(root, rel: "self"),
+        url: link_href(root, rel: "alternate") || link_href(root),
+        feed_url: link_href(root, rel: "self"),
         updated: time(text(root, "atom:updated")),
         authors: authors(root),
         links: links(root),
@@ -33,7 +37,7 @@ module FeedParser
       Entry.new(
         id: text(node, "atom:id"),
         title: text(node, "atom:title"),
-        url: link(node, rel: "alternate") || link(node),
+        url: link_href(node, rel: "alternate") || link_href(node),
         summary: text(node, "atom:summary"),
         content: text(node, "atom:content"),
         published: time(text(node, "atom:published")),
@@ -55,19 +59,41 @@ module FeedParser
     end
 
     def links(node)
-      REXML::XPath.match(node, "atom:link", NS).filter_map do |element|
-        href = element.attributes["href"]&.strip
-        href unless href.empty?
-      end.freeze
+      REXML::XPath.match(node, "atom:link", NS).filter_map { |element| build_link(element) }.freeze
     end
 
-    def link(node, rel: nil)
-      REXML::XPath.match(node, "atom:link", NS).each do |element|
-        next if rel && element.attributes["rel"] != rel
+    def link_href(node, rel: nil)
+      links(node).each do |link|
+        next if rel && link.rel != rel
 
-        href = element.attributes["href"]&.strip
-        return href unless href.nil? || href.empty?
+        return link.href
       end
+      nil
+    end
+
+    def build_link(element)
+      href = element.attributes["href"]&.strip
+      return if href.nil? || href.empty?
+
+      Link.new(
+        href: href,
+        rel: present_attribute(element, "rel"),
+        type: present_attribute(element, "type"),
+        hreflang: present_attribute(element, "hreflang"),
+        title: present_attribute(element, "title"),
+        length: integer_attribute(element, "length"),
+      )
+    end
+
+    def present_attribute(element, name)
+      value = element.attributes[name]&.strip
+      value unless value.nil? || value.empty?
+    end
+
+    def integer_attribute(element, name)
+      value = present_attribute(element, name)
+      Integer(value) if value
+    rescue ArgumentError
       nil
     end
 

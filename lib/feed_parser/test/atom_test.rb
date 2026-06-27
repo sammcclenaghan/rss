@@ -10,8 +10,8 @@ class AtomTest < Minitest::Test
       <title>Example Atom</title>
       <subtitle>A small feed</subtitle>
       <updated>2026-06-26T12:34:56Z</updated>
-      <link rel="self" href="https://example.com/feed.atom" />
-      <link rel="alternate" href="https://example.com/" />
+      <link rel="self" href="https://example.com/feed.atom" type="application/atom+xml" />
+      <link rel="alternate" href="https://example.com/" type="text/html" hreflang="en" title="Home" length="42" />
       <author>
         <name>Ada Lovelace</name>
         <email>ada@example.com</email>
@@ -36,7 +36,15 @@ class AtomTest < Minitest::Test
     assert_equal "A small feed", feed.description
     assert_equal "https://example.com/", feed.url
     assert_equal "https://example.com/feed.atom", feed.feed_url
-    assert_equal ["https://example.com/feed.atom", "https://example.com/"], feed.links
+    assert_equal ["https://example.com/feed.atom", "https://example.com/"], feed.links.map(&:href)
+    assert_equal FeedParser::Link.new(
+      href: "https://example.com/",
+      rel: "alternate",
+      type: "text/html",
+      hreflang: "en",
+      title: "Home",
+      length: 42,
+    ), feed.links.fetch(1)
     assert_equal [{ name: "Ada Lovelace", email: "ada@example.com" }.freeze], feed.authors
     assert_equal Time.utc(2026, 6, 26, 12, 34, 56), feed.updated
   end
@@ -58,6 +66,6 @@ class AtomTest < Minitest::Test
       FeedParser.parse("<rss><channel /></rss>")
     end
 
-    assert_equal "not an Atom feed", error.message
+    assert_equal "unsupported feed format", error.message
   end
 end
