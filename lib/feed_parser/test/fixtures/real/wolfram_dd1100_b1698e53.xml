@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Wolfram Blog</title>
+	<atom:link href="https://blog.wolfram.com/feed/" rel="self" type="application/rss+xml" />
+	<link>https://blog.wolfram.com</link>
+	<description>News, Views and Insights from Wolfram</description>
+	<lastBuildDate>Tue, 16 Jun 2026 19:14:22 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.7.2</generator>
+	<item>
+		<title>Launching Version 15 of Wolfram Language &#038; Mathematica: Built-in (Useful) AI &#038; Lots of New Core Functionality</title>
+		<link>https://blog.wolfram.com/2026/06/16/new-features-everywhere-launching-version-14-3-of-wolfram-language-mathematica-2/</link>
+		<comments>https://blog.wolfram.com/2026/06/16/new-features-everywhere-launching-version-14-3-of-wolfram-language-mathematica-2/#respond</comments>
+		<pubDate>Tue, 16 Jun 2026 19:04:57 +0000</pubDate>
+		<dc:creator><![CDATA[Stephen Wolfram]]></dc:creator>
+		<category><![CDATA[Featured, Wolfram Language]]></category>
+		<guid isPermaLink="false">https://blog.wolfram.com/?p=94308</guid>
+		<description><![CDATA[June 23, 1988 is when we launched Version 1.0 of Mathematica. Today—almost 38 years later—we’re launching Version 15 of what—in recognition of how far it’s expanded beyond “math”—we now call Wolfram Language. It’s an impressive release, with a lot of new core functionality. It might perhaps seem surprising that after 38 years there’d still be [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>June 23, 1988 is when we <a href="https://www.wolfram.com/mathematica/scrapbook/">launched Version 1.0 of Mathematica</a>. Today—almost 38 years later—we’re launching Version 15 of what—in recognition of how far it’s expanded beyond “math”—we now call <a href="https://www.wolfram.com/language/">Wolfram Language</a>. It’s an impressive release, with a lot of new core functionality. It might perhaps seem surprising that after 38 years there’d still be more to add. But it’s like the typical arc of intellectual history: the more one’s figured out, the further one can see, and the more one becomes able to do. And for all of us working on it, it’s been a very satisfying process: year after year building an ever taller tower of ideas and technology, with which we can reach ever further—today to all the functionality of Version 15.<span id="more-94308"></span><br />
+<!--more--></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.wolfram.com/2026/06/16/new-features-everywhere-launching-version-14-3-of-wolfram-language-mathematica-2/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>OpenAI Disproves Erdős Unit Distance Conjecture</title>
+		<link>https://blog.wolfram.com/2026/06/02/openai-disproves-erdos-unit-distance-conjecture/</link>
+		<comments>https://blog.wolfram.com/2026/06/02/openai-disproves-erdos-unit-distance-conjecture/#respond</comments>
+		<pubDate>Tue, 02 Jun 2026 15:01:18 +0000</pubDate>
+		<dc:creator><![CDATA[Wolfram Blog Team]]></dc:creator>
+		<category><![CDATA[Mathematics, Wolfram Community]]></category>
+		<guid isPermaLink="false">https://blog.wolfram.com/?p=94295</guid>
+		<description><![CDATA[The Erdős unit distance problem asks for the largest possible number <em>u</em>(<em>n</em>) of unit distances among <em>n</em> points in the plane. This is equivalent to finding maximally dense unit-distance graphs. A recent OpenAI announcement concerns the asymptotic problem: the old <em>n</em>^(1+<em>o</em>(1)) expectation is false.<!--more-->]]></description>
+				<content:encoded><![CDATA[<p>The Erdős unit distance problem asks for the largest possible number <em>u</em>(<em>n</em>) of unit distances among <em>n</em> points in the plane. This is equivalent to finding maximally dense unit-distance graphs. A recent OpenAI announcement concerns the asymptotic problem: the old <em>n</em>^(1+<em>o</em>(1)) expectation is false.<span id="more-94295"></span></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.wolfram.com/2026/06/02/openai-disproves-erdos-unit-distance-conjecture/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Theory Meets Practice: 8 Books to Start Your Career in Astrophysics, Geography, Civil Engineering and More</title>
+		<link>https://blog.wolfram.com/2026/05/28/theory-meets-practice-8-books-to-start-your-career-in-astrophysics-geography-civil-engineering-and-more/</link>
+		<comments>https://blog.wolfram.com/2026/05/28/theory-meets-practice-8-books-to-start-your-career-in-astrophysics-geography-civil-engineering-and-more/#respond</comments>
+		<pubDate>Thu, 28 May 2026 15:09:47 +0000</pubDate>
+		<dc:creator><![CDATA[Treyton Jansen]]></dc:creator>
+		<category><![CDATA[Astronomy, Books, Geosciences]]></category>
+		<guid isPermaLink="false">https://blog.wolfram.com/?p=94243</guid>
+		<description><![CDATA[In or out of school, the opportunities to learn and grow in your career are endless, and Wolfram is proud to bolster those with educational resources, from courses to textbooks. We are happy to share conversations with two authors whose books cover applications of Wolfram technology in astrophysics and geography, as well as highlight a [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p><img class="aligncenter box-shadow" title="Theory Meets Practice: 8 Books to Start Your Career in Astrophysics, Geography, Civil Engineering and More" src="https://content.wolfram.com/sites/39/2026/05/hero-2026-books.png" alt="Theory Meets Practice: 8 Books to Start Your Career in Astrophysics, Geography, Civil Engineering and More" width="620" height="315" /></p>
+<p>In or out of school, the opportunities to learn and grow in your career are endless, and Wolfram is proud to bolster those with educational resources, from courses to textbooks. We are happy to share conversations with two authors whose books cover applications of Wolfram technology in astrophysics and geography, as well as highlight a few other recent book releases featuring <a href="https://www.wolfram.com/language/">Wolfram Language</a>. Whether you’re building your summer reading list or prepping to wow interviewers, these titles are essential insights for real-world, computational STEM operations.<span id="more-94243"></span></p>
+<h2 id="general-relativity-analytic-and-symbolic-problems-with-mathematica"><em>General Relativity: Analytic and Symbolic Problems with Mathematica</em></h2>
+<p>
+<img style="float: left; padding-right: 15px;" loading='lazy' src='https://content.wolfram.com/sites/39/2026/05/tj051926img1.png' width='200' height='auto' title="&quot;General Relativity: Analytic and Symbolic Problems with Mathematica&quot;" alt="&quot;General Relativity: Analytic and Symbolic Problems with Mathematica&quot;"/><em><a href="https://www.routledge.com/General-Relativity-Analytic-and-Symbolic-Problems-with-Mathematica/Vittorio/p/book/9781032655277" target="_blank" rel="noopener">General Relativity: Analytic and Symbolic Problems with Mathematica</a></em> was published by CRC Press in 2025. According to a review by Paolo Pani of the <a href="https://www.uniroma1.it/en/pagina-strutturale/home" target="_blank" rel="noopener">Sapienza University of Rome</a>, the book “combines analytical rigor with the power of symbolic manipulation software to tackle a wide range of problems in Einstein’s theory of gravity. It offers a truly ‘hands-on’ approach to learning general relativity, guiding readers through both the conceptual and technical aspects of the subject while introducing advanced features of <a href="https://www.wolfram.com/mathematica/">Wolfram Mathematica</a>.” We discussed this new book with the author, Nicola Vittorio.</p>
+<p><span><br />
+<span><br />
+<span></p>
+<p><b>Could you tell us a bit about yourself?</b></p>
+<p>I am an emeritus professor at the <a href="https://web.uniroma2.it/en" target="_blank" rel="noopener">University of Rome Tor Vergata</a>, where I taught relativity and cosmology for many years in the master’s program in physics at the physics department. My research focused on theoretical cosmology, particularly in making predictions about the formation and evolution of the universe’s large-scale structure. In this capacity, I served as a coinvestigator for the <a href="https://www.esa.int/Science_Exploration/Space_Science/Planck" target="_blank" rel="noopener">Planck mission of the European Space Agency</a>. I have published 250 articles in refereed journals and authored the following textbooks: <em><a href="https://www.routledge.com/Cosmology/Vittorio/p/book/9780367572693" target="_blank" rel="noopener">Cosmology</a></em> (2020), <em><a href="https://www.amazon.com/-/he/Overview-Relativity-Space-Time-Astronomy-Astrophysics/dp/0367683040" target="_blank" rel="noopener">An Overview of General Relativity and Space-Time</a></em> (2022) and <em><a href="https://www.wolfram.com/books/profile.cgi?id=9910">General Relativity: Analytic and Symbolic Problems with Mathematica</a></em> (2025). Additionally, I have held the position of dean of the faculty of science at my university, served as president of the Association of Deans of the Italian Faculty of Sciences and been a member of the technical secretary of the <a href="https://www.mim.gov.it/" target="_blank" rel="noopener">Ministry for Education and Research</a>.</p>
+<p><b>Why did you decide to write this book?</b></p>
+<p>In light of this experience, I decided to publish the Mathematica codes I developed over the years in a book. I have found that if students create their own version of the Mathematica notebooks, even by copying, they more quickly acquire the skills needed to effectively use the Mathematica software. However, for the convenience of both students and teachers, a significant fraction of these codes is available online.</p>
+<p><b>What is a feature of your book that you’re most excited for your readers to experience?</b></p>
+<p>I shared highly illustrative Mathematica notebooks with my class, which was quite diverse. The students came from various educational backgrounds—most had a bachelor’s in physics, while others had a bachelor’s in mathematics, and many were international students. Their interests varied; some were more focused on theoretical aspects, while others were interested in experimental results and astrophysical applications. Writing numerical codes helped students grasp the formal aspects of tensor calculus more easily. Additionally, being in a computer lab fostered collaboration among all students and created a strong team spirit within the class. Several Mathematica codes were developed to generate plots of different theoretical scenarios, such as the perihelion advance of Mercury or the shape of the horizons of a Kerr black hole. I found it particularly rewarding for students to create these plots themselves, rather than simply finding similar ones in a book.</p>
+<p><b>Who do you want to see reading this book?</b></p>
+<p>The book promotes a “learning by doing” approach. The lectures minimize abstract formalization and focus on problem solving, even for specific analytical derivations. This method effectively captures students’ attention and makes it easier to connect various problems and topics. Once the meaning and use of all necessary geometric objects are explained, Mathematica software, freely available to all students [at <a href="https://www.wolfram.com/siteinfo/">universities with site license access</a>], is used to perform symbolic calculations. This approach has the advantage of bypassing lengthy and often tedious mathematical steps. For example, deriving Christoffel symbols or writing the Riemann tensor for different spacetime metrics is tackled quite easily by all the students in the class group. I found the results of this experiment quite encouraging. I am curious to see if this approach produces similar outcomes in other settings, which are characterized by different teaching methods and learning strategies. Therefore, feedback from instructors would be greatly appreciated.</p>
+<p><b>What kind of general relativity problems does this book go over?</b></p>
+<p>The book covers the traditional topics of general relativity and cosmology, which are usually part of a master’s-level physics course. The problems, both analytical and symbolic, include subjects like tensor calculus, metric geometry, covariant derivatives, geodesics and spacetime curvature. It also discusses the equivalence principle and the Einstein field equations. Furthermore, the book examines applications such as the classical tests of general relativity, linearized gravity with scalar and tensor modes, gravitational waves, Schwarzschild solutions, charged and rotating black holes, relativistic hydrodynamics and cosmology. </p>
+<p><b>When were you first introduced to Wolfram Language and how has it changed your work?</b></p>
+<p>A few years back, I mainly taught myself how to use it. My use of Mathematica grew a lot when I was working on the <em>Cosmology</em> book. The goal was to check long analytical calculations. I wouldn’t call myself an expert in Mathematica, but I have the basic skills necessary to get it to do what I need.</p>
+<p><b>How do you see software like Mathematica being used for physics and astrophysics students?</b></p>
+<p>As previously mentioned, the benefit lies in equipping students with numerical and symbolic tools that can be advantageous in other areas of their research and future careers. However, a word of caution is necessary with this approach. While students will become more efficient in the latter part of the course, they may initially encounter a “static friction” with programming, as not all students are familiar with it. Therefore, it is crucial to carefully balance the number of topics covered in the course with the numerical implementations of some of them, based on the average response of the class. Nonetheless, I have found that 48 hours of lectures and eight afternoons in a computer lab are more than adequate to cover most of the standard topics that define an introductory course in general relativity within a master’s program in physics.</p>
+<p><b>Do you plan on writing any more books? And if so, what do you want them to focus on?</b></p>
+<p>I will soon begin working on the second edition of my book <em>Cosmology</em>. In this second edition, I plan to use a similar approach by including Mathematica codes for solving different problems</p>
+<h2 id="intelligence-artificielle-et-géographie-avec-le-langage-wolfram-mathematica-artificial-intelligence-and-geography-with-wolfram-mathematica"><em>Intelligence artificielle et Géographie avec le langage Wolfram Mathematica</em> (<em>Artificial Intelligence and Geography with Wolfram Mathematica</em>)</h2>
+<p>
+<img style="float: left; padding-right: 15px; padding-bottom: 5px;" loading='lazy' src='https://content.wolfram.com/sites/39/2026/05/tj051926img2.png' width='200' height='514' title="&quot;Intelligence artificielle et Géographie avec le langage Wolfram Mathematica&quot;" alt="&quot;Intelligence artificielle et Géographie avec le langage Wolfram Mathematica&#038;quot"/><em><a href="https://www.morebooks.shop/shop-ui/shop/product/9786206734628" target="_blank" rel="noopener">Intelligence artificielle et Géographie avec le langage Wolfram Mathematica</a></em> by André Dauphiné was published by Éditions Universitaires Européennes in 2025. According to the book’s description, “[t]his book aims to introduce geographers to artificial intelligence using machine learning models… The second part presents the Wolfram Mathematica programming language. How can machine learning models be created to answer geographical questions?” We discussed the new book with Dauphiné.</p>
+<p><span><br />
+<span><br />
+<span></p>
+<p><b>Could you tell us a bit about yourself?</b></p>
+<p>I am a retired professor from <a href="https://univ-cotedazur.eu/" target="_blank" rel="noopener">Côte d’Azur University</a>, where I directed a CNRS-affiliated laboratory. For four years, I was the director of humanities and social sciences at the <a href="https://en.wikipedia.org/wiki/Ministry_of_Higher_Education_and_Research_(France)" target="_blank" rel="noopener">Ministry of Higher Education and Research</a> in Paris.</p>
+<p><b>In one sentence, how would you describe your book to the layman?</b></p>
+<p>An introduction to artificial intelligence with original application exercises developed in Mathematica for geographers.</p>
+<p><b>What is your goal with writing this book?</b></p>
+<p>To show how, with very simple programs, artificial intelligence can address very different geographical questions (forecasting, recognition of territorial structures, etc.).</p>
+<p><b>Who do you want to see reading this book?</b></p>
+<p>This book is aimed at master’s students, then at young researchers and established geographers who want to discover machine learning.</p>
+<p><b>What made you want to focus on Mathematica in your book?</b></p>
+<p>I’ve been using Mathematica since <a href="https://reference.wolfram.com/legacy/v3/">Version 3</a>. Besides its conciseness and user support, I appreciate the integration of so many modules into a single software program. </p>
+<p><b>What do you think is the most exciting use of artificial intelligence using machine models in geography?</b></p>
+<p>Artificial intelligence is a very powerful tool for forecasting in risk assessments, whether they concern climate events, transportation accidents in a city or even urban unrest. Thus, artificial intelligence is becoming an indispensable tool in land-use planning and environmental impact assessments.</p>
+<p><b>How do you see artificial intelligence affecting geographers and their work?</b></p>
+<p>The combination of artificial intelligence and big data allows us to address questions that enable us to derive laws from a very large amount of data. This should promote geographical studies on a global scale.</p>
+<p><b>What is theoretical geography and how does machine learning relate to it?</b></p>
+<p>Theoretical geography aims to understand territorial organizations at all time and space scales to find laws that apply to territories that are more or less close. For example, the center-periphery rule can be observed at the scale of a village, a state or the world. It is a multifractal law.</p>
+<p><b>Do you see yourself writing another book in this same vein?</b></p>
+<p>Not on this topic, but rather on multiscale geographical systems using recurrence, wavelet, entropy and fractal models…. Mathematica allows us to use all these forms of modeling.</p>
+<h2 id="what-else-is-new">What Else Is New?</h2>
+<p><span style="font-style:Italic;font-weight:Bold">Polynomial Diophantine Equations: A Systematic Approach </span></p>
+<p>
+<img style="float: left; padding-right: 15px; padding-bottom: 5px;" loading='lazy' src='https://content.wolfram.com/sites/39/2026/05/tj051926img3.png' width='200' height='auto' title="&quot;Polynomial Diophantine Equations: A Systematic Approach&quot;" alt="&quot;Polynomial Diophantine Equations: A Systematic Approach&quot;"/>Bogdan Grechuk published <em><a href="https://link.springer.com/book/10.1007/978-3-031-62949-5" target="_blank" rel="noopener">Polynomial Diophantine Equations: A Systematic Approach</a></em> with Springer in 2024. This book describes a new approach to the study of Diophantine equations. This new approach makes it widely accessible by those with high-school knowledge of mathematics. Springer describes the intended audience for the book as “undergraduate students, for whom the book will serve as an unusually rich introduction to the topic of Diophantine equations” while also stating that it will be useful for graduate students, PhD students and researchers as a source of “fascinating open questions of varying levels of difficulty.” This book earned a <a href="https://community.wolfram.com/people">Featured Contributor Badge</a> on <a href="https://community.wolfram.com/">Wolfram Community</a>, where it was <a href="https://community.wolfram.com/groups/-/m/t/3305960">originally written</a> in a <a href="https://www.wolfram.com/notebooks/">Wolfram Notebook</a> with many examples and solutions using Wolfram Language.</p>
+<p><span style="font-style:Italic;font-weight:Bold">Short Lessons on Wolfram Language: Programming, Data Processing, Graphics, Machine Learning, and Quantum Computing with Mathematica</span></p>
+<p>
+<img style="float: left; padding-right: 15px; padding-bottom: 5px;" loading='lazy' src='https://content.wolfram.com/sites/39/2026/05/tj051926img4.png' width='200' height='auto' title="&quot;Short Lessons on Wolfram Language: Programming, Data Processing, Graphics, Machine Learning, and Quantum Computing with Mathematica&quot;" alt="&quot;Short Lessons on Wolfram Language: Programming, Data Processing, Graphics, Machine Learning, and Quantum Computing with Mathematica&quot;"/>Jarosław Miszczak published <em><a href="https://www.amazon.com/Short-Lessons-Wolfram-Language-Programming/dp/8366950018" target="_blank" rel="noopener">Short Lessons on Wolfram Language: Programming, Data Processing, Graphics, Machine Learning, and Quantum Computing with Mathematica</a></em><em> </em>in 2024. This book’s main purpose is “to introduce the basic concepts required to start using Mathematica.” If you are a new user of Wolfram Language, this book is meant for you. Miszczak presents guides to using Wolfram Language across different disciplines and showcases how to use these tools in a brief overview to machine learning and quantum computing. An interactive excerpt from one of the book’s quantum lessons is <a href="https://community.wolfram.com/groups/-/m/t/3487075">available on Community</a>, where it was awarded a Featured Contributor Badge.</p>
+<p><span><br />
+<span></p>
+<p><span style="font-style:Italic;font-weight:Bold">An Introduction to Wolfram Mathematica for Civil Engineers</span></p>
+<p><span></p>
+<p><img style="float: left; padding-right: 15px; padding-bottom: 5px;" loading='lazy' src='https://content.wolfram.com/sites/39/2026/05/tj051926img5.png' width='200' height='auto' title="&quot;An Introduction to Wolfram Mathematica for Civil Engineers&quot;" alt="&quot;An Introduction to Wolfram Mathematica for Civil Engineers&quot;"/>Malcolm Woodruff’s <em>An Introduction to Wolfram Mathematica for Civil Engineers</em> offers a graceful introduction to Wolfram Language for engineers who may not have been exposed to it in their training and profession. Woodruff describes Wolfram as a “cost-effective tool that should be in every engineer’s toolbox.” The book starts with setting up industry standard units and symbols and ends on using native finite element modeling (FEM). You can get a free copy of the book on the <a href="https://www.notebookarchive.org/an-introduction-to-mathematica-for-civil-engineers--2025-03-cx2tujb/">Wolfram Notebook Archive</a>.</p>
+<p><span><br />
+<span><br />
+<span></p>
+<p><span style="font-style:Italic;font-weight:Bold">Fundamental Concepts of Probabilistic Seismic Hazard Analysis</span></p>
+<p><span></p>
+<p><img style="float: left; padding-right: 15px;" loading='lazy' src='https://content.wolfram.com/sites/39/2026/05/tj051926img6.png' width='200' height='auto' title="&quot;Fundamental Concepts of Probabilistic Seismic Hazard Analysis&quot;" alt="&quot;Fundamental Concepts of Probabilistic Seismic Hazard Analysis&quot;"/>Frank Scherbaum’s <em><a href="https://www.notebookarchive.org/fundamental-concepts-of-probabilistic-seismic-hazard-analysis--2025-02-5zwyxr9/">Fundamental Concepts of Probabilistic Seismic Hazard Analysis</a></em><em> </em>earned him a Featured Contributor Badge on Community and is available for free on the Notebook Archive. The book was developed from Scherbaum’s professional and teaching experience in probabilistic seismic hazard analysis. Using Wolfram Language to illustrate real-world examples, he focuses on concepts, rather than procedures, to emphasize getting to know seismic hazard analysis on a deeper level.</p>
+<p><span><br />
+<span></p>
+<p><span style="font-style:Italic;font-weight:Bold">Analysis with Mathematica </span><b>and </b><span style="font-style:Italic;font-weight:Bold">Applied Linear Analysis for Chemical Engineers</span></p>
+<p>Rounding out our coverage of new Wolfram Language books, we would like to point toward two titles we have covered in previous posts that have new second editions available. Check out <em><a href="https://www.degruyterbrill.com/document/doi/10.1515/9783111533063/html" target="_blank" rel="noopener">Analysis with Mathematica</a></em> by Galina Filipuk and Andrzej Kozłowski and <em><a href="https://www.degruyterbrill.com/document/doi/10.1515/9783111598055/html" target="_blank" rel="noopener">Applied Linear Analysis for Chemical Engineers</a></em> by Vemuri Balakotaiah and Ram R. Ratnakar. </p>
+<table>
+<tr>
+<td style="padding-right:5px">
+<img loading='lazy' src='https://content.wolfram.com/sites/39/2026/05/tj051926img7.png' width='200' height='auto' title="&quot;Analysis with Mathematica&quot;" alt="&quot;Analysis with Mathematica&quot;"/>
+</td>
+<td style="padding-left:5px">
+<img loading='lazy' src='https://content.wolfram.com/sites/39/2026/05/tj051926img8.png' width='200' height='auto' title="&quot;Applied Linear Analysis for Chemical Engineers&quot;" alt="&quot;Applied Linear Analysis for Chemical Engineers&quot;"/>
+</td>
+</tr>
+</table>
+<p><span></p>
+<p>If you’re interested in finding more books that use Wolfram Language, check out the <a href="https://www.wolfram.com/books/">full collection</a>. If you’re working on a book about Mathematica or Wolfram Language, <a href="https://www.wolfram-media.com/contact/">contact us</a> to find out more about our options for author support and to have your book featured in an upcoming blog post!</p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.wolfram.com/2026/05/28/theory-meets-practice-8-books-to-start-your-career-in-astrophysics-geography-civil-engineering-and-more/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Compression and Recompression of JPEG: Stability, Artifacts and Iterative Image Collapse</title>
+		<link>https://blog.wolfram.com/2026/05/26/compression-and-recompression-of-jpeg-stability-artifacts-and-iterative-image-collapse/</link>
+		<comments>https://blog.wolfram.com/2026/05/26/compression-and-recompression-of-jpeg-stability-artifacts-and-iterative-image-collapse/#respond</comments>
+		<pubDate>Tue, 26 May 2026 16:53:01 +0000</pubDate>
+		<dc:creator><![CDATA[Wolfram Blog Team]]></dc:creator>
+		<category><![CDATA[Recreational Computation, Wolfram Community]]></category>
+		<guid isPermaLink="false">https://blog.wolfram.com/?p=94286</guid>
+		<description><![CDATA[Every semester or two, students ask me about the implications of re-compression, especially of JPEG files. Compression comes in two main kinds—Lossless, which is completely invertible, meaning you get exactly what you put in when you decompress, and Lossy which ‘throws out’ things deemed unimportant in some way, so that when you decompress, you get [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>Every semester or two, students ask me about the implications of re-compression, especially of JPEG files.</p>
+<p>Compression comes in two main kinds—Lossless, which is completely invertible, meaning you get exactly what you put in when you decompress, and Lossy which ‘throws out’ things deemed unimportant in some way, so that when you decompress, you get something that is almost the same and is usually good enough.<span id="more-94286"></span></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.wolfram.com/2026/05/26/compression-and-recompression-of-jpeg-stability-artifacts-and-iterative-image-collapse/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>A Data Adventure in Boston, 1929: Historical Census Corpus Analysis</title>
+		<link>https://blog.wolfram.com/2026/05/22/a-data-adventure-in-boston-1929-historical-census-corpus-analysis/</link>
+		<comments>https://blog.wolfram.com/2026/05/22/a-data-adventure-in-boston-1929-historical-census-corpus-analysis/#respond</comments>
+		<pubDate>Fri, 22 May 2026 18:24:13 +0000</pubDate>
+		<dc:creator><![CDATA[Wolfram Blog Team]]></dc:creator>
+		<category><![CDATA[History, Recreational Computation, Wolfram Community]]></category>
+		<guid isPermaLink="false">https://blog.wolfram.com/?p=94281</guid>
+		<description><![CDATA[I am writing a novel. It’s a historical fiction thing. Apparently, that means I need to do a lot of research on what life was like in the 1920s. ​ My problem last night was, my character moves to Boston from Chicago, and in order to give the city texture, we need to introduce characters, [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>I am writing a novel. It’s a historical fiction thing. Apparently, that means I need to do a lot of research on what life was like in the 1920s.<br />
+​<br />
+My problem last night was, my character moves to Boston from Chicago, and in order to give the city texture, we need to introduce characters, buildings, streets and so on in a way that feels real. The thing about Boston, especially the West End where he goes, is that it’s changed dramatically in the last 100 years. There was a massive urban revitalization project in the 50s and 60s which essentially bulldozed the entire area. So none of the streets or buildings are even remotely similar on a map now to what my character would see walking around.<span id="more-94281"></span></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.wolfram.com/2026/05/22/a-data-adventure-in-boston-1929-historical-census-corpus-analysis/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>LLMs, Symbolic Computation and the Future of Mathematical Discovery</title>
+		<link>https://blog.wolfram.com/2026/05/18/llms-symbolic-computation-and-the-future-of-mathematical-discovery/</link>
+		<comments>https://blog.wolfram.com/2026/05/18/llms-symbolic-computation-and-the-future-of-mathematical-discovery/#respond</comments>
+		<pubDate>Mon, 18 May 2026 17:05:38 +0000</pubDate>
+		<dc:creator><![CDATA[Wolfram Blog Team]]></dc:creator>
+		<category><![CDATA[Mathematics, Wolfram Community]]></category>
+		<guid isPermaLink="false">https://blog.wolfram.com/?p=94239</guid>
+		<description><![CDATA[“The cat’s out of the bag,” said the mathematician Andrew Granville, reflecting on the rapid improvement of AI systems. His phrase captures the mood of the moment: by 2025-26, large language models (LLMs) had become powerful enough to move from impressive demonstrations to serious mathematical and scientific use. AI systems reached gold-medal level at the [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>“The cat’s out of the bag,” said the mathematician Andrew Granville, reflecting on the rapid improvement of AI systems. His phrase captures the mood of the moment: by 2025-26, large language models (LLMs) had become powerful enough to move from impressive demonstrations to serious mathematical and scientific use. AI systems reached gold-medal level at the International Mathematical Olympiad, while newer research workflows began using LLMs together with symbolic tools to explore large mathematical spaces and even help resolve some open problems [1-5]. Many mathematicians now see this as a turning point: AI is becoming ready for “prime time” as a research companion in mathematics, physics, and related sciences &#8211; helping researchers test ideas rapidly and discover connections that might otherwise remain hidden.<span id="more-94239"></span></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.wolfram.com/2026/05/18/llms-symbolic-computation-and-the-future-of-mathematical-discovery/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Computational Geometry Modeling of the Neolithic Circular Ditch in Vinoř, Prague</title>
+		<link>https://blog.wolfram.com/2026/05/15/computational-geometry-modeling-of-the-neolithic-circular-ditch-in-vinor-prague/</link>
+		<comments>https://blog.wolfram.com/2026/05/15/computational-geometry-modeling-of-the-neolithic-circular-ditch-in-vinor-prague/#respond</comments>
+		<pubDate>Fri, 15 May 2026 14:20:31 +0000</pubDate>
+		<dc:creator><![CDATA[Wolfram Blog Team]]></dc:creator>
+		<category><![CDATA[Geosciences, Wolfram Community]]></category>
+		<guid isPermaLink="false">https://blog.wolfram.com/?p=94234</guid>
+		<description><![CDATA[This tutorial is a follow-up to a recent post by the author herself about archeoastronomical modeling of Central European Neolithic Circular Ditches [1], or roundels, with Wolfram 3D graphical primitives. Here, the focus will be instead on the use of mesh-based primitives from computational geometry to build a realistic 3D model of a roundel recently [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>This tutorial is a follow-up to a recent post by the author herself about archeoastronomical modeling of Central European Neolithic Circular Ditches [1], or roundels, with Wolfram 3D graphical primitives. Here, the focus will be instead on the use of mesh-based primitives from computational geometry to build a realistic 3D model of a roundel recently excavated in Vinoř, a northeastern outskirt of Prague (Czech Republic). This roundel has a diameter of 55 m, with ditches 3.2 m wide and 1.7 m deep and three entrances, which is quite unusual for Central European ditches [2].</p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.wolfram.com/2026/05/15/computational-geometry-modeling-of-the-neolithic-circular-ditch-in-vinor-prague/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>A Modern eTextbook on Laplace Transforms for Engineering, Science and More</title>
+		<link>https://blog.wolfram.com/2026/05/11/a-modern-etextbook-on-laplace-transforms-for-engineering-science-and-more/</link>
+		<comments>https://blog.wolfram.com/2026/05/11/a-modern-etextbook-on-laplace-transforms-for-engineering-science-and-more/#respond</comments>
+		<pubDate>Mon, 11 May 2026 21:28:14 +0000</pubDate>
+		<dc:creator><![CDATA[Juan Ortiz]]></dc:creator>
+		<category><![CDATA[Books, Education, Mathematics]]></category>
+		<guid isPermaLink="false">https://blog.wolfram.com/?p=94209</guid>
+		<description><![CDATA[The Laplace transform is such an effective tool for solving problems in the fields of science and engineering—it’s one of the main tools available for solving both ordinary differential equations (ODEs) and partial differential equations (PDEs). I’m excited to announce that the notebook version of Laplace Transforms in Theory and Practice: A Computational Approach by Hrachya Khachatryan [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p><img class="aligncenter box-shadow" title="A Modern eTextbook on Laplace Transforms for Engineering, Science and More" src="https://content.wolfram.com/sites/39/2026/05/Laplace-Transforms-ebook-hero.png" alt="A Modern eTextbook on Laplace Transforms for Engineering, Science and More" width="620" height="315" /></p>
+<p>The Laplace transform is such an effective tool for solving problems in the fields of science and engineering—it’s one of the main tools available for solving both ordinary differential equations (ODEs) and partial differential equations (PDEs).  I’m excited to announce that the notebook version of <a href="https://www.wolfram-media.com/products/laplace-transforms-in-theory-and-practice/"><em>Laplace Transforms in Theory and Practice: A Computational Approach</em></a> by Hrachya Khachatryan is now available as a free download from <a href="https://www.wolfram-media.com">Wolfram Media</a> for all the world to learn this beautiful subject.<span id="more-94209"></span></p>
+<p>In this book, we dive deep into:</p>
+<ul>
+<li>The theory behind the Laplace transform</li>
+<li>Practical applications, both in and out of the classroom</li>
+<li><a href="https://www.wolfram.com/language">Wolfram Language</a>’s <tt><a href="http://reference.wolfram.com/language/ref/Integrate.html">Integrate</a></tt>, <tt><a href="http://reference.wolfram.com/language/ref/LaplaceTransform.html">LaplaceTransform</a></tt> and <tt><a href="http://reference.wolfram.com/language/ref/InverseLaplaceTransform.html">InverseLaplaceTransform</a></tt> functions</li>
+</ul>
+<p>The contents of the book are based on the <a href="https://www.wolfram.com/wolfram-u/">Wolfram U</a> course <a href="https://www.wolfram.com/wolfram-u/courses/mathematics/introduction-to-laplace-transforms">Introduction to Laplace Transforms</a>, which is available for free as an interactive video course.</p>
+<h2 id="ca1715ad-6402-4631-bbfa-ab0c820dbca7">A Quick Look into <em>Laplace Transforms in Theory and Practice</em></h2>
+<p>This book can be used by undergraduates as a textbook for a formal course on Laplace transforms or as supplementary material for such a course. The book also contains more advanced material (e.g. chapters on asymptotic expansions of the Laplace transform and numerical inverse Laplace transforms), which can be beneficial for both graduate students and researchers. We have tried to keep the book self-contained; however, some prior knowledge of calculus and complex analysis is required for a better understanding of the book.</p>
+<p>The 25 chapters presented here are organized into three sections to study the theory and applications of the Laplace transform. The first and second sections introduce the Laplace transform and its inverse, respectively, covering essential properties, such as linearity, scaling, translation theorems and the convolution theorem. We also explain methods for evaluating Laplace and inverse Laplace transforms, including the Bromwich inversion formula for the inverse transform, asymptotic expansion methods, numerical methods and more. The third section is dedicated to applications of the Laplace transform in differential equations (ODEs, PDEs, integral equations, fractional differential equations) across various fields of physics and engineering. Engineers will find this section useful for studying control systems.</p>
+<p>The powerful symbolic and numerical computational capabilities of Wolfram Language, along with its robust visualization tools, provide an ideal environment in which to study this subject.</p>
+<p><img loading='lazy' src='https://content.wolfram.com/sites/39/2026/05/juano050126img1.png' width='534' height='465' alt="&quot;Laplace Transforms in Theory and Practice: A Computational Approach&quot; excerpt" title="&quot;Laplace Transforms in Theory and Practice: A Computational Approach&quot; excerpt"/></p>
+<p>Many examples and exercises are included to help the reader understand and apply the practical side of Laplace transform theory. The included examples use simple arguments to keep the focus on mastering essential concepts rather than sophisticated proofs. Solutions to exercises are presented at the end of each chapter. The final chapter, “Laplace Transforms in a Nutshell,” summarizes the book as a neat study guide for readers. The book also includes a sample exam covering most of the chapters and a table of Laplace and inverse Laplace transforms.</p>
+<p><img loading='lazy' src='https://content.wolfram.com/sites/39/2026/05/juano050126img2.png' width='504' height='457' alt="&quot;Laplace Transforms in Theory and Practice: A Computational Approach&quot; sample exam" title="&quot;Laplace Transforms in Theory and Practice: A Computational Approach&quot; sample exam"/></p>
+<p>Following the success of <em><a href="https://www.wolfram-media.com/products/essentials-of-complex-analysis/">Essentials of Complex Analysis: A Computational Approach</a></em> by Marco Saragnese, this book continues the Wolfram eTextbook Series in tackling typically abstract and pure mathematics with Wolfram Language tools. Expect more books in this series on advanced topics soon, including <em><a href="https://www.wolfram-media.com/products/introduction-to-special-functions/">Special Functions from Theory to Application: A Computational Approach</a></em> by Tigran Ishkhanyan in the next few months. Also keep an eye on Wolfram social channels and our <a href="https://www.wolfram-media.com/series/etextbooks/">series webpage</a> for opportunities to sign up for more prerelease editions of forthcoming books in the series. For more information, please contact <a href="mailto:publishing@wolfram.com" target="_blank" rel="noopener">publishing@wolfram.com</a>.</p>
+<div class="special-offer blue" style="padding-bottom: 20px;">
+<table>
+<tbody>
+<tr>
+<td width="590px">Check out more books featuring Wolfram Language and other Wolfram technologies on the <a href="https://www.wolfram.com/books/">Wolfram Books</a> page or contact <a href="https://www.wolfram-media.com/contact.html">Wolfram Media</a> with your own publishing ideas.</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.wolfram.com/2026/05/11/a-modern-etextbook-on-laplace-transforms-for-engineering-science-and-more/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>All Elementary Functions from a Single Binary Operator</title>
+		<link>https://blog.wolfram.com/2026/05/04/all-elementary-functions-from-a-single-binary-operator/</link>
+		<comments>https://blog.wolfram.com/2026/05/04/all-elementary-functions-from-a-single-binary-operator/#respond</comments>
+		<pubDate>Mon, 04 May 2026 17:41:01 +0000</pubDate>
+		<dc:creator><![CDATA[Wolfram Blog Team]]></dc:creator>
+		<category><![CDATA[Mathematics, Wolfram Community]]></category>
+		<guid isPermaLink="false">https://blog.wolfram.com/?p=94218</guid>
+		<description><![CDATA[A single two-input gate suffices for all of Boolean logic in digital hardware. No comparable primitive has been known for continuous mathematics: computing elementary functions such as sin, cos, sqrt and log has always required multiple distinct operations. Here I show that a single binary operator, eml(x,y)=exp(x)-ln(y), together with the constant 1, generates the standard [&#8230;]]]></description>
+				<content:encoded><![CDATA[<p>A single two-input gate suffices for all of Boolean logic in digital hardware. No comparable primitive has been known for continuous mathematics: computing elementary functions such as sin, cos, sqrt and log has always required multiple distinct operations. Here I show that a single binary operator, <em>eml</em>(<em>x</em>,<em>y</em>)=<em>exp</em>(<em>x</em>)-<em>ln</em>(<em>y</em>), together with the constant 1, generates the standard repertoire of a scientific calculator. This includes constants such as <em>e</em>, pi and <em>i</em>; arithmetic operations including addition, subtraction, multiplication, division and exponentiation as well as the usual transcendental and algebraic functions.<span id="more-94218"></span></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.wolfram.com/2026/05/04/all-elementary-functions-from-a-single-binary-operator/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+	</channel>
+</rss>

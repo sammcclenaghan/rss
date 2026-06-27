@@ -1,0 +1,78 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "digest"
+require "fileutils"
+require "net/http"
+require "uri"
+
+ROOT = File.expand_path("..", __dir__)
+FEEDS_FILE = File.expand_path("../../../config/feeds.txt", __dir__)
+OUT = File.join(ROOT, "test/fixtures/real")
+INDEX = File.join(OUT, "index.tsv")
+LIMIT = Integer(ENV.fetch("LIMIT", "12"))
+TIMEOUT = Integer(ENV.fetch("TIMEOUT", "10"))
+
+FileUtils.mkdir_p(OUT)
+
+def feed_lines
+  File.readlines(FEEDS_FILE, chomp: true).filter_map do |line|
+    line = line.strip
+    next if line.empty? || line.start_with?("#", "-")
+
+    url, name = line.split(/\s+/, 3)
+    next unless url&.start_with?("http")
+
+    if name.nil? && url.include?("[")
+      url, name = url.split("[", 2)
+      name = URI(url).host
+    end
+
+    [url, name || URI(url).host]
+  end
+end
+
+def fetch(uri, redirects: 3)
+  Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https", open_timeout: TIMEOUT, read_timeout: TIMEOUT) do |http|
+    request = Net::HTTP::Get.new(uri)
+    request["User-Agent"] = "feed_parser fixture snapshotter"
+    response = http.request(request)
+
+    if response.is_a?(Net::HTTPRedirection) && redirects.positive?
+      location = response["location"]
+      return fetch(URI.join(uri, location), redirects: redirects - 1) if location
+    end
+
+    response
+  end
+end
+
+rows = []
+feed_lines.first(LIMIT).each do |url, name|
+  uri = URI(url)
+  response = fetch(uri)
+
+  unless response.is_a?(Net::HTTPSuccess)
+    warn "skip #{url}: HTTP #{response.code}"
+    next
+  end
+
+  body = response.body.to_s.lstrip
+  unless body.start_with?("<?xml", "<rss", "<feed", "<rdf:RDF", "{")
+    warn "skip #{url}: response does not look like a feed"
+    next
+  end
+
+  content_type = response["content-type"].to_s
+  ext = content_type.include?("json") || body.start_with?("{") ? "json" : "xml"
+  slug = name.gsub(/[^A-Za-z0-9]+/, "_").gsub(/\A_|_\z/, "").downcase
+  file = "#{slug}_#{Digest::SHA256.hexdigest(url)[0, 8]}.#{ext}"
+
+  File.binwrite(File.join(OUT, file), response.body)
+  rows << [file, name, url]
+  puts "#{file}\t#{name}\t#{url}"
+rescue StandardError => e
+  warn "skip #{url}: #{e.class}: #{e.message}"
+end
+
+File.write(INDEX, rows.map { |row| row.join("\t") }.join("\n") + "\n")

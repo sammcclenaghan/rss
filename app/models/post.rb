@@ -13,6 +13,11 @@ class Post < ApplicationRecord
   # which sanitizes it into the post's Content record. Not persisted directly.
   attr_accessor :raw_content
 
+  # Transient image URL discovered from the feed itself. Feed::Refresher passes
+  # this to thumbnail fetching so we can avoid fetching the article page just to
+  # discover an Open Graph image when RSS/Atom already supplied one.
+  attr_accessor :feed_image_url
+
   # Transient read flag, batch-loaded by Post::Fetcher to avoid per-post
   # queries. nil means "not loaded"; `read?` then falls back to a lookup.
   attr_accessor :read_state

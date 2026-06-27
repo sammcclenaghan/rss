@@ -16,14 +16,30 @@ class Feed
     end
 
     def refresh(feed)
-      @fetcher.fetch(feed).each do |incoming|
+      incoming_posts = @fetcher.fetch(feed)
+      Rails.logger.info("Feed refresh started feed_id=#{feed.id} url=#{feed.url} incoming=#{incoming_posts.size}")
+
+      created_count = 0
+      content_count = 0
+      extraction_count = 0
+
+      incoming_posts.each do |incoming|
         post, created = upsert(feed, incoming)
-        save_content(post, incoming) if @load_content
-        FetchPostThumbnailJob.perform_later(post) if created && @load_thumbnails
-        ExtractPostContentJob.perform_later(post) if created && @extract_content && post.content.nil?
+        created_count += 1 if created
+        content_count += 1 if @load_content && save_content(post, incoming)
+        enqueue_thumbnail(post, incoming) if created && @load_thumbnails
+        if created && @extract_content && post.content.nil?
+          ExtractPostContentJob.perform_later(post)
+          extraction_count += 1
+        end
       end
 
       feed.mark_fetched
+      Rails.logger.info(
+        "Feed refresh finished feed_id=#{feed.id} url=#{feed.url} " \
+        "incoming=#{incoming_posts.size} created=#{created_count} " \
+        "content_saved=#{content_count} extraction_enqueued=#{extraction_count}"
+      )
     end
 
     private
@@ -42,15 +58,23 @@ class Feed
         [ post, created ]
       end
 
+      def enqueue_thumbnail(post, incoming)
+        FetchPostThumbnailJob.perform_later(post, incoming.feed_image_url.presence)
+      end
+
       # Sanitizes the feed-provided article HTML and stores it as feed content.
       # Runs for both new and existing posts so a re-refresh backfills content
       # for the first time; Post::Content.capture guards against clobbering a
       # fuller body (e.g. a previously extracted article).
       def save_content(post, incoming)
-        return if incoming.raw_content.blank?
+        return false if incoming.raw_content.blank?
 
         body = ContentFilters::ArticleContent.apply(incoming.raw_content, base_url: post.url)
+        before = post.content&.id
         Post::Content.capture(post, body, source: Post::Content::FEED)
+        saved = post.reload.content&.id != before || post.content&.source == Post::Content::FEED
+        Rails.logger.info("Feed content saved post_id=#{post.id} feed_id=#{post.feed_id} bytes=#{body.to_s.bytesize}") if saved
+        saved
       end
   end
 end

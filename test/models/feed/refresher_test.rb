@@ -29,6 +29,17 @@ class Feed::RefresherTest < ActiveSupport::TestCase
     end
   end
 
+  test "passes feed-provided image urls to thumbnail jobs" do
+    incoming = [ build_incoming(guid: "img-1", title: "Image", feed_image_url: "https://cdn.example.com/image.jpg") ]
+
+    assert_enqueued_with(job: FetchPostThumbnailJob) do
+      refresher(incoming, load_thumbnails: true).refresh(@feed)
+    end
+
+    job = enqueued_jobs.find { |enqueued| enqueued[:job] == FetchPostThumbnailJob }
+    assert_equal "https://cdn.example.com/image.jpg", job[:args].last
+  end
+
   test "does not enqueue thumbnail jobs when disabled" do
     assert_no_enqueued_jobs only: FetchPostThumbnailJob do
       refresher(@incoming, load_thumbnails: false).refresh(@feed)
@@ -116,8 +127,10 @@ class Feed::RefresherTest < ActiveSupport::TestCase
         load_thumbnails: load_thumbnails, load_content: load_content, extract_content: extract_content)
     end
 
-    def build_incoming(guid:, title:, url: "https://example.com/#{guid}", raw_content: nil)
-      Post.new(title: title, url: url, guid: guid, description: "Body", published_at: 1.hour.ago.to_i)
-        .tap { |post| post.raw_content = raw_content }
+    def build_incoming(guid:, title:, url: "https://example.com/#{guid}", raw_content: nil, feed_image_url: nil)
+      Post.new(title: title, url: url, guid: guid, description: "Body", published_at: 1.hour.ago.to_i).tap do |post|
+        post.raw_content = raw_content
+        post.feed_image_url = feed_image_url
+      end
     end
 end

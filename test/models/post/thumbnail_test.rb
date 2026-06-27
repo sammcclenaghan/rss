@@ -1,7 +1,15 @@
 require "test_helper"
 
 class Post::ThumbnailTest < ActiveSupport::TestCase
-  setup { @post = posts(:basecamp_post) }
+  setup do
+    @post = feeds(:basecamp).posts.create!(
+      title: "Thumbnail Target",
+      url: "https://example.com/thumbnail-target",
+      guid: "thumbnail-target-#{SecureRandom.hex(4)}",
+      description: "Body",
+      published_at: Time.current.to_i
+    )
+  end
 
   teardown do
     file = Rails.root.join("public/storage", @post.reload.thumbnail)
@@ -14,6 +22,15 @@ class Post::ThumbnailTest < ActiveSupport::TestCase
       .stub("https://cdn.test/image.png", body: png_bytes, content_type: "image/png")
 
     assert Post::Thumbnail.new(client: client).fetch_and_store(@post)
+    assert @post.reload.thumbnail.end_with?(".png")
+    assert Rails.root.join("public/storage", @post.thumbnail).exist?
+  end
+
+  test "downloads a feed-provided image url directly" do
+    client = FakeHTTPClient.new
+      .stub("https://cdn.test/feed-image.png", body: png_bytes, content_type: "image/png")
+
+    assert Post::Thumbnail.new(client: client).fetch_and_store(@post, image_url: "https://cdn.test/feed-image.png")
     assert @post.reload.thumbnail.end_with?(".png")
     assert Rails.root.join("public/storage", @post.thumbnail).exist?
   end

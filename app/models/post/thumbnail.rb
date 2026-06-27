@@ -1,4 +1,5 @@
 require "restricted_http/client"
+require "digest"
 require "marcel"
 
 class Post
@@ -15,8 +16,10 @@ class Post
     end
 
     # Fetches and stores the thumbnail for a post. Returns true on success.
-    def fetch_and_store(post)
-      image_url = discover_image_url(post.url)
+    # When the feed provides an image URL we can download it directly; otherwise
+    # fall back to fetching the article page and reading its Open Graph image.
+    def fetch_and_store(post, image_url: nil)
+      image_url = image_url.presence || discover_image_url(post.url)
       return false if image_url.blank?
 
       image = download_image(image_url)
@@ -53,7 +56,8 @@ class Post
       end
 
       def store(post, image)
-        path = "thumbs/#{post.feed_id}/#{post.id}.#{image[:extension]}"
+        fingerprint = Digest::SHA256.hexdigest(post.guid.to_s)[0, 8]
+        path = "thumbs/#{post.feed_id}/#{post.id}-#{fingerprint}.#{image[:extension]}"
         destination = Rails.root.join("public/storage", path)
 
         destination.dirname.mkpath

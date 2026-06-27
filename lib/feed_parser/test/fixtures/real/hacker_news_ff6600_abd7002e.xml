@@ -1,0 +1,91 @@
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hacker News: Front Page</title><link>https://news.ycombinator.com/</link><description>Hacker News RSS</description><docs>https://hnrss.org/</docs><generator>hnrss v2.1.1</generator><lastBuildDate>Sat, 27 Jun 2026 06:06:02 +0000</lastBuildDate><atom:link href="https://hnrss.org/frontpage?points=50" rel="self" type="application/rss+xml"></atom:link><item><title><![CDATA[Om]]></title><description><![CDATA[
+<p>Related: <i>Om Malik has died</i> - <a href="https://news.ycombinator.com/item?id=48678852">https://news.ycombinator.com/item?id=48678852</a> - June 2026 (161 comments)</p>
+<hr>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48693391">https://news.ycombinator.com/item?id=48693391</a></p>
+<p>Points: 263</p>
+<p># Comments: 15</p>
+]]></description><pubDate>Fri, 26 Jun 2026 23:33:46 +0000</pubDate><link>https://daringfireball.net/2026/06/om</link><dc:creator>throw0101a</dc:creator><comments>https://news.ycombinator.com/item?id=48693391</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48693391</guid></item><item><title><![CDATA[U.S. allows Anthropic to release Mythos AI to ‘trusted’ US organizations]]></title><description><![CDATA[
+<p><a href="https://archive.md/ArXuF" rel="nofollow">https://archive.md/ArXuF</a><p><a href="https://www.nbcnews.com/tech/tech-news/us-government-gives-anthropic-green-light-limited-re-release-mythos-5-rcna352018" rel="nofollow">https://www.nbcnews.com/tech/tech-news/us-government-gives-a...</a></p>
+<hr>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48692995">https://news.ycombinator.com/item?id=48692995</a></p>
+<p>Points: 342</p>
+<p># Comments: 339</p>
+]]></description><pubDate>Fri, 26 Jun 2026 22:48:28 +0000</pubDate><link>https://www.semafor.com/article/06/27/2026/us-releases-powerful-anthropic-model-mythos-to-some-us-companies</link><dc:creator>bobrenjc93</dc:creator><comments>https://news.ycombinator.com/item?id=48692995</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48692995</guid></item><item><title><![CDATA[Why does kinetic energy increase quadratically, not linearly, with speed? (2011)]]></title><description><![CDATA[
+<p>Article URL: <a href="https://physics.stackexchange.com/questions/535/why-does-kinetic-energy-increase-quadratically-not-linearly-with-speed">https://physics.stackexchange.com/questions/535/why-does-kinetic-energy-increase-quadratically-not-linearly-with-speed</a></p>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48692946">https://news.ycombinator.com/item?id=48692946</a></p>
+<p>Points: 182</p>
+<p># Comments: 86</p>
+]]></description><pubDate>Fri, 26 Jun 2026 22:43:29 +0000</pubDate><link>https://physics.stackexchange.com/questions/535/why-does-kinetic-energy-increase-quadratically-not-linearly-with-speed</link><dc:creator>ProxyTracer</dc:creator><comments>https://news.ycombinator.com/item?id=48692946</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48692946</guid></item><item><title><![CDATA[AI in mathematics is forcing big questions]]></title><description><![CDATA[
+<p>Article URL: <a href="https://spectrum.ieee.org/ai-in-mathematics">https://spectrum.ieee.org/ai-in-mathematics</a></p>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48692883">https://news.ycombinator.com/item?id=48692883</a></p>
+<p>Points: 96</p>
+<p># Comments: 61</p>
+]]></description><pubDate>Fri, 26 Jun 2026 22:36:51 +0000</pubDate><link>https://spectrum.ieee.org/ai-in-mathematics</link><dc:creator>rbanffy</dc:creator><comments>https://news.ycombinator.com/item?id=48692883</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48692883</guid></item><item><title><![CDATA[A C++ implementation of a fast hash map and hash set using hopscotch hashing]]></title><description><![CDATA[
+<p>Article URL: <a href="https://github.com/Tessil/hopscotch-map">https://github.com/Tessil/hopscotch-map</a></p>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48692090">https://news.ycombinator.com/item?id=48692090</a></p>
+<p>Points: 81</p>
+<p># Comments: 13</p>
+]]></description><pubDate>Fri, 26 Jun 2026 21:18:28 +0000</pubDate><link>https://github.com/Tessil/hopscotch-map</link><dc:creator>gjvc</dc:creator><comments>https://news.ycombinator.com/item?id=48692090</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48692090</guid></item><item><title><![CDATA[The gap between open weights LLMs and closed source LLMs]]></title><description><![CDATA[
+<p>Article URL: <a href="https://blog.doubleword.ai/frontier-os-llm">https://blog.doubleword.ai/frontier-os-llm</a></p>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48692058">https://news.ycombinator.com/item?id=48692058</a></p>
+<p>Points: 175</p>
+<p># Comments: 144</p>
+]]></description><pubDate>Fri, 26 Jun 2026 21:14:47 +0000</pubDate><link>https://blog.doubleword.ai/frontier-os-llm</link><dc:creator>kkm</dc:creator><comments>https://news.ycombinator.com/item?id=48692058</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48692058</guid></item><item><title><![CDATA[We can still stop California's 3D printer surveillance scheme]]></title><description><![CDATA[
+<p>Article URL: <a href="https://www.eff.org/deeplinks/2026/06/we-can-still-stop-californias-3d-printer-surveillance-scheme">https://www.eff.org/deeplinks/2026/06/we-can-still-stop-californias-3d-printer-surveillance-scheme</a></p>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48692051">https://news.ycombinator.com/item?id=48692051</a></p>
+<p>Points: 329</p>
+<p># Comments: 114</p>
+]]></description><pubDate>Fri, 26 Jun 2026 21:13:50 +0000</pubDate><link>https://www.eff.org/deeplinks/2026/06/we-can-still-stop-californias-3d-printer-surveillance-scheme</link><dc:creator>hn_acker</dc:creator><comments>https://news.ycombinator.com/item?id=48692051</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48692051</guid></item><item><title><![CDATA[Long Wave radio era set to end with Droitwich switch-off]]></title><description><![CDATA[
+<p>Article URL: <a href="https://www.bbc.com/news/articles/c74yn7v7k4qo">https://www.bbc.com/news/articles/c74yn7v7k4qo</a></p>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48690709">https://news.ycombinator.com/item?id=48690709</a></p>
+<p>Points: 74</p>
+<p># Comments: 30</p>
+]]></description><pubDate>Fri, 26 Jun 2026 19:12:20 +0000</pubDate><link>https://www.bbc.com/news/articles/c74yn7v7k4qo</link><dc:creator>speckx</dc:creator><comments>https://news.ycombinator.com/item?id=48690709</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48690709</guid></item><item><title><![CDATA[U.S. government will decide who gets to use GPT-5.6]]></title><description><![CDATA[
+<p><a href="https://archive.ph/PCQQl" rel="nofollow">https://archive.ph/PCQQl</a></p>
+<hr>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48690101">https://news.ycombinator.com/item?id=48690101</a></p>
+<p>Points: 940</p>
+<p># Comments: 1010</p>
+]]></description><pubDate>Fri, 26 Jun 2026 18:23:14 +0000</pubDate><link>https://www.washingtonpost.com/technology/2026/06/26/openai-says-us-government-will-vet-users-its-latest-ai-model/</link><dc:creator>alain94040</dc:creator><comments>https://news.ycombinator.com/item?id=48690101</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48690101</guid></item><item><title><![CDATA[Pre-Modern Armies for Worldbuilders, Part III: Paying for It]]></title><description><![CDATA[
+<p>Article URL: <a href="https://acoup.blog/2026/06/26/collections-pre-modern-armies-for-worldbuilders-part-iii-paying-for-it/">https://acoup.blog/2026/06/26/collections-pre-modern-armies-for-worldbuilders-part-iii-paying-for-it/</a></p>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48689859">https://news.ycombinator.com/item?id=48689859</a></p>
+<p>Points: 81</p>
+<p># Comments: 15</p>
+]]></description><pubDate>Fri, 26 Jun 2026 18:04:05 +0000</pubDate><link>https://acoup.blog/2026/06/26/collections-pre-modern-armies-for-worldbuilders-part-iii-paying-for-it/</link><dc:creator>jfoucher</dc:creator><comments>https://news.ycombinator.com/item?id=48689859</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48689859</guid></item><item><title><![CDATA[What Is a Nomogram and Why Would It Interest Me?]]></title><description><![CDATA[
+<p>Article URL: <a href="https://lefakkomies.github.io/pynomo-doc/introduction/introduction.html#what-is-a-nomogram-and-why-would-it-interest-me">https://lefakkomies.github.io/pynomo-doc/introduction/introduction.html#what-is-a-nomogram-and-why-would-it-interest-me</a></p>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48689277">https://news.ycombinator.com/item?id=48689277</a></p>
+<p>Points: 103</p>
+<p># Comments: 18</p>
+]]></description><pubDate>Fri, 26 Jun 2026 17:24:25 +0000</pubDate><link>https://lefakkomies.github.io/pynomo-doc/introduction/introduction.html#what-is-a-nomogram-and-why-would-it-interest-me</link><dc:creator>Eridanus2</dc:creator><comments>https://news.ycombinator.com/item?id=48689277</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48689277</guid></item><item><title><![CDATA[Previewing GPT‑5.6 Sol: a next-generation model]]></title><description><![CDATA[
+<p>System card: <a href="https://deploymentsafety.openai.com/gpt-5-6-preview" rel="nofollow">https://deploymentsafety.openai.com/gpt-5-6-preview</a></p>
+<hr>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48689028">https://news.ycombinator.com/item?id=48689028</a></p>
+<p>Points: 928</p>
+<p># Comments: 565</p>
+]]></description><pubDate>Fri, 26 Jun 2026 17:06:55 +0000</pubDate><link>https://openai.com/index/previewing-gpt-5-6-sol/</link><dc:creator>minimaxir</dc:creator><comments>https://news.ycombinator.com/item?id=48689028</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48689028</guid></item><item><title><![CDATA[Show HN: Smart model routing directly in Claude, Codex and Cursor]]></title><description><![CDATA[
+<p>We built a model router that plugs into coding agents (e.g. Claude Code, Codex, Cursor, etc.) and intelligently sends requests to the best model to serve them. Here's a quick demo of running it locally: <a href="https://www.youtube.com/watch?v=isKhAyivtfM" rel="nofollow">https://www.youtube.com/watch?v=isKhAyivtfM</a>.<p>At Weave, we write most of our code with AI, and it's been getting more expensive. This came to a head when Opus 4.7 was released and, thanks to its tokenizer changes, our costs shot up. We knew we didn't need Opus for <i>everything</i> but we didn't want to lose out on the intelligence for the cases where you really need it. So we decided to build a model router to handle this for us.<p>The Weave Router acts as an Anthropic/OpenAI endpoint specifically for coding agents. It looks at every inference request and intelligently (more on that in a sec) decides what model to send it to, handling all the translations required along the way. So it can use faster/cheaper models (e.g. DeepSeek v4, GLM 5.2, Kimi K2.6) when possible, and frontier models (Opus 4.8 & GPT 5.5 (& Fable whenever it's back)) when necessary.<p>How do we know what model to route to? We trained an RL model on tens of thousands (so far!) of agent traces. We reward the routing model when it selects an LLM that successfully completes the given task.<p>Here's an example: if you ask the router to plan a complex change, it will (probably) route that request to Opus 4.8. Subagents exploring the codebase to gather context will be routed to more suitable models (e.g. DeepSeek V4 Flash). Then when you have the plan ready to implement, it will be (most likely) be handed to a quicker model (e.g. GLM 5.2) to carry it out.<p>We've been using this internally for the last month or so. We've saved 40% on tokens vs. what we otherwise would have paid, with no noticeable differences in quality or velocity.<p>The router is source-available under Elastic License 2.0, so you can self-host it. Or if you prefer, you can also use our hosted version: weaverouter.com.<p>I'll be here to answer any questions you may have!</p>
+<hr>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48688700">https://news.ycombinator.com/item?id=48688700</a></p>
+<p>Points: 161</p>
+<p># Comments: 94</p>
+]]></description><pubDate>Fri, 26 Jun 2026 16:40:11 +0000</pubDate><link>https://github.com/workweave/router</link><dc:creator>adchurch</dc:creator><comments>https://news.ycombinator.com/item?id=48688700</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48688700</guid></item><item><title><![CDATA[Ultrasound imaging of the brain]]></title><description><![CDATA[
+<p>Article URL: <a href="https://alephneuro.com/blog/ultrasound-brain">https://alephneuro.com/blog/ultrasound-brain</a></p>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48685558">https://news.ycombinator.com/item?id=48685558</a></p>
+<p>Points: 261</p>
+<p># Comments: 109</p>
+]]></description><pubDate>Fri, 26 Jun 2026 11:51:11 +0000</pubDate><link>https://alephneuro.com/blog/ultrasound-brain</link><dc:creator>rossant</dc:creator><comments>https://news.ycombinator.com/item?id=48685558</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48685558</guid></item><item><title><![CDATA[A human postmortem of the 1996 AOL outage]]></title><description><![CDATA[
+<p>Article URL: <a href="https://ngrok.com/blog/aol-was-down-1996">https://ngrok.com/blog/aol-was-down-1996</a></p>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48660522">https://news.ycombinator.com/item?id=48660522</a></p>
+<p>Points: 58</p>
+<p># Comments: 12</p>
+]]></description><pubDate>Wed, 24 Jun 2026 14:29:17 +0000</pubDate><link>https://ngrok.com/blog/aol-was-down-1996</link><dc:creator>EndEntire</dc:creator><comments>https://news.ycombinator.com/item?id=48660522</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48660522</guid></item><item><title><![CDATA[The "Bizarre Headgear" exhibit at the Sam Noble museum]]></title><description><![CDATA[
+<p>Article URL: <a href="https://svpow.com/2026/05/15/the-bizarre-headgear-exhibit-at-the-sam-noble-museum-is-incredible/">https://svpow.com/2026/05/15/the-bizarre-headgear-exhibit-at-the-sam-noble-museum-is-incredible/</a></p>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48644111">https://news.ycombinator.com/item?id=48644111</a></p>
+<p>Points: 72</p>
+<p># Comments: 7</p>
+]]></description><pubDate>Tue, 23 Jun 2026 12:45:09 +0000</pubDate><link>https://svpow.com/2026/05/15/the-bizarre-headgear-exhibit-at-the-sam-noble-museum-is-incredible/</link><dc:creator>surprisetalk</dc:creator><comments>https://news.ycombinator.com/item?id=48644111</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48644111</guid></item><item><title><![CDATA[MicroVMs: Run isolated sandboxes with full lifecycle control]]></title><description><![CDATA[
+<p>Article URL: <a href="https://aws.amazon.com/blogs/aws/run-isolated-sandboxes-with-full-lifecycle-control-aws-lambda-introduces-microvms/">https://aws.amazon.com/blogs/aws/run-isolated-sandboxes-with-full-lifecycle-control-aws-lambda-introduces-microvms/</a></p>
+<p>Comments URL: <a href="https://news.ycombinator.com/item?id=48642510">https://news.ycombinator.com/item?id=48642510</a></p>
+<p>Points: 307</p>
+<p># Comments: 172</p>
+]]></description><pubDate>Tue, 23 Jun 2026 09:39:35 +0000</pubDate><link>https://aws.amazon.com/blogs/aws/run-isolated-sandboxes-with-full-lifecycle-control-aws-lambda-introduces-microvms/</link><dc:creator>justincormack</dc:creator><comments>https://news.ycombinator.com/item?id=48642510</comments><guid isPermaLink="false">https://news.ycombinator.com/item?id=48642510</guid></item></channel></rss>

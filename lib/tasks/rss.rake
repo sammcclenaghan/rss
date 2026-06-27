@@ -19,12 +19,22 @@ namespace :rss do
 
   desc "Re-fetch every feed to backfill post content (content:encoded / <content>)"
   task backfill_content: :environment do
+    total = Feed.count
+    missing_before = Post.where.missing(:content).count
     count = 0
-    Feed.find_each do |feed|
+
+    puts "Backfill content refresh starting..."
+    puts "  feeds: #{total}"
+    puts "  posts missing content before enqueue: #{missing_before}"
+
+    Feed.find_each.with_index(1) do |feed, index|
       RefreshFeedJob.perform_later(feed)
       count += 1
+      puts "  [#{index}/#{total}] enqueued RefreshFeedJob feed_id=#{feed.id} url=#{feed.url}"
     end
-    puts "Enqueued a content backfill refresh for #{count} feed(s)."
+
+    puts "Backfill content refresh enqueued #{count} feed(s)."
+    puts "Watch worker logs for Feed::Refresher progress. Re-check with: bin/rails runner 'puts Post.where.missing(:content).count'"
   end
 
   desc "Extract full article content for every post that is still missing it"

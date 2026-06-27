@@ -1,0 +1,2233 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>John D. Cook</title>
+	<atom:link href="https://www.johndcook.com/feed/" rel="self" type="application/rss+xml" />
+	<link>https://www.johndcook.com/blog</link>
+	<description>Applied Mathematics Consulting</description>
+	<lastBuildDate>Sat, 27 Jun 2026 01:51:03 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	
+
+<image>
+	<url>https://www.johndcook.com/wp-content/uploads/2020/01/cropped-favicon_512-32x32.png</url>
+	<title>John D. Cook</title>
+	<link>https://www.johndcook.com/blog</link>
+	<width>32</width>
+	<height>32</height>
+</image> 
+	<item>
+		<title>Writing down harmonic numbers</title>
+		<link>https://www.johndcook.com/blog/2026/06/26/writing-down-harmonic-numbers/</link>
+					<comments>https://www.johndcook.com/blog/2026/06/26/writing-down-harmonic-numbers/#respond</comments>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Sat, 27 Jun 2026 01:51:03 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Number theory]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247251</guid>
+
+					<description><![CDATA[<p>The nth harmonic number is the sum of the reciprocals of the first n positive integers. Hn = 1 + 1/2 + 1/3 + 1/4 + … + 1/n The product of all the denominators is n!, so you could write Hn as a fraction Hn = p/q where p = n! Hn is an integer and q = n!. While [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/26/writing-down-harmonic-numbers/">Writing down harmonic numbers</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>The <em>n</em>th harmonic number is the sum of the reciprocals of the first <em>n</em> positive integers.</p>
+<p style="padding-left: 40px;"><em>H</em><sub><em>n</em></sub> = 1 + 1/2 + 1/3 + 1/4 + … + 1/<em>n</em></p>
+<p>The product of all the denominators is <em>n</em>!, so you could write <em>H</em><sub><em>n</em></sub> as a fraction</p>
+<p style="padding-left: 40px;"><em>H</em><sub><em>n</em></sub> = <em>p</em>/<em>q</em></p>
+<p>where <em>p</em> = <em>n</em>! <em>H</em><sub><em>n</em></sub> is an integer and <em>q</em> = <em>n</em>!.</p>
+<p>While <em>p</em>/<em>q</em> is <em>a</em> way to write <em>H</em><sub><em>n</em></sub> as a fraction, it&#8217;s not the most efficient because <em>p</em> and <em>n</em>! will have common factors.</p>
+<p>If we write <em>H</em><sub><em>n</em></sub> as a reduced fraction, the denominator will be the least common multiple of the integers 1 through <em>n</em>. That number is asymptotically exp(<em>n</em>). That estimate follows from the prime number theorem.</p>
+<p>So for large <em>n</em> the denominator will be roughly exp(<em>n</em>), and in base <em>b</em> it would have around</p>
+<p style="padding-left: 40px;"><span style="background-color: #dee;"><em>n</em>/log(<em>b</em>)</span></p>
+<p>digits.</p>
+<p>The numerator will be exp(<em>n</em>) <em>H</em><sub><em>n</em></sub>, and since <em>H</em><sub><em>n</em></sub> is asymptotically log(<em>n</em>) + γ, the numerator for large <em>n</em> will be roughly</p>
+<p style="padding-left: 40px;">exp(<em>n</em>) (log(<em>n</em>) + γ)</p>
+<p>and will have around</p>
+<p style="padding-left: 40px;"><span style="background-color: #dee;">(<em>n</em> + log log(<em>n</em>) ) / log(<em>b</em>)</span></p>
+<p>digits.</p>
+<p>Let&#8217;s see how well our asymptotic estimates work for <em>n</em> = 50. The 50th harmonic number is</p>
+<p style="padding-left: 40px;"><em>H</em><sub>50</sub> = 13943237577224054960759 / 3099044504245996706400.</p>
+<p>This fraction has 23 digits in the numerator and 22 in the denominator. We would have predicted around</p>
+<p style="padding-left: 40px;">(50 + log(log(50)))/log(10) = 22.3</p>
+<p>digits in the numerator and</p>
+<p style="padding-left: 40px;">50/log(10) = 21.7</p>
+<p>digits in the denominator.</p>
+<p>Let&#8217;s try a larger example, looking at the 1000th harmonic number in binary. We&#8217;ll use the following Python code.</p>
+<pre>from fractions import Fraction
+
+def bits(n):
+    H = sum(Fraction(i, i+1) for i in range(1, n+1))
+    p, q = H.numerator, H.denominator
+    # subtract 2 because bin returns a string starting with 0b.
+    return len(bin(p)) - 2, len(bin(q)) - 2
+
+print(bits(1000))
+</pre>
+<p>This returns 1448 and 1438. We would have estimated</p>
+<p style="padding-left: 40px;">(1000 + log(log(1000)))/log(2) = 1445.4</p>
+<p>bits in the numerator and</p>
+<p style="padding-left: 40px;">1000/log(2) = 1442.7</p>
+<p>bits in the denominator.</p>
+<h2>Related posts</h2>
+<ul>
+<li class='link'><a href='https://www.johndcook.com/blog/2017/04/18/computing-harmonic-numbers/'>Computing harmonic numbers</a></li>
+<li class='link'><a href='https://www.johndcook.com/blog/2021/01/23/sums-of-consecutive-reciprocals/'>Sums of consecutive reciprocals</a></li>
+<li class='link'><a href='https://www.johndcook.com/blog/2023/05/23/am-over-gm/'>AM over GM</a></li>
+</ul>The post <a href="https://www.johndcook.com/blog/2026/06/26/writing-down-harmonic-numbers/">Writing down harmonic numbers</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+					<wfw:commentRss>https://www.johndcook.com/blog/2026/06/26/writing-down-harmonic-numbers/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Hart&#8217;s theorem</title>
+		<link>https://www.johndcook.com/blog/2026/06/25/harts-theorem/</link>
+					<comments>https://www.johndcook.com/blog/2026/06/25/harts-theorem/#respond</comments>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Thu, 25 Jun 2026 19:20:09 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Geometry]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247249</guid>
+
+					<description><![CDATA[<p>Hart&#8217;s theorem says If a triangle be formed by the arcs of three circles, the inscribed and the three escribed circles are all tangent to a new circle or line. Here &#8220;triangle&#8221; means a three-sided figure whose sides are portions of a circle. The inscribed circle is the largest circle that can fit inside the [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/25/harts-theorem/">Hart’s theorem</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>Hart&#8217;s theorem says</p>
+<blockquote><p>If a triangle be formed by the arcs of three circles, the inscribed and the three escribed circles are all tangent to a new circle or line.</p></blockquote>
+<p>Here &#8220;triangle&#8221; means a three-sided figure whose sides are portions of a circle. The inscribed circle is the largest circle that can fit inside the three-sided figure.</p>
+<p>The &#8220;escribed&#8221; circles are analogous to the excircles in the <a href="https://www.johndcook.com/blog/2026/06/25/incircle-excircle/">previous post</a>: you extend two sides and find a circle that is tangent to the triangle side and the extended side. The difference here being that the side extensions are now circles.</p>
+<p><img fetchpriority="high" decoding="async" class="aligncenter size-medium" src="https://www.johndcook.com/hart_circles.png" width="400" height="466" /></p>The post <a href="https://www.johndcook.com/blog/2026/06/25/harts-theorem/">Hart’s theorem</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+					<wfw:commentRss>https://www.johndcook.com/blog/2026/06/25/harts-theorem/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Incircles and Excircles of Pythagorean triangles</title>
+		<link>https://www.johndcook.com/blog/2026/06/25/incircle-excircle/</link>
+					<comments>https://www.johndcook.com/blog/2026/06/25/incircle-excircle/#comments</comments>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Thu, 25 Jun 2026 14:35:52 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Geometry]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247245</guid>
+
+					<description><![CDATA[<p>This post will reveal the connection between my two previous posts: one on the Star Trek lemma and one on Pythagorean triples. In the process of writing the latter, I looked at the Wikipedia article on Pythagorean triples and noticed this curious paragraph. In every Pythagorean triangle, the radius of the incircle and the radii of the [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/25/incircle-excircle/">Incircles and Excircles of Pythagorean triangles</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>This post will reveal the connection between my two previous posts: one on the <a href="https://www.johndcook.com/blog/2026/06/24/star-trek-lemma/">Star Trek lemma</a> and one on <a href="https://www.johndcook.com/blog/2026/06/25/consecutive-pythagorean/">Pythagorean triples</a>.</p>
+<p>In the process of writing the latter, I looked at the <a href="https://en.wikipedia.org/wiki/Pythagorean_triple">Wikipedia article</a> on Pythagorean triples and noticed this curious paragraph.</p>
+<blockquote><p>In every Pythagorean triangle, the radius of the incircle and the radii of the three excircles are positive integers. Specifically, for a primitive triple the radius of the incircle is <i>r</i> = <i>n</i>(<i>m</i> − <i>n</i>), and the radii of the excircles opposite the sides <i>m</i><sup>2</sup> − <i>n<sup>2</sup></i>, <i>2mn</i>, and the hypotenuse <i>m</i><sup>2</sup> + <i>n</i><sup>2</sup> are respectively <i>m</i>(<i>m</i> − <i>n</i>), <i>n</i>(<i>m</i> + <i>n</i>), and <em>m</em>(<i>m</i> + <i>n</i>).</p></blockquote>
+<p>The citation for the paragraph above was the book by my former officemate, which led to the post on the Star Trek lemma. The passage in Arthur Baragar&#8217;s book that Wikipedia cites is Exercise 15.3.</p>
+<blockquote><p>Let Δ<em>ABC</em> be a right angle triangle with sides of integer length. Prove that the inradius <em>r</em> and the exradii <em>r</em><sub><em>a</em></sub>, <em>r</em><sub><em>b</em></sub>, and <em>r</em><sub><em>c</em></sub> are all integers.</p></blockquote>
+<p>I don&#8217;t know whether Arthur discovered this theorem, but I&#8217;ll call it Baragar&#8217;s theorem for this post.</p>
+<h2>Incircles and excircles</h2>
+<p>To unpack Baragar&#8217;s theorem, let&#8217;s start by saying what <a href="https://www.johndcook.com/blog/2022/11/26/incircle-and-excircles/">incircles and excircles</a> are. Incircles are more familiar. The <strong>incircle</strong> of a triangle is the largest circle that can be inscribed inside the triangle, and the radius of this circle is the inradius.</p>
+<p>Since an incircle is an inscribed circle, you might expect an excircle to be a circumscribed circle, but that&#8217;s not it. There are three excircles, one for each side. To find the <strong>excircle</strong> for a side, extend the other two sides and find the circle tangent to the side and the two extensions. The radius of an excircle is its exradius.</p>
+<h2>Proof</h2>
+<p>Baragar&#8217;s theorem follows directly from Euclid&#8217;s formula for Pythagorean triples mentioned in the previous post</p>
+<p><img decoding="async" class="aligncenter" src="https://www.johndcook.com/osborne2.svg" alt="\begin{align*} a &amp;= m^2 - n^2 \\ b &amp;= 2mn \\ c &amp;= m^2 + n^2 \end{align*} " width="96" height="79" /></p>
+<p>and formulas for the inradius <em>r</em> and the exradii <em>r</em><sub><em>a</em></sub>, <em>r</em><sub><em>b</em></sub>, and <em>r</em><sub><em>c</em></sub>.</p>
+<p><img decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/exradii.svg" alt="\begin{align*} r &amp;= \frac{K}{s} \\ r_a &amp;= \frac{K}{s - a} \\ r_b &amp;= \frac{K}{s - b} \\ r_c &amp;= \frac{K}{s - c} \\ \end{align*}" width="80" height="181" /></p>
+<p>Here <em>K</em> is the area of the triangle, which in our case is <em>ab</em>/2, and <em>s</em> is the semiperimeter, half the perimeter.</p>
+<p>Expressing the radii in terms of <em>m</em> and <em>n</em> gives the values cited by Wikipedia above.</p>
+<h2>Illustrating the theorem</h2>
+<p>I&#8217;d like to write a Python script to illustrate the theorem, and knowing the radii of the circles help, but we also need to know the centers of the circles.</p>
+<p>The center of the incircle is the weighted average of the vertices, with weights given by the lengths of the opposite sides. That is, if the vertices are <em>A</em>, <em>B</em>, and <em>C</em>, and the sides opposite these vertices are <em>a</em>, <em>b</em>, and <em>c</em>, the the incenter is</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/incenter_formula.svg" alt="I = \frac{aA + bB + cC}{a + b + c}" width="141" height="41" /></p>
+<p>The centers for the excircles have remarkably similar expressions. For the incenter of the circle opposite a vertex, flip the sign of the corresponding side.</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/excenters.svg" alt="\begin{align*} I_a = \frac{-aA + bB + cC}{-a + b + c} \\ I_a = \frac{aA - bB + cC}{a - b + c} \\ I_a = \frac{aA + bB - cC}{a + b - c} \\ \end{align*}" width="160" height="137" /></p>
+<h2>Python code</h2>
+<p>Putting it all together, here&#8217;s an illustrate the theorem.</p>
+<p><img loading="lazy" decoding="async" class="aligncenter size-medium" src="https://www.johndcook.com/baragar_circles.png" width="480" height="360" /></p>
+<p>And here&#8217;s the code that produced it. Note that everything in this section works for right triangles in general, not just Pythagorean triangles.</p>
+<pre>import numpy as np
+import matplotlib.pyplot as plt
+
+def connect(A, B):
+    plt.plot([A[0], B[0]], [A[1], B[1]], "C0")
+
+def draw_circle(c, r, color):
+    t = np.linspace(0, 2*np.pi)
+    plt.plot(r*np.cos(t) + c[0], r*np.sin(t) + c[1], color=color)
+
+a, b, c, = 3, 4, 5
+
+A = np.array([0, b])
+B = np.array([-a, 0])
+C = np.array([0, 0])
+
+s = (a + b + c)/2
+K = a*b/2
+r = K/s
+ra = K/(s - a)
+rb = K/(s - b)
+rc = K/(s - c)
+I = (a*A + b*B + c*C)/(a + b + c)
+Ia = (-a*A + b*B + c*C)/(-a + b + c)
+Ib = (a*A - b*B + c*C)/(a - b + c)
+Ic = (a*A + b*B - c*C)/(a + b - c)
+
+draw_circle(I, r, "C1")
+draw_circle(Ia, ra, "C2")
+draw_circle(Ib, rb, "C3")
+draw_circle(Ic, rc, "C4")
+
+plt.plot([-2*rc, 2*rb], [0, 0], "C0")
+plt.plot([0, 0], [-2*ra, 2*rc], "C0")
+plt.plot([(-2*ra - b)*a/b, 2*rb], [-2*ra, 2*rb*b/a + b], "C0")
+
+plt.gca().set_aspect("equal")
+plt.show()
+</pre>The post <a href="https://www.johndcook.com/blog/2026/06/25/incircle-excircle/">Incircles and Excircles of Pythagorean triangles</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+					<wfw:commentRss>https://www.johndcook.com/blog/2026/06/25/incircle-excircle/feed/</wfw:commentRss>
+			<slash:comments>1</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Consecutive Pythagorean triangle sides</title>
+		<link>https://www.johndcook.com/blog/2026/06/25/consecutive-pythagorean/</link>
+					<comments>https://www.johndcook.com/blog/2026/06/25/consecutive-pythagorean/#respond</comments>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Thu, 25 Jun 2026 12:00:14 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Number theory]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247232</guid>
+
+					<description><![CDATA[<p>In this post we find all Pythagorean triples that contain consecutive numbers, all Pythagorean triples (a, b, c) such that a + 1 = b or b + 1 = c. a + 1 = b George Osborne wrote a paper [1] addressing the question of when the squares of two consecutive numbers is also a square. Geometrically this is asking [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/25/consecutive-pythagorean/">Consecutive Pythagorean triangle sides</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>In this post we find all Pythagorean triples that contain consecutive numbers, all Pythagorean triples (<em>a</em>, <em>b</em>, <em>c</em>) such that <em>a</em> + 1 = <em>b</em> or <em>b</em> + 1 = c.</p>
+<h2><em>a</em> + 1 = <em>b</em></h2>
+<p>George Osborne wrote a paper [1] addressing the question of when the squares of two consecutive numbers is also a square. Geometrically this is asking for primitive Pythagorean triples for which the legs are consecutive integers.</p>
+<p>He proved that the sequence shorter legs satisfies the recurrence relation</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/osborne0.svg" alt="u_{n+2} = 6 u_{n+1} - u_{n+1} + 2" width="173" height="18" /><br />
+with initial conditions <em>u</em><sub>0</sub> = 0 and <em>u</em><sub>1</sub> = 1. This is OEIS sequence <a href=" https://oeis.org/A001652">A001652</a>.</p>
+<p>The method for solving recurrences like the one above is analogous to the method for solving linear differential equations. See a solution <a href="https://www.johndcook.com/consecutive_pythagorean.pdf">here</a>. This gives us the following formula for the terms:</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/osborne.svg" alt="u_n = \dfrac{1 + \sqrt{2}}{4} \left(3 + 2\sqrt{2}\right)^n + \dfrac{1 - \sqrt{2}}{4} \left(3 - 2\sqrt{2}\right)^n - \dfrac{1}{2}" width="367" height="44" /></p>
+<h2><em>b</em> + 1 = <em>c</em></h2>
+<p>It&#8217;s also possible for the longer side and hypotenuse of a Pythagorean triangle to be consecutive numbers, as in the (5, 12, 13) triangle.</p>
+<p>All primitive Pythagorean triples are given by Euclid&#8217;s formula</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/osborne2.svg" alt="\begin{align*} a &amp;= m^2 - n^2 \\ b &amp;= 2mn \\ c &amp;= m^2 + n^2 \end{align*} " width="96" height="79" /></p>
+<p>with integers <em>m</em> &gt; <em>n</em> &gt; 0. If <em>b</em> and <em>c</em> are consecutive numbers, then</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/osborne3.svg" alt="c - b = 1 = m^2 + n^2 - 2mn = (m -n)^2" width="310" height="22" /></p>
+<p>and so <em>m</em> = <em>n</em> + 1. Therefore all possible values of <em>b</em> are given by 2<em>n</em>(<em>n</em> + 1) for <em>n</em> &gt; 1.</p>
+<p>[1] Geo. A. Osborne. A Problem in Number Theory. The American Mathematical Monthly, Vol. 21, No. 5 (May, 1914), pp. 148-150</p>The post <a href="https://www.johndcook.com/blog/2026/06/25/consecutive-pythagorean/">Consecutive Pythagorean triangle sides</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+					<wfw:commentRss>https://www.johndcook.com/blog/2026/06/25/consecutive-pythagorean/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>The Star Trek lemma</title>
+		<link>https://www.johndcook.com/blog/2026/06/24/star-trek-lemma/</link>
+					<comments>https://www.johndcook.com/blog/2026/06/24/star-trek-lemma/#comments</comments>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Thu, 25 Jun 2026 02:38:42 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Geometry]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247235</guid>
+
+					<description><![CDATA[<p>I was reading an article this evening and saw a footnote to a book by Arthur Baragar [1]. This caught my eye because he was my officemate at UT for a year. I found his book on Archive.org and was surprised to see &#8220;The Star Trek Lemma&#8221; in the table of contents. What could this [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/24/star-trek-lemma/">The Star Trek lemma</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>I was reading an article this evening and saw a footnote to a book by Arthur Baragar [1]. This caught my eye because he was my officemate at UT for a year.</p>
+<p>I found his book on <a href="https://archive.org/details/surveyofclassica0000bara">Archive.org</a> and was surprised to see &#8220;The Star Trek Lemma&#8221; in the table of contents. What could this be?</p>
+<p>It&#8217;s a theorem that goes back to Euclid that applies to an angle formed by connecting a point to two other points on a circle. The theorem says &#8220;The measure of an inscribed angle is half the measure of the arc it subtends.&#8221; But why call it the Star Trek lemma? Quoting Arthur:</p>
+<p>In the spirit of Euclid, we will refer to this theorem as the Star Trek lemma because of the figure associated with the statement of the theorem. … Before Star Trek, as far as I know, this theorem had no name, though some might call it Euclid III.20, which is its proposition number in Euclid&#8217;s <em>Elements</em> (Book III, Proposition 20).</p>
+<p>Here is my reconstruction of the figure given in the book.</p>
+<p><img loading="lazy" decoding="async" class="aligncenter size-medium" src="https://www.johndcook.com/baragar_star_trek.png" alt="Baragar's illustration of the Star Trek lemma" width="300" height="332" /></p>
+<p>The lemma says that ∠BAC is half of ∠BOC.</p>
+<p>[1] Baragar, Arthur (2001), <i>A Survey of Classical and Modern Geometries: With Computer Activities</i>, Prentice Hall</p>
+<p>&nbsp;</p>The post <a href="https://www.johndcook.com/blog/2026/06/24/star-trek-lemma/">The Star Trek lemma</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+					<wfw:commentRss>https://www.johndcook.com/blog/2026/06/24/star-trek-lemma/feed/</wfw:commentRss>
+			<slash:comments>1</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Regular expressions that work &#8220;everywhere&#8221;</title>
+		<link>https://www.johndcook.com/blog/2026/06/23/regex-everywhere/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Wed, 24 Jun 2026 00:26:11 +0000</pubDate>
+				<category><![CDATA[Computing]]></category>
+		<category><![CDATA[Regular expressions]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247223</guid>
+
+					<description><![CDATA[<p>The most frustrating aspect of regular expressions is that implementations vary. Features supported in one tool may not be supported at all in another tool, or they may be supported with slightly different syntax. I learned regular expressions in the context Perl, a maximalist regex environment. This led to frustration when features I expect to [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/23/regex-everywhere/">Regular expressions that work “everywhere”</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>The most frustrating aspect of regular expressions is that implementations vary. Features supported in one tool may not be supported at all in another tool, or they may be supported with slightly different syntax.</p>
+<p>I learned regular expressions in the context Perl, a maximalist regex environment. This led to frustration when features I expect to work are missing [1]. One way around this is to use <a href="https://www.johndcook.com/blog/2013/08/20/perl-as-a-better/">Perl analogs</a> of other tools, but this is very non-standard. I want to be able to send colleagues and clients code that works out of the box.</p>
+<p>As I mentioned in my post on <a href="https://www.johndcook.com/blog/2019/10/09/computational-survivalist/">computational survivalism</a>, I occasionally need to work on computers that I cannot install software on. So a better approach is to identify a subset of regex features that work everywhere. The stricter your definition of &#8220;everywhere&#8221; the less this includes. The strictest subset would be</p>
+<ul>
+<li>literals</li>
+<li>character classes <code>[…]</code></li>
+<li>the special characters <code>. * ^ $</code></li>
+</ul>
+<p>A more relaxed definition of &#8220;everywhere&#8221; would be the tools you most care about. Currently the tools I most want to use with regular expressions are sed, awk, grep, and Emacs.</p>
+<h2>Awk as lowest common denominator</h2>
+<p>If you use the Gnu versions of sed, awk, and grep, and use the <code>-E</code> option with sed and grep, then the list of common features is bigger. The regular expression features of of the three tools are similar, and awk&#8217;s features are supported in the other tools, with one exception: word boundaries in awk are <code>\&lt;</code> and <code>\&gt;</code> rather than <code>\b</code> and <code>\B</code>.</p>
+<p>I wrote about Awk&#8217;s regex features <a href="https://www.johndcook.com/blog/awk-regular-expressions/">here</a>.</p>
+<h2>Emacs as the oddball</h2>
+<p>Emacs supports analogs of most of awk&#8217;s regex features. However, the characters</p>
+<pre>    + ? ( ) { } |</pre>
+<p>all require a backslash in front in order to act like the awk counterparts. Also, the analog of <code>\s</code> and <code>\S</code> in awk is <code>\s-</code> and <code>\S-</code> in Emacs.</p>
+<p>Instead of meaning space or nonspace, <code>\s</code> and <code>\S</code> in Emacs begin a (negated) character class, and one of those classes is <code>-</code> for space. But there are many others. For example, <code>\s.</code> stands for a punctuation character and <code>\S.</code> stands for a non-punctuation character.</p>
+<h2>What works everywhere</h2>
+<p>So for my definition of &#8220;everywhere,&#8221; with the caveats mentioned above, the following features work everywhere. YMMV.</p>
+<pre>    .
+    ^, $
+    […], [^…]
+    *
+    \w, \W, \s, \S
+    \1 - \9 backreferences
+    \b \B
+    ? + 
+    | alternation
+    {n,m} for counting matches
+    (...) capturing
+</pre>
+<p>One footnote is that gawk supports backreferences in replacement strings but not in regular expressions <em>per se</em>.</p>
+<p>[1] To some extent, basic Perl features work elsewhere and advanced features do not, depending on your idea of what is basic or advanced. I think of <a href="https://www.johndcook.com/blog/2014/05/01/look-behind-regex/">look-around</a> features as advanced, and that tracks. But I think of <code>\d</code> for digits as basic, but that&#8217;s not supported in many regex flavors.</p>The post <a href="https://www.johndcook.com/blog/2026/06/23/regex-everywhere/">Regular expressions that work “everywhere”</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Lobachevsky&#8217;s integral formula</title>
+		<link>https://www.johndcook.com/blog/2026/06/22/lobachevskys-integral-formula/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Mon, 22 Jun 2026 20:02:47 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Fourier analysis]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247217</guid>
+
+					<description><![CDATA[<p>Let f be an even function with period π. Then the following remarkable theorem by Lobachevsky holds. This theorem is useful in Fourier analysis and signal processing. It&#8217;s useful to know even in the special case f(x) = 1. For a &#8220;jinc&#8221; analog, see this paper. *** Every time I see the name Lobachevsky I [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/22/lobachevskys-integral-formula/">Lobachevsky’s integral formula</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>Let <em>f</em> be an even function with period π. Then the following remarkable theorem by Lobachevsky holds.</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/lobachevsky.svg" alt="\int_0^\infty \frac{\sin^2 x}{x^2} f(x) \, dx = \int_0^\infty\frac{\sin x} x f(x) \, dx = \int_0^{\pi/2} f(x) \, dx" width="455" height="49" /></p>
+<p>This theorem is useful in Fourier analysis and signal processing. It&#8217;s useful to know even in the special case <em>f</em>(<em>x</em>) = 1.</p>
+<p>For a &#8220;jinc&#8221; analog, see <a href="https://arxiv.org/abs/2006.09575v1">this paper</a>.</p>
+<p style="text-align: center;">***</p>
+<p>Every time I see the name Lobachevsky I think of Tom Lehrer&#8217;s song about him. You can find the words <a href="https://tomlehrersongs.com/wp-content/uploads/2018/12/lobachevsky.pdf">here</a> and the audio <a href="https://www.youtube.com/watch?v=rlgRDdWUs7g">here</a>.</p>
+<h2>Related posts</h2>
+<ul>
+<li class="link"><a href="https://www.johndcook.com/blog/2015/12/16/sinc-and-jinc-integrals/">Sinc and jinc integrals</a></li>
+<li class="link"><a href="https://www.johndcook.com/blog/2015/12/17/sinc-and-jinc-sums/">Sinc and jinc sums</a></li>
+</ul>The post <a href="https://www.johndcook.com/blog/2026/06/22/lobachevskys-integral-formula/">Lobachevsky’s integral formula</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Queens on a prime order board</title>
+		<link>https://www.johndcook.com/blog/2026/06/21/queens-prime/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Mon, 22 Jun 2026 00:21:44 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Chess]]></category>
+		<category><![CDATA[Combinatorics]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247212</guid>
+
+					<description><![CDATA[<p>The n queens problem is to place on an n × n chessboard n queens so that none attacks any other. This means there is only one queen on every horizontal, vertical, and diagonal line. When n is a prime number ≥ 5, it is sufficient to place the queens on a line that has slope 2, 3, 4, …, [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/21/queens-prime/">Queens on a prime order board</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>The <em>n</em> queens problem is to place on an <em>n</em> × <em>n</em> chessboard <em>n</em> queens so that none attacks any other. This means there is only one queen on every horizontal, vertical, and diagonal line.</p>
+<p>When <em>n</em> is a <strong>prime number</strong> ≥ 5, it is sufficient to place the queens on a line that has slope 2, 3, 4, …, <em>n</em> − 2. (The slope cannot be 1 because that&#8217;s a diagonal. And it cannot be <em>n</em> − 1 because <i>n </i>− 1 = −1 mod <em>n</em> is also a diagonal.) [1]</p>
+<p>Here we imagine opposite edges of the board being joined together. Geometrically, this makes the chessboard a torus (donut). Algebraically, the points on a line of slope <em>s</em> have the coordinates</p>
+<p style="padding-left: 40px;">(<em>a</em> + <em>k</em>, <em>b</em> + <em>ks</em>)</p>
+<p>where addition is carried out mod <em>n</em>.</p>
+<p><strong>All</strong> solutions to the <em>n</em> queens problem have this form when <em>n</em> = 5. <strong>Some</strong> solutions will have this form for larger prime values of <em>n</em> but not all.</p>
+<p>For example, when <em>n</em> = 7, here is a solution where all the queens are on a line of slope 2.</p>
+<p><img loading="lazy" decoding="async" class="aligncenter size-medium" src="https://www.johndcook.com/queens71.png" width="400" height="400" /></p>
+<p>But here is another solution where the queens do not all lie on a line of constant slope.</p>
+<p><img loading="lazy" decoding="async" class="aligncenter size-medium" src="https://www.johndcook.com/queens72.png" width="400" height="400" /></p>
+<h2>Related posts</h2>
+<ul>
+<li class="link"><a href="https://www.johndcook.com/blog/2025/05/11/one-hot-sat/">Formulating eight queens as a SAT problem</a></li>
+<li class="link"><a href="https://www.johndcook.com/blog/2021/08/18/queens-on-a-donut/">Queens on a donut</a></li>
+<li class="link"><a href="https://www.johndcook.com/blog/2026/06/11/prolog-claude/">Solving a chess puzzle with Claude and Prolog</a></li>
+</ul>
+<p>[1] W. H. Bussey. A Note on the Problem of the Eight Queens. The American Mathematical Monthly, Vol. 29, No. 7 (August 1922), pp. 252–253</p>The post <a href="https://www.johndcook.com/blog/2026/06/21/queens-prime/">Queens on a prime order board</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>All pieces on a 6 by 5 board</title>
+		<link>https://www.johndcook.com/blog/2026/06/20/z3-python-claude/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Sat, 20 Jun 2026 21:41:16 +0000</pubDate>
+				<category><![CDATA[Artificial Intelligence]]></category>
+		<category><![CDATA[Chess]]></category>
+		<category><![CDATA[Logic]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247206</guid>
+
+					<description><![CDATA[<p>I&#8217;ve written a couple posts lately on getting an LLM to generate code to solve chess problems. The first used Claude to generate Prolog and the second used ChatGPT to generate Prolog. This post will use Claude to generate Z3/Python code. The puzzle is one I&#8217;ve written about before: Place all the pieces—king, queen, two [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/20/z3-python-claude/">All pieces on a 6 by 5 board</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>I&#8217;ve written a couple posts lately on getting an LLM to generate code to solve chess problems. <a href="https://www.johndcook.com/blog/2026/06/11/prolog-claude/">The first</a> used Claude to generate Prolog and <a href="https://www.johndcook.com/blog/2026/06/15/writing-prolog-with-chatgpt/">the second</a> used ChatGPT to generate Prolog. This post will use Claude to generate Z3/Python code.</p>
+<p>The puzzle is one I&#8217;ve written about <a href="https://www.johndcook.com/blog/2025/07/13/all-pieces-on-a-small-chessboard/">before</a>:</p>
+<blockquote><p>Place all the pieces—king, queen, two bishops, two knights, and two rooks—on a 6 × 5 chessboard, with the requirement that the two bishops be on opposite colored squares and no piece is attacking another.</p></blockquote>
+<p>Incidentally, it&#8217;s common for &#8220;piece&#8221; to exclude pawns, as above. But then what do you call all the things on a chessboard? You might call them &#8220;chess pieces,&#8221; in which case a pawn is a &#8220;chess piece&#8221; but not a &#8220;piece.&#8221; One convention is to use &#8220;chessmen&#8221; or simply &#8220;men&#8221; to include pieces and pawns.</p>
+<p><img loading="lazy" decoding="async" class="aligncenter size-medium" src="https://www.johndcook.com/claudez3.png" width="400" height="389" /></p>
+<p>This was the prompt I used.</p>
+<blockquote>
+<p class="whitespace-pre-wrap break-words">Write Z3/Python code to find all solutions to the following chess puzzle.</p>
+<p class="whitespace-pre-wrap break-words">Place all the pieces—king, queen, two bishops, two knights, and two rooks—on a 6 × 5 chessboard, with the requirement that the two bishops be on opposite colored squares and no piece is attacking another.</p>
+</blockquote>
+<p>The code found 192 = 8 × 24 solutions. The factor of 8 comes from 2<sup>3</sup> ways of swapping the pairs of bishops, knights, and rooks. The script reports</p>
+<pre>
+Total raw solutions: 192
+Unique solutions (deduplicating piece-pair swaps): 24
+
+── Solution 1 ──
+  0 1 2 3 4
+0 . K . . N
+1 . . . . B
+2 . . R . .
+3 Q . . . .
+4 . . . R .
+5 . B . . N
+  King: (0,1)
+  Queen: (3,0)
+  Bishop1: (5,1) [light]
+  Bishop2: (1,4) [dark]
+  Knight1: (5,4)
+  Knight2: (0,4)
+  Rook1: (4,3)
+  Rook2: (2,2)
+
+── Solution 2 ──
+  0 1 2 3 4
+0 N . . K .
+1 B . . . .
+2 . . R . .
+3 . . . . Q
+4 . R . . .
+5 N . . B .
+  King: (0,3)
+  Queen: (3,4)
+  Bishop1: (5,3) [light]
+  Bishop2: (1,0) [dark]
+  Knight1: (5,0)
+  Knight2: (0,0)
+  Rook1: (4,1)
+  Rook2: (2,2)
+
+...
+
+── Solution 24 ──
+  0 1 2 3 4
+0 B . . B .
+1 N . . . .
+2 . . . . Q
+3 . . R . .
+4 . R . . .
+5 N . . K .
+  King: (5,3)
+  Queen: (2,4)
+  Bishop1: (0,0) [light]
+  Bishop2: (0,3) [dark]
+  Knight1: (5,0)
+  Knight2: (1,0)
+  Rook1: (3,2)
+  Rook2: (4,1)
+</pre>
+<p>Here&#8217;s the code.</p>
+<pre>
+"""
+Chess Puzzle Solver using Z3
+Place king, queen, 2 bishops, 2 knights, 2 rooks on a 6×5 board
+such that:
+  - The two bishops are on opposite-colored squares
+  - No piece attacks any other piece
+"""
+
+from z3 import (
+    Int, Solver, Or, And, Not, Distinct, If,
+    sat, ForAll, Implies
+)
+import itertools
+
+ROWS = 6
+COLS = 5
+TOTAL_CELLS = ROWS * COLS  # 30
+
+PIECES = ["king", "queen", "bishop1", "bishop2", "knight1", "knight2", "rook1", "rook2"]
+N = len(PIECES)  # 8 pieces
+
+def cell(r, c):
+    return r * COLS + c
+
+def pos_to_rc(pos):
+    return pos // COLS, pos % COLS
+
+def color(r, c):
+    """Square color: 0=light, 1=dark"""
+    return (r + c) % 2
+
+def attacks_king(r1, c1, r2, c2):
+    return max(abs(r1 - r2), abs(c1 - c2)) == 1
+
+def attacks_queen(r1, c1, r2, c2):
+    return (r1 == r2 or c1 == c2 or
+            abs(r1 - r2) == abs(c1 - c2))
+
+def attacks_bishop(r1, c1, r2, c2):
+    return abs(r1 - r2) == abs(c1 - c2)
+
+def attacks_rook(r1, c1, r2, c2):
+    return r1 == r2 or c1 == c2
+
+def attacks_knight(r1, c1, r2, c2):
+    dr, dc = abs(r1 - r2), abs(c1 - c2)
+    return (dr == 1 and dc == 2) or (dr == 2 and dc == 1)
+
+# Map piece index to its attack function
+ATTACK_FN = {
+    0: attacks_king,
+    1: attacks_queen,
+    2: attacks_bishop,
+    3: attacks_bishop,
+    4: attacks_knight,
+    5: attacks_knight,
+    6: attacks_rook,
+    7: attacks_rook,
+}
+
+def solve_all():
+    solutions = []
+
+    # Each piece gets an integer position in [0, TOTAL_CELLS)
+    pos = [Int(f"pos_{p}") for p in PIECES]
+
+    s = Solver()
+
+    # All positions in valid range
+    for p in pos:
+        s.add(p >= 0, p < TOTAL_CELLS)
+
+    # All pieces on distinct squares
+    s.add(Distinct(*pos))
+
+    # Bishops on opposite colors
+    # bishop1 = pos[2], bishop2 = pos[3]
+    # color of pos = ((pos // COLS) + (pos % COLS)) % 2
+    b1_color = (pos[2] / COLS + pos[2] % COLS) % 2  # Z3 integer arithmetic
+    b2_color = (pos[3] / COLS + pos[3] % COLS) % 2
+
+    # Z3 doesn't do Python //; use integer division carefully
+    # We'll encode opposite colors: sum of colors == 1
+    # color(pos) = (row + col) % 2 = (pos//COLS + pos%COLS) % 2
+    # For Z3 int vars, use: (pos / COLS + pos % COLS) % 2
+    s.add((pos[2] / COLS + pos[2] % COLS) % 2 != (pos[3] / COLS + pos[3] % COLS) % 2)
+
+    # No piece attacks another
+    # We enumerate all (i,j) pairs and for each possible (pos_i, pos_j) assignment,
+    # assert that those pieces don't attack each other.
+    # Since positions are Z3 vars, we use a constraint table approach:
+    # For each pair (i,j), add constraints over all concrete (r1,c1,r2,c2) combos.
+
+    # Pre-build attack lookup tables for each piece-type pair
+    # This avoids slow Z3 symbolic reasoning over large disjunctions.
+
+    # We'll encode: for all concrete assignments, if pos[i]==cell(r1,c1) and pos[j]==cell(r2,c2),
+    # then piece i must not attack piece j.
+    # Equivalently: NOT (pos[i]==cell(r1,c1) AND pos[j]==cell(r2,c2)) for all attacking pairs.
+
+    # For efficiency, we build a set of "forbidden (cell_i, cell_j)" pairs per piece pair.
+
+    for i, j in itertools.combinations(range(N), 2):
+        fn_i = ATTACK_FN[i]
+        fn_j = ATTACK_FN[j]
+        forbidden = []
+        for r1, c1 in itertools.product(range(ROWS), range(COLS)):
+            for r2, c2 in itertools.product(range(ROWS), range(COLS)):
+                if (r1, c1) == (r2, c2):
+                    continue
+                # i attacks j or j attacks i
+                if fn_i(r1, c1, r2, c2) or fn_j(r2, c2, r1, c1):
+                    forbidden.append((cell(r1, c1), cell(r2, c2)))
+
+        if forbidden:
+            # Add: NOT (pos[i] == ci AND pos[j] == cj) for each forbidden pair
+            s.add(And([
+                Not(And(pos[i] == ci, pos[j] == cj))
+                for ci, cj in forbidden
+            ]))
+
+    # Enumerate all solutions
+    solution_count = 0
+    while s.check() == sat:
+        m = s.model()
+        sol = [m[pos[k]].as_long() for k in range(N)]
+        solutions.append(sol)
+        solution_count += 1
+
+        # Block this solution (and symmetric duplicates via blocking exact assignment)
+        s.add(Or([pos[k] != sol[k] for k in range(N)]))
+
+        if solution_count % 10 == 0:
+            print(f"  Found {solution_count} solutions so far...")
+
+    return solutions
+
+def print_board(sol):
+    board = [["." for _ in range(COLS)] for _ in range(ROWS)]
+    symbols = ["K", "Q", "B", "B", "N", "N", "R", "R"]
+    for k, p in enumerate(sol):
+        r, c = pos_to_rc(p)
+        board[r][c] = symbols[k]
+    print("  " + " ".join(str(c) for c in range(COLS)))
+    for r in range(ROWS):
+        print(f"{r} " + " ".join(board[r]))
+
+def canonicalize(sol):
+    """
+    Produce a canonical form to deduplicate solutions where
+    bishop1/bishop2, knight1/knight2, rook1/rook2 are interchangeable.
+    Returns a frozenset-based key.
+    """
+    king_pos   = sol[0]
+    queen_pos  = sol[1]
+    bishops    = tuple(sorted([sol[2], sol[3]]))
+    knights    = tuple(sorted([sol[4], sol[5]]))
+    rooks      = tuple(sorted([sol[6], sol[7]]))
+    return (king_pos, queen_pos, bishops, knights, rooks)
+
+def main():
+    print("Solving chess puzzle on 6×5 board...")
+    print("Pieces: King, Queen, 2 Bishops (opposite colors), 2 Knights, 2 Rooks")
+    print("Constraint: No piece attacks another\n")
+
+    solutions = solve_all()
+
+    # Deduplicate by canonical form
+    seen = {}
+    for sol in solutions:
+        key = canonicalize(sol)
+        if key not in seen:
+            seen[key] = sol
+
+    unique = list(seen.values())
+    print(f"\nTotal raw solutions: {len(solutions)}")
+    print(f"Unique solutions (deduplicating piece-pair swaps): {len(unique)}\n")
+
+    for idx, sol in enumerate(unique, 1):
+        print(f"── Solution {idx} ──")
+        print_board(sol)
+        labels = ["King", "Queen", "Bishop1", "Bishop2", "Knight1", "Knight2", "Rook1", "Rook2"]
+        for k, p in enumerate(sol):
+            r, c = pos_to_rc(p)
+            col_name = "light" if color(r, c) == 0 else "dark"
+            sq = f"({r},{c})"
+            extra = f" [{col_name}]" if "Bishop" in labels[k] else ""
+            print(f"  {labels[k]}: {sq}{extra}")
+        print()
+
+if __name__ == "__main__":
+    main()
+</pre>
+<p><b>Related post</b>: <a href="https://www.johndcook.com/blog/2025/03/17/lessons-learned-with-the-z3-sat-smt-solver/">Lessons Learned With the Z3 SAT/SMT Solver</a></p>The post <a href="https://www.johndcook.com/blog/2026/06/20/z3-python-claude/">All pieces on a 6 by 5 board</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Formalizing a ring theorem with Lean 4 and Claude</title>
+		<link>https://www.johndcook.com/blog/2026/06/17/rings-with-lean-claude/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Wed, 17 Jun 2026 14:23:51 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Artificial intelligence]]></category>
+		<category><![CDATA[Formal methods]]></category>
+		<category><![CDATA[Lean]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247201</guid>
+
+					<description><![CDATA[<p>I&#8217;ve been testing Claude&#8217;s ability to generate Lean 4 code to prove theorems. I&#8217;ve written about a couple experiments that verified calculations. I did not write about my failed attempt to get Claude to formalize a proof of the pqr theorem for seminorms. This time I asked Claude to formally prove the theorem from the [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/17/rings-with-lean-claude/">Formalizing a ring theorem with Lean 4 and Claude</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>I&#8217;ve been testing Claude&#8217;s ability to generate Lean 4 code to prove theorems. I&#8217;ve written about a <a href="https://www.johndcook.com/blog/2026/06/10/claude-and-lean/">couple</a> <a href="https://www.johndcook.com/blog/2026/06/15/quaternions-claude-lean/">experiments</a> that verified calculations. I did not write about my failed attempt to get Claude to formalize a proof of the <a href="https://www.johndcook.com/pqr_theorem.pdf">pqr theorem</a> for seminorms.</p>
+<p>This time I asked Claude to formally prove the theorem from the previous post on <a href="https://www.johndcook.com/blog/2026/06/16/partial-fraction-decomposition/">partial fraction decomposition</a> in an abstract setting. Unlike the previous experiments, I did not give it a proof or calculation to verify; I asked it to <em>generate</em> a proof.</p>
+<p>This was the prompt:</p>
+<blockquote><p>Write a proof in Lean 4 for the following generalization of partial fraction decomposition.</p>
+<p>If a ring R is a principle ideal domain (PID), then every element c of the field of fractions over R can be written in the form \[c = \sum_i \frac{a_i}{p_i^{r_i}}\]</p>
+<p>where the p_i are nonassociate irreducible elements of R, the r_i are non-negative integers, and the elements a_i and p_i are relatively prime.</p></blockquote>
+<p>This was Claude&#8217;s immediate response:</p>
+<blockquote><p>I&#8217;ll work through this carefully, as it&#8217;s a substantial formalization task. Let me think through what&#8217;s available in Mathlib and what needs to be constructed.</p>
+<p>This is a genuinely hard Lean 4 formalization problem. Let me think carefully about what&#8217;s in Mathlib, what the statement precisely means, and what proof strategy is realistic.</p></blockquote>
+<p>It also stated its overall proof strategy:</p>
+<blockquote><p><strong>Proof strategy</strong>: Write <code>c = a/b</code> in lowest terms. Factor <code>b = ∏ pᵢ^rᵢ</code>. Use the Chinese Remainder Theorem / Bezout identity to decompose <code>a/b</code> into partial fractions.</p></blockquote>
+<p>If I needed to prove the theorem by hand, this suggestion alone could be very helpful.</p>
+<p>The first attempt generated code that would not build. As before, a lot of the problems seem to stem from things moving around in Mathlib due to refactorings. There are also occasional hallucinations.</p>
+<p>I did not offer any help other than pasting in error messages after each failure. When working on a real problem, I&#8217;d be more interactive. But as a test, I just passively pasted error messages and tried again. It took 11 iterations, but I finally got a proof. The proof had five sections marked &#8220;sorry,&#8221; which is essentially a TODO note indicating an unproven assumption.</p>
+<p>I asked if it could explain or remove the sorries, and it said it could remove three of them. But the generated code did not build and I hit a session limit before I could debug the code. Here is the code with five sorry sections.</p>
+<pre>
+/-
+  PartialFractions.lean  (v11 — final)
+-/
+
+import Mathlib
+
+open UniqueFactorizationMonoid
+
+variable {R : Type*} [CommRing R] [IsDomain R] [IsPrincipalIdealRing R]
+
+structure PFDSummand (R : Type*) [CommRing R] where
+  prime    : R
+  exponent : ℕ
+  numer    : R
+
+noncomputable def PFDSummand.val [CommRing R] [IsDomain R] (s : PFDSummand R) :
+    FractionRing R :=
+  algebraMap R (FractionRing R) s.numer /
+  algebraMap R (FractionRing R) (s.prime ^ s.exponent)
+
+structure IsPFD [CommRing R] [IsDomain R] [IsPrincipalIdealRing R]
+    (terms : List (PFDSummand R)) (c : FractionRing R) : Prop where
+  irred    : ∀ s ∈ terms, Irreducible s.prime
+  nonAssoc : ∀ s ∈ terms, ∀ t ∈ terms, s ≠ t → ¬Associated s.prime t.prime
+  coprime  : ∀ s ∈ terms, IsCoprime s.numer s.prime
+  sum_eq   : (terms.map PFDSummand.val).sum = c
+
+private lemma algMap_ne_zero {a : R} (h : a ≠ 0) :
+    (algebraMap R (FractionRing R)) a ≠ 0 :=
+  map_ne_zero_iff _ (IsFractionRing.injective R (FractionRing R)) |>.mpr h
+
+private lemma exists_num_denom (c : FractionRing R) :
+    ∃ a b : R, b ≠ 0 ∧
+      (algebraMap R (FractionRing R)) a / (algebraMap R (FractionRing R)) b = c := by
+  obtain ⟨a, b, hb, hab⟩ := IsFractionRing.div_surjective (A := R) c
+  exact ⟨a, b, nonZeroDivisors.ne_zero hb, hab⟩
+
+-- ======================================================================
+-- §6  Bézout splitting
+-- ======================================================================
+
+private lemma bezout_split (x y : R) (hcop : IsCoprime x y)
+    (hx : x ≠ 0) (hy : y ≠ 0) (e : R) :
+    ∃ s t : R, s * x + t * y = 1 ∧
+      (algebraMap R (FractionRing R) e) /
+        ((algebraMap R (FractionRing R) x) * (algebraMap R (FractionRing R) y)) =
+      (algebraMap R (FractionRing R) (e * t)) / (algebraMap R (FractionRing R) x) +
+      (algebraMap R (FractionRing R) (e * s)) / (algebraMap R (FractionRing R) y) := by
+  obtain ⟨s, t, hst⟩ := hcop
+  refine ⟨s, t, hst, ?_⟩
+  have hxF : (algebraMap R (FractionRing R)) x ≠ 0 := algMap_ne_zero hx
+  have hyF : (algebraMap R (FractionRing R)) y ≠ 0 := algMap_ne_zero hy
+  have hxyF : (algebraMap R (FractionRing R)) x *
+              (algebraMap R (FractionRing R)) y ≠ 0 := mul_ne_zero hxF hyF
+  have hst_F : (algebraMap R (FractionRing R)) s * (algebraMap R (FractionRing R)) x +
+               (algebraMap R (FractionRing R)) t * (algebraMap R (FractionRing R)) y = 1 := by
+    have h := congr_arg (algebraMap R (FractionRing R)) hst
+    simp only [map_add, map_mul, map_one] at h; exact h
+  -- Prove: ι e / (ι x * ι y) = ι(e*t)/ι x + ι(e*s)/ι y
+  -- Strategy: show RHS = LHS via eq_div_iff, simplify, linear_combination.
+  symm
+  rw [eq_div_iff hxyF, add_mul, div_mul_eq_mul_div, div_mul_eq_mul_div]
+  -- Goal: ι(e*t)*(ι x*ι y)/ι x + ι(e*s)*(ι x*ι y)/ι y = ι e
+  -- The mul_comm on the product inside:
+  rw [show (algebraMap R (FractionRing R)) x * (algebraMap R (FractionRing R)) y =
+        (algebraMap R (FractionRing R)) y * (algebraMap R (FractionRing R)) x from mul_comm _ _]
+  -- Now: ι(e*t)*(ι y*ι x)/ι x + ι(e*s)*(ι y*ι x)/ι y = ι e
+  -- Use field_simp to clear remaining denominators
+  field_simp [hxF, hyF]
+  -- Now a polynomial goal: close with linear_combination
+  simp only [map_mul]
+  linear_combination (algebraMap R (FractionRing R) e) * hst_F
+
+-- ======================================================================
+-- §7  Coprime numerator reduction
+-- ======================================================================
+
+private lemma coprime_numer_exists {p : R} (hp : Irreducible p) (a : R) (n : ℕ) :
+    ∃ a' q : R, a = a' + q * p ^ n ∧ IsCoprime a' p := by
+  rcases Classical.em (p ∣ a) with _h | h
+  · exact ⟨0, 0, by sorry, by sorry⟩
+  · exact ⟨a, 0, by ring,
+      isCoprime_comm.mpr ((irreducible_iff_prime.mp hp).coprime_iff_not_dvd.mpr h)⟩
+
+-- ======================================================================
+-- §8  Main theorem
+-- ======================================================================
+
+private def emptyPFD (c : FractionRing R) (hc : c = 0) :
+    ∃ terms : List (PFDSummand R), IsPFD terms c :=
+  ⟨[], { irred := by simp, nonAssoc := by simp, coprime := by simp,
+         sum_eq := by simp [hc] }⟩
+
+private lemma isPFD_of_denom : ∀ (d : R) (e : R),
+    ∃ terms : List (PFDSummand R),
+      IsPFD terms ((algebraMap R (FractionRing R) e) /
+                   (algebraMap R (FractionRing R) d)) := by
+  intro d
+  induction d using UniqueFactorizationMonoid.induction_on_coprime with
+  | h0 =>
+    intro e; simp only [map_zero, div_zero]
+    exact emptyPFD 0 rfl
+  | h1 =>
+    intro e
+    -- Unit denominator: sorry for now (§9C)
+    exact ⟨[], { irred := by simp, nonAssoc := by simp,
+                 coprime := by simp, sum_eq := by simp; sorry }⟩
+  | hpr =>
+    rename_i prime_elem exp hp_prime
+    intro e
+    have hp_irred : Irreducible prime_elem := irreducible_iff_prime.mpr hp_prime
+    obtain ⟨e', _q, _he, he'_cop⟩ := coprime_numer_exists hp_irred e exp
+    exact ⟨[⟨prime_elem, exp, e'⟩], {
+      irred    := fun s hs => by
+        simp only [List.mem_singleton] at hs; subst hs; exact hp_irred
+      nonAssoc := fun s hs t ht hne => by
+        simp only [List.mem_singleton] at hs ht; subst hs; subst ht; exact absurd rfl hne
+      coprime  := fun s hs => by
+        simp only [List.mem_singleton] at hs; subst hs; exact he'_cop
+      sum_eq   := by
+        simp only [List.map_singleton, List.sum_singleton, PFDSummand.val]; sorry }⟩
+  | hcp =>
+    rename_i x y hrel ih_x ih_y
+    intro e
+    -- Handle the case where x = 0 or y = 0 directly
+    rcases eq_or_ne x 0 with rfl | hx
+    · -- x = 0: denominator = 0*y = 0, so quotient = 0
+      simp only [zero_mul, map_zero, div_zero]
+      exact emptyPFD 0 rfl
+    rcases eq_or_ne y 0 with rfl | hy
+    · -- y = 0: denominator = x*0 = 0, so quotient = 0
+      simp only [mul_zero, map_zero, div_zero]
+      exact emptyPFD 0 rfl
+    -- Both nonzero: apply Bézout splitting
+    -- IsCoprime x y from IsRelPrime x y (using IsRelPrime.isCoprime)
+    have hcop : IsCoprime x y := hrel.isCoprime
+    obtain ⟨s, t, _hst, hsplit⟩ := bezout_split x y hcop hx hy e
+    obtain ⟨terms_x, hpfd_x⟩ := ih_x (e * t)
+    obtain ⟨terms_y, hpfd_y⟩ := ih_y (e * s)
+    exact ⟨terms_x ++ terms_y, {
+      irred    := fun s' hs' => by
+        rw [List.mem_append] at hs'
+        exact hs'.elim (hpfd_x.irred s') (hpfd_y.irred s')
+      nonAssoc := fun s' hs' t' ht' hne => by
+        rw [List.mem_append] at hs' ht'
+        rcases hs' with hs' | hs' <;> rcases ht' with ht' | ht'
+        · exact hpfd_x.nonAssoc s' hs' t' ht' hne
+        · intro; sorry
+        · intro; sorry
+        · exact hpfd_y.nonAssoc s' hs' t' ht' hne
+      coprime  := fun s' hs' => by
+        rw [List.mem_append] at hs'
+        exact hs'.elim (hpfd_x.coprime s') (hpfd_y.coprime s')
+      sum_eq   := by
+        rw [List.map_append, List.sum_append, hpfd_x.sum_eq, hpfd_y.sum_eq]
+        -- Goal: ι(e*t)/ι x + ι(e*s)/ι y = ι e / ι(x*y)
+        -- hsplit: ι e/(ι x*ι y) = ι(e*t)/ι x + ι(e*s)/ι y
+        -- So: ι(e*t)/ι x + ι(e*s)/ι y = ι e/(ι x*ι y) = ι e/ι(x*y)
+        rw [← hsplit, map_mul] }⟩
+
+theorem pid_partial_fraction_decomposition (c : FractionRing R) :
+    ∃ terms : List (PFDSummand R), IsPFD terms c := by
+  obtain ⟨a, b, _hb, hc⟩ := exists_num_denom c
+  rw [← hc]; exact isPFD_of_denom b a
+
+section IntExample
+example (c : FractionRing ℤ) :
+    ∃ terms : List (PFDSummand ℤ), IsPFD terms c :=
+  pid_partial_fraction_decomposition c
+end IntExample
+</pre>The post <a href="https://www.johndcook.com/blog/2026/06/17/rings-with-lean-claude/">Formalizing a ring theorem with Lean 4 and Claude</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Partial fraction decomposition</title>
+		<link>https://www.johndcook.com/blog/2026/06/16/partial-fraction-decomposition/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Tue, 16 Jun 2026 17:56:27 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Ring theory]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247197</guid>
+
+					<description><![CDATA[<p>Nearly everyone who has seen partial fraction decomposition was introduced to it as a way to compute integrals. If P(x) and Q(x) are polynomials, then you can break their ratio P(x)/Q(x) into a sum of terms that can each be integrated in closed form. As with most topics in a calculus class, partial fractions go by in [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/16/partial-fraction-decomposition/">Partial fraction decomposition</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>Nearly everyone who has seen partial fraction decomposition was introduced to it as a way to compute integrals. If <em>P</em>(<em>x</em>) and <em>Q</em>(<em>x</em>) are polynomials, then you can break their ratio <em>P</em>(<em>x</em>)/<em>Q</em>(<em>x</em>) into a sum of terms that can each be integrated in closed form. As with most topics in a calculus class, partial fractions go by in a blur.</p>
+<p>This post will look at partial fractions more generally.</p>
+<h2>Computation</h2>
+<p>Every polynomial with real coefficients can be factored into a product of linear and irreducible quadratic terms. But actually calculating this factorization is difficult if the degree of the denominator is large.</p>
+<p>The quadratic equation is easy to use. There are analogs for 3rd and 4th order polynomials, but they&#8217;re cumbersome. And there is no formula in general for finding roots of polynomials of degree 5 or higher.</p>
+<p>You could find the roots numerically, but if you&#8217;re going to go that route, maybe you should evaluate your integral numerically.</p>
+<p>Still, it is useful in proving theorems to know that a partial fraction decomposition exists, even if in practice you cannot calculate it.</p>
+<h2>Complex numbers</h2>
+<p>Rational polynomials over the real numbers can be factored into powers of linear terms and irreducible quadratic terms. There are no irreducible quadratics over the complex numbers thanks to the <a href="https://www.johndcook.com/blog/2020/05/27/fundamental-theorem-of-algebra/">Fundamental Theorem of Algebra</a>, and every polynomial can be factored into a product of linear terms.</p>
+<p>This means every rational in <em>z</em> can be broken into a sum of a polynomial in <em>z</em> and polynomials in 1/(<em>z</em> − <em>z</em><sub><em>i</em></sub>) where the <em>z</em><sub><em>i</em></sub> are the roots of the denominator. This fact is important, for example, in contour integration.</p>
+<h2>Principle ideal domains</h2>
+<p>The concept of partial fraction decomposition can be generalized to the field of fractions over a ring <em>R</em> [1].</p>
+<p>If the ring <em>R</em> is a principle ideal domain (PID) [2], then every element <em>c</em> of the field <em>K</em> of fractions over <em>R</em> can be written in the form</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/partial_frac1.svg" alt="c = \sum_i \frac{a_i}{p_i^{r_i}}" width="85" height="44" /></p>
+<p>where the <em>p</em><sub><em>i</em></sub> are nonassociate [3] irreducible elements of <em>R</em>, the <em>r</em><sub><em>i</em></sub> are non-negative integers, and the elements <em>a</em><sub><em>i</em></sub> and <em>p</em><sub><em>i</em></sub> are relatively prime.</p>
+<p>When <em>R</em> is the ring of of polynomials over a field, <em>R</em> is a PID, and the field of fractions is the set of rational functions over that field. When the field is the real or complex numbers, we get the results above. But the field could be something else, such as a finite field.</p>
+<h2>Integers</h2>
+<p>When <em>R</em> is the ring of integers, the irreducible elements are prime numbers. The nonassociate condition means you can&#8217;t count <em>p</em> and −<em>p</em> as distinct elements, so practically this means we only look at positive primes. The field of fractions is the rational numbers. So the theorem above says that every rational number can be written as a sum of fractions where the denominators of the fractions are prime powers and the numerators are relatively prime to the denominators.</p>
+<p>The way you would decompose a rational number into fractions with prime power denominators is analogous to the way you&#8217;d do partial fraction decomposition in a calculus class. For example, suppose we want to decompose 46/75. The distinct prime factors of 75 are 3 and 5, and so we&#8217;d look for fractions with denominators 3, 5, and 25, and in fact</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/partial_frac2.svg" alt="\frac{46}{75} = \frac{1}{3} + \frac{2}{5} - \frac{3}{25}" width="136" height="41" /></p>
+<h2>Footnotes</h2>
+<p>[1] The field of fractions over <em>R</em> is the set of formal terms <em>a</em>/<em>b</em> where <em>a</em> and <em>b</em> are in <em>R</em> and <em>b</em> ≠ 0. Operations are defined by analogy with rational numbers. If <em>R</em> is an integral domain, the field of fractions really is a field.</p>
+<p>[2] A ring is a PID if every ideal can be generated by a single element.</p>
+<p>[3] Two elements of an integral domain are said to be associate if they generate the same ideal.</p>The post <a href="https://www.johndcook.com/blog/2026/06/16/partial-fraction-decomposition/">Partial fraction decomposition</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Three examples suffice</title>
+		<link>https://www.johndcook.com/blog/2026/06/16/three-examples-suffice/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Tue, 16 Jun 2026 11:14:01 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247192</guid>
+
+					<description><![CDATA[<p>You can&#8217;t prove a theorem by just checking a few examples. Except sometimes you can. A few weeks ago I wrote Pentagonal numbers are truncated triangular numbers. In a nutshell, if the pentagonal numbers are defined by Pn = (3n² − n)/2 and the triangular numbers by Tn = (n² + n)/2 then Pn = T2n − 1 − Tn − 1. Here&#8217;s a visualization [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/16/three-examples-suffice/">Three examples suffice</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>You can&#8217;t prove a theorem by just checking a few examples. Except sometimes you can.</p>
+<p>A few weeks ago I wrote <a href="https://www.johndcook.com/blog/2026/04/01/truncated-triangular-numbers/">Pentagonal numbers are truncated triangular numbers</a>. In a nutshell, if the pentagonal numbers are defined by</p>
+<p style="padding-left: 40px;"><em>P</em><sub><em>n</em></sub> = (3<em>n</em>² − <em>n</em>)/2</p>
+<p>and the triangular numbers by</p>
+<p style="padding-left: 40px;"><em>T</em><sub><em>n</em></sub> = (<em>n</em>² + <em>n</em>)/2</p>
+<p>then</p>
+<p style="padding-left: 40px;"><em>P</em><sub><em>n</em></sub> = <em>T</em><sub>2<em>n</em> − 1</sub> − <em>T</em><sub><em>n</em> − 1</sub>.</p>
+<p>Here&#8217;s a visualization of the equation.</p>
+<p><img decoding="async" class="aligncenter" src="https://www.johndcook.com/pent_trunk.svg" /></p>
+<p>Note that the equation asserts that two quadratic polynomials are equal. If the two polynomials are equal at three points, then they&#8217;re equal everywhere. We might as well make life easy and choose <em>n</em> = 0, 1, and 2.</p>
+<p>If you&#8217;d like, you could do this in code.</p>
+<pre>&gt;&gt;&gt; P = lambda n: (3*n**2 - n)/2
+&gt;&gt;&gt; T = lambda n: (n**2 + n)/2
+&gt;&gt;&gt; for n in [0, 1, 2]: assert(P(n) == T(2*n-1) - T(n-1))
+</pre>
+<p>This provides a rigorous proof, not just a sanity check.</p>
+<p>Sometimes checking a few points is not enough to prove an equation with certainty, but it is enough to establish an equation with high probability. More on that <a href="https://www.johndcook.com/blog/2026/05/30/schwartz-zippel/">here</a>.</p>
+<h2>Related posts</h2>
+<ul>
+<li class='link'><a href='https://www.johndcook.com/blog/2026/06/15/testing-pentagonal-numbers/'>Testing pentagonal numbers</a></li>
+<li class='link'><a href='https://www.johndcook.com/blog/2012/07/21/binomial-coefficient-trick/'>Binomial coefficient trick</a></li>
+</ul>The post <a href="https://www.johndcook.com/blog/2026/06/16/three-examples-suffice/">Three examples suffice</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Testing pentagonal numbers</title>
+		<link>https://www.johndcook.com/blog/2026/06/15/testing-pentagonal-numbers/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Mon, 15 Jun 2026 23:57:54 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Number theory]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247187</guid>
+
+					<description><![CDATA[<p>The nth pentagonal number Pn is the number of dots in diagrams like those below with n concentric pentagons. We have the formula Pn = (3n² − n)/2 where n is a positive integer. If n is an integer but not positive, the equation above defines a generalized pentagonal number. If you&#8217;re given an n, you can easily compute Pn. [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/15/testing-pentagonal-numbers/">Testing pentagonal numbers</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>The <em>n</em>th pentagonal number <em>P</em><sub><em>n</em></sub> is the number of dots in diagrams like those below with <em>n</em> concentric pentagons.</p>
+<p><img decoding="async" class="aligncenter" src="https://www.johndcook.com/pentagonal_numbers.png" /></p>
+<p>We have the formula</p>
+<p style="padding-left: 40px;"><em>P</em><sub><em>n</em></sub> = (3<em>n</em>² − <em>n</em>)/2</p>
+<p>where <em>n</em> is a positive integer. If <em>n</em> is an integer but not positive, the equation above defines a <em>generalized</em> pentagonal number.</p>
+<p>If you&#8217;re given an <em>n</em>, you can easily compute <em>P</em><sub><em>n</em></sub>. But suppose you&#8217;re given a large number <em>x</em>. How would you determine if it is a pentagonal number? And if it is a pentagonal number, how would you find <em>n</em> such that <em>x</em> = <em>P</em><sub><em>n</em></sub>?</p>
+<h2>Rejecting non-pentagonal numbers</h2>
+<p>If</p>
+<p style="padding-left: 40px;"><em>x</em> = <em>P</em><sub><em>n</em></sub> = (3<em>n</em>² − <em>n</em>)/2</p>
+<p>then we can solve a quadratic equation for <em>n</em>:</p>
+<p style="padding-left: 40px;"><em>n</em> = (1 ± √(24<em>x</em> + 1))/6.</p>
+<p>If 24<em>x</em> + 1 is not a perfect square, <em>n</em> is not an integer and <em>x</em> is not a pentagonal number, ordinary or generalized.</p>
+<h3>Small numbers</h3>
+<p>For example,</p>
+<p style="padding-left: 40px;">√(24 × 20260615 + 1)) = 22051.185…</p>
+<p>and so 20260615 is not a pentagonal number nor a generalized pentagonal number.</p>
+<h3>Big numbers</h3>
+<p>Now suppose</p>
+<p style="padding-left: 40px;"><em>x</em> = 170141183460469231731687303715884105727.</p>
+<p>Is this a pentagonal number? You can&#8217;t just compute √(24<em>x</em> + 1) in floating point arithmetic because the result is a 20-digit number, and floating point number have 15 digits of precision, so you can&#8217;t tell whether the result is an integer.</p>
+<p>However, you can compute</p>
+<p style="padding-left: 40px;">⌊√(24<em>x</em> + 1)⌋</p>
+<p>with only integer arithmetic using the <code>sqrt_floor</code> function from <a href="https://www.johndcook.com/blog/2024/01/01/computing-square-root-floor/">this post</a>.</p>
+<pre>def sqrt_floor(n):
+    a = n
+    b = (n + 1) // 2
+    while b &lt; a:
+        a = b
+        b = (a*a + n) // (2*a)
+    return a
+</pre>
+<p>The following prints a positive number,</p>
+<pre>x = 2**127 - 1
+y = 24*x + 1
+r = sqrt_floor(y)
+print(y - r**2)
+</pre>
+<p>which tells us <em>y</em> is not a perfect square.</p>
+<h2>Finding the index</h2>
+<p>Now suppose <em>y</em> <em>is</em> a perfect square. Then the roots of</p>
+<p style="padding-left: 40px;">(1 ± √(24<em>x</em> + 1))/6</p>
+<p>are rational, but are they integers? In fact one, and only one, of the roots will be an integer. If</p>
+<p style="padding-left: 40px;">24<em>x</em> + 1 = <em>r</em>²</p>
+<p>then <em>r</em> is congruent to ±1 mod 6 because the left side is congruent to 1 mod 6. If <em>r</em> = 1 mod 6 then the smaller root is an integer, and if <em>r</em> = 5 mod 6 then the larger root is an integer.</p>
+<p>So if 24<em>x</em> + 1 = <em>r</em>², then <em>x</em> is a pentagonal number if <em>r</em> = 5 mod 6 and a generalized pentagonal number otherwise.</p>
+<p>The function <code>pentagonal_index</code> takes a number <em>x</em> and return n if <em>x</em> = <em>P</em><sub><em>n</em></sub> and <code>None</code> if no such <em>n</em> exists.</p>
+<pre>def pentagonal_index(x):
+    y = 24*x + 1
+    r = sqrt_floor(y)
+    if r*r != y:
+        return None
+    if r % 6 == 5:
+        return (1 + r) // 6
+    else:
+        return (1 - r) // 6
+</pre>
+<p>We can test this with the following code.</p>
+<pre>P = lambda n: (3*n**2 - n) // 2
+for n in [2, 3, -4, -5, 10**200]:
+    assert(pentagonal_index(P(n)) == n)
+</pre>
+<h2>Integer division in Python</h2>
+<p>Note that <code>P(10**200)</code> is too big to fit into a float, but the code works fine. This is because we use integer division (<code>//</code>) everywhere. If we had said</p>
+<pre>P = lambda n: (3*n**2 - n) / 2</pre>
+<p>the test above would pass for the small values of <em>n</em> but output</p>
+<pre>OverflowError: integer division result too large for a float</pre>
+<p>when it came to <em>n</em> = 10<sup>200</sup>.</p>
+<h2>Related posts</h2>
+<ul>
+<li class="link"><a href="https://www.johndcook.com/blog/2021/11/10/partitions-and-pentagons/">Partitions and pentagons</a></li>
+<li class="link"><a href="https://www.johndcook.com/blog/2026/02/21/big-certified-fibonacci/">Certified Fibonacci numbers</a></li>
+<li class="link"><a href="https://www.johndcook.com/blog/2026/04/01/truncated-triangular-numbers/">Truncated triangular numbers</a></li>
+</ul>The post <a href="https://www.johndcook.com/blog/2026/06/15/testing-pentagonal-numbers/">Testing pentagonal numbers</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Quaternion Rotations, Claude, and Lean</title>
+		<link>https://www.johndcook.com/blog/2026/06/15/quaternions-claude-lean/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Mon, 15 Jun 2026 19:31:38 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Formal methods]]></category>
+		<category><![CDATA[Lean]]></category>
+		<category><![CDATA[Quaternions]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247178</guid>
+
+					<description><![CDATA[<p>I got an email message this afternoon reporting a typo in a blog post from about a year ago on converting between quaternions and rotation matrices [1]. The email said exactly where the typo was, but I decided to see whether Claude would find it. Specifically, I prompted Sonnet 4.6 Medium with the following. Write [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/15/quaternions-claude-lean/">Quaternion Rotations, Claude, and Lean</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>I got an email message this afternoon reporting a typo in a blog post from about a year ago on <a href="https://www.johndcook.com/blog/2025/05/07/quaternions-and-rotation-matrices/">converting between quaternions and rotation matrices</a> [1]. The email said exactly where the typo was, but I decided to see whether Claude would find it. Specifically, I prompted Sonnet 4.6 Medium with the following.</p>
+<p class="whitespace-pre-wrap break-words" style="padding-left: 40px;">Write Lean code to verify the two theorems at the top of this post:<br />
+<a class="underline" href="https://www.johndcook.com/blog/2025/05/07/quaternions-and-rotation-matrices/" target="_blank" rel="noopener">https://www.johndcook.com/blog/2025/05/07/quaternions-and-rotation-matrices/</a></p>
+<p class="whitespace-pre-wrap break-words" style="padding-left: 40px;">That is, prove that the expressions given in the two SVG files are correct.</p>
+<p>The post included Python code to numerically verify the equations. However, the Python code differed from the LaTeX code for the image in one subscript [2]. Although I asked Claude to prove the expressions in the SVG file produced by the LaTeX code, it detected the conflict between the Python and LaTeX and correctly concluded that the former was correct.</p>
+<p class="font-claude-response-body break-words whitespace-normal" style="padding-left: 40px;">The SVG is an image — let me rely on the Python code in the blog (which is the ground truth implementation) and the matrix entries in the alt text. &hellip; Note the alt text says row 1 col 2 is <code class="bg-text-200/5 border border-0.5 border-border-300 text-danger-000 whitespace-pre-wrap rounded-[0.4rem] px-1 py-px text-[0.9rem]">2(q_1 q_3 - q_0 q_1)</code> — that&#8217;s a typo in the alt text; the Python code says <code class="bg-text-200/5 border border-0.5 border-border-300 text-danger-000 whitespace-pre-wrap rounded-[0.4rem] px-1 py-px text-[0.9rem]">2*(q2*q3 - q0*q1)</code> which makes sense. I&#8217;ll use the Python code as the authoritative source.</p>
+<p>The code did not run on first attempt. After four iterations of pasting in error messages and generating code again, it worked.</p>
+<p>Here is the final Lean 4 code.</p>
+<pre>/-
+  Lean 4 / Mathlib verification of the two theorems from:
+    "Converting between quaternions and rotation matrices"
+    ...
+
+  Matrix entries (0-based, matching the post's Python code):
+    R00 = 2(q0²+q1²)−1    R01 = 2(q1 q2−q0 q3)   R02 = 2(q1 q3+q0 q2)
+    R10 = 2(q1 q2+q0 q3)  R11 = 2(q0²+q2²)−1     R12 = 2(q2 q3−q0 q1)
+    R20 = 2(q1 q3−q0 q2)  R21 = 2(q2 q3+q0 q1)   R22 = 2(q0²+q3²)−1
+
+  THEOREM 1  (quaternion → rotation matrix)
+    If q0²+q1²+q2²+q3² = 1 then R is orthogonal (Rᵀ R = I),
+    proved via the 9 scalar dot-product identities.
+
+  THEOREM 2  (rotation matrix → quaternion, Chiaverini–Siciliano)
+    With rᵢⱼ as above:
+        1 + R00 + R11 + R22 = 4 q0²
+        1 + R00 − R11 − R22 = 4 q1²
+        1 − R00 + R11 − R22 = 4 q2²
+        1 − R00 − R11 + R22 = 4 q3²
+-/
+
+import Mathlib.Tactic
+
+set_option linter.style.whitespace false
+
+variable (q0 q1 q2 q3 : ℝ)
+
+/-! ## Theorem 1 : Rᵀ R = I -/
+
+-- ── Column norms = 1 ─────────────────────────────────────────────────────────
+
+theorem col0_norm (h : q0 ^ 2 + q1 ^ 2 + q2 ^ 2 + q3 ^ 2 = 1) :
+    (2 * (q0 ^ 2 + q1 ^ 2) - 1) ^ 2 + (2 * (q1 * q2 + q0 * q3)) ^ 2 +
+    (2 * (q1 * q3 - q0 * q2)) ^ 2 = 1 := by
+  nlinarith [sq_nonneg (q0 ^ 2 + q1 ^ 2 - q2 ^ 2 - q3 ^ 2),
+             sq_nonneg (q0 * q2 + q1 * q3), sq_nonneg (q0 * q3 - q1 * q2),
+             sq_nonneg q0, sq_nonneg q1, sq_nonneg q2, sq_nonneg q3]
+
+theorem col1_norm (h : q0 ^ 2 + q1 ^ 2 + q2 ^ 2 + q3 ^ 2 = 1) :
+    (2 * (q1 * q2 - q0 * q3)) ^ 2 + (2 * (q0 ^ 2 + q2 ^ 2) - 1) ^ 2 +
+    (2 * (q2 * q3 + q0 * q1)) ^ 2 = 1 := by
+  nlinarith [sq_nonneg (q0 ^ 2 - q1 ^ 2 + q2 ^ 2 - q3 ^ 2),
+             sq_nonneg (q0 * q1 + q2 * q3), sq_nonneg (q0 * q3 - q1 * q2),
+             sq_nonneg q0, sq_nonneg q1, sq_nonneg q2, sq_nonneg q3]
+
+theorem col2_norm (h : q0 ^ 2 + q1 ^ 2 + q2 ^ 2 + q3 ^ 2 = 1) :
+    (2 * (q1 * q3 + q0 * q2)) ^ 2 + (2 * (q2 * q3 - q0 * q1)) ^ 2 +
+    (2 * (q0 ^ 2 + q3 ^ 2) - 1) ^ 2 = 1 := by
+  nlinarith [sq_nonneg (q0 ^ 2 - q1 ^ 2 - q2 ^ 2 + q3 ^ 2),
+             sq_nonneg (q0 * q1 - q2 * q3), sq_nonneg (q0 * q2 + q1 * q3),
+             sq_nonneg q0, sq_nonneg q1, sq_nonneg q2, sq_nonneg q3]
+
+-- ── Column orthogonality = 0 ─────────────────────────────────────────────────
+-- These need h (the residuals shown by Lean are multiples of (q0²+q1²+q2²+q3²-1)).
+-- We use linear_combination with the explicit witnesses.
+
+theorem col0_col1_orth (h : q0 ^ 2 + q1 ^ 2 + q2 ^ 2 + q3 ^ 2 = 1) :
+    (2 * (q0 ^ 2 + q1 ^ 2) - 1) * (2 * (q1 * q2 - q0 * q3)) +
+    (2 * (q1 * q2 + q0 * q3)) * (2 * (q0 ^ 2 + q2 ^ 2) - 1) +
+    (2 * (q1 * q3 - q0 * q2)) * (2 * (q2 * q3 + q0 * q1)) = 0 := by
+  linear_combination 4 * q1 * q2 * h
+
+theorem col0_col2_orth (h : q0 ^ 2 + q1 ^ 2 + q2 ^ 2 + q3 ^ 2 = 1) :
+    (2 * (q0 ^ 2 + q1 ^ 2) - 1) * (2 * (q1 * q3 + q0 * q2)) +
+    (2 * (q1 * q2 + q0 * q3)) * (2 * (q2 * q3 - q0 * q1)) +
+    (2 * (q1 * q3 - q0 * q2)) * (2 * (q0 ^ 2 + q3 ^ 2) - 1) = 0 := by
+  linear_combination 4 * q1 * q3 * h
+
+theorem col1_col2_orth (h : q0 ^ 2 + q1 ^ 2 + q2 ^ 2 + q3 ^ 2 = 1) :
+    (2 * (q1 * q2 - q0 * q3)) * (2 * (q1 * q3 + q0 * q2)) +
+    (2 * (q0 ^ 2 + q2 ^ 2) - 1) * (2 * (q2 * q3 - q0 * q1)) +
+    (2 * (q2 * q3 + q0 * q1)) * (2 * (q0 ^ 2 + q3 ^ 2) - 1) = 0 := by
+  linear_combination 4 * q2 * q3 * h
+
+-- ── Row norms = 1 ────────────────────────────────────────────────────────────
+
+theorem row0_norm (h : q0 ^ 2 + q1 ^ 2 + q2 ^ 2 + q3 ^ 2 = 1) :
+    (2 * (q0 ^ 2 + q1 ^ 2) - 1) ^ 2 + (2 * (q1 * q2 - q0 * q3)) ^ 2 +
+    (2 * (q1 * q3 + q0 * q2)) ^ 2 = 1 := by
+  nlinarith [sq_nonneg (q0 ^ 2 + q1 ^ 2 - q2 ^ 2 - q3 ^ 2),
+             sq_nonneg (q0 * q2 - q1 * q3), sq_nonneg (q0 * q3 + q1 * q2),
+             sq_nonneg q0, sq_nonneg q1, sq_nonneg q2, sq_nonneg q3]
+
+theorem row1_norm (h : q0 ^ 2 + q1 ^ 2 + q2 ^ 2 + q3 ^ 2 = 1) :
+    (2 * (q1 * q2 + q0 * q3)) ^ 2 + (2 * (q0 ^ 2 + q2 ^ 2) - 1) ^ 2 +
+    (2 * (q2 * q3 - q0 * q1)) ^ 2 = 1 := by
+  nlinarith [sq_nonneg (q0 ^ 2 - q1 ^ 2 + q2 ^ 2 - q3 ^ 2),
+             sq_nonneg (q0 * q1 - q2 * q3), sq_nonneg (q0 * q3 + q1 * q2),
+             sq_nonneg q0, sq_nonneg q1, sq_nonneg q2, sq_nonneg q3]
+
+theorem row2_norm (h : q0 ^ 2 + q1 ^ 2 + q2 ^ 2 + q3 ^ 2 = 1) :
+    (2 * (q1 * q3 - q0 * q2)) ^ 2 + (2 * (q2 * q3 + q0 * q1)) ^ 2 +
+    (2 * (q0 ^ 2 + q3 ^ 2) - 1) ^ 2 = 1 := by
+  nlinarith [sq_nonneg (q0 ^ 2 - q1 ^ 2 - q2 ^ 2 + q3 ^ 2),
+             sq_nonneg (q0 * q1 + q2 * q3), sq_nonneg (q0 * q2 - q1 * q3),
+             sq_nonneg q0, sq_nonneg q1, sq_nonneg q2, sq_nonneg q3]
+
+-- ── Row orthogonality = 0 ────────────────────────────────────────────────────
+
+theorem row0_row1_orth (h : q0 ^ 2 + q1 ^ 2 + q2 ^ 2 + q3 ^ 2 = 1) :
+    (2 * (q0 ^ 2 + q1 ^ 2) - 1) * (2 * (q1 * q2 + q0 * q3)) +
+    (2 * (q1 * q2 - q0 * q3)) * (2 * (q0 ^ 2 + q2 ^ 2) - 1) +
+    (2 * (q1 * q3 + q0 * q2)) * (2 * (q2 * q3 - q0 * q1)) = 0 := by
+  linear_combination 4 * q1 * q2 * h
+
+theorem row0_row2_orth (h : q0 ^ 2 + q1 ^ 2 + q2 ^ 2 + q3 ^ 2 = 1) :
+    (2 * (q0 ^ 2 + q1 ^ 2) - 1) * (2 * (q1 * q3 - q0 * q2)) +
+    (2 * (q1 * q2 - q0 * q3)) * (2 * (q2 * q3 + q0 * q1)) +
+    (2 * (q1 * q3 + q0 * q2)) * (2 * (q0 ^ 2 + q3 ^ 2) - 1) = 0 := by
+  linear_combination 4 * q1 * q3 * h
+
+theorem row1_row2_orth (h : q0 ^ 2 + q1 ^ 2 + q2 ^ 2 + q3 ^ 2 = 1) :
+    (2 * (q1 * q2 + q0 * q3)) * (2 * (q1 * q3 - q0 * q2)) +
+    (2 * (q0 ^ 2 + q2 ^ 2) - 1) * (2 * (q2 * q3 + q0 * q1)) +
+    (2 * (q2 * q3 - q0 * q1)) * (2 * (q0 ^ 2 + q3 ^ 2) - 1) = 0 := by
+  linear_combination 4 * q2 * q3 * h
+
+/-! ## Theorem 2 : Chiaverini–Siciliano square-root arguments -/
+
+theorem cs_arg0 (h : q0 ^ 2 + q1 ^ 2 + q2 ^ 2 + q3 ^ 2 = 1) :
+    1 + (2 * (q0 ^ 2 + q1 ^ 2) - 1) + (2 * (q0 ^ 2 + q2 ^ 2) - 1) +
+    (2 * (q0 ^ 2 + q3 ^ 2) - 1) = 4 * q0 ^ 2 := by linarith
+
+theorem cs_arg1 (h : q0 ^ 2 + q1 ^ 2 + q2 ^ 2 + q3 ^ 2 = 1) :
+    1 + (2 * (q0 ^ 2 + q1 ^ 2) - 1) - (2 * (q0 ^ 2 + q2 ^ 2) - 1) -
+    (2 * (q0 ^ 2 + q3 ^ 2) - 1) = 4 * q1 ^ 2 := by linarith
+
+theorem cs_arg2 (h : q0 ^ 2 + q1 ^ 2 + q2 ^ 2 + q3 ^ 2 = 1) :
+    1 - (2 * (q0 ^ 2 + q1 ^ 2) - 1) + (2 * (q0 ^ 2 + q2 ^ 2) - 1) -
+    (2 * (q0 ^ 2 + q3 ^ 2) - 1) = 4 * q2 ^ 2 := by linarith
+
+theorem cs_arg3 (h : q0 ^ 2 + q1 ^ 2 + q2 ^ 2 + q3 ^ 2 = 1) :
+    1 - (2 * (q0 ^ 2 + q1 ^ 2) - 1) - (2 * (q0 ^ 2 + q2 ^ 2) - 1) +
+    (2 * (q0 ^ 2 + q3 ^ 2) - 1) = 4 * q3 ^ 2 := by linarith
+
+/-! ### Sign-correction identities (pure ring) -/
+
+theorem sign_q1 : (2 * (q2 * q3 + q0 * q1)) - (2 * (q2 * q3 - q0 * q1)) = 4 * (q0 * q1) := by ring
+theorem sign_q2 : (2 * (q1 * q3 + q0 * q2)) - (2 * (q1 * q3 - q0 * q2)) = 4 * (q0 * q2) := by ring
+theorem sign_q3 : (2 * (q1 * q2 + q0 * q3)) - (2 * (q1 * q2 - q0 * q3)) = 4 * (q0 * q3) := by ring
+</pre>
+<p>[1] I very much appreciate error reports. Thank you to everyone who has helped improve this blog.</p>
+<p>[2] It is awkward that math is written in LaTeX and implemented in, say, Python. Lately I&#8217;ve been generating one or the other to reduce the chance of error. When I&#8217;m using Mathematica, for example, I&#8217;ll use <code>TeXForm[]</code> to convert the Mathematica code to LaTeX.</p>
+<p>&nbsp;</p>The post <a href="https://www.johndcook.com/blog/2026/06/15/quaternions-claude-lean/">Quaternion Rotations, Claude, and Lean</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Writing Prolog with ChatGPT</title>
+		<link>https://www.johndcook.com/blog/2026/06/15/writing-prolog-with-chatgpt/</link>
+					<comments>https://www.johndcook.com/blog/2026/06/15/writing-prolog-with-chatgpt/#comments</comments>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Mon, 15 Jun 2026 17:22:43 +0000</pubDate>
+				<category><![CDATA[Uncategorized]]></category>
+		<category><![CDATA[Chess]]></category>
+		<category><![CDATA[Logic]]></category>
+		<category><![CDATA[Prolog]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247171</guid>
+
+					<description><![CDATA[<p>A few days ago I wrote about using Claude to solve a chess puzzle by writing Prolog code. This morning I tried a similar chess puzzle with ChatGPT. The task is to place a queen, king, rook, bishop, and knight on a 4 by 4 chessboard so no piece attacks another. Of course there&#8217;s not [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/15/writing-prolog-with-chatgpt/">Writing Prolog with ChatGPT</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p><a href="https://www.johndcook.com/blog/2026/06/11/prolog-claude/">A few days ago</a> I wrote about using Claude to solve a chess puzzle by writing Prolog code. This morning I tried a <a href="https://www.johndcook.com/blog/2025/05/13/a-crowded-little-chess-puzzle/">similar chess puzzle</a> with ChatGPT. The task is to place a queen, king, rook, bishop, and knight on a 4 by 4 chessboard so no piece attacks another.</p>
+<p><img decoding="async" class="aligncenter" src="https://www.johndcook.com/crowded4.png" /></p>
+<p>Of course there&#8217;s not a lot of market demand for solving chess puzzles, but there is demand for solving real-world problems that amount to logic puzzles. Experiments with chess puzzles suggest writing Prolog with LLM help might be pleasant. The syntax of Prolog can be a little odd, but the LLM handles that. And because Prolog has been around so long without changing much, you&#8217;d expect LLMs to be good at generating code in it. [1]</p>
+<p>I gave ChatGPT this prompt:</p>
+<blockquote><p>Write a SWI Prolog program to solve the following chess puzzle. Place a queen, king, rook, bishop, and knight on a 4 by 4 chessboard so no piece attacks another. Print all solutions.</p></blockquote>
+<p>It produced a file <code>chess4.pl</code> (below) that I ran with</p>
+<pre>swipl -q -s chess4.pl -g solve -t halt</pre>
+<p>It found all 16 solutions:</p>
+<pre>Solution 1:
+  queen=1-2  king=2-4  rook=3-1  bishop=4-3  knight=4-4
+. K . N
+. . . B
+Q . . .
+. . R .
+
+Solution 2:
+  queen=1-2  king=4-3  rook=2-4  bishop=3-1  knight=4-1
+. R . .
+. . . K
+Q . . .
+. . B N
+
+...
+</pre>
+<p>Here&#8217;s the code.</p>
+<pre>% chess4.pl
+% Place queen, king, rook, bishop, and knight on a 4x4 board
+% so that no piece attacks another.
+
+:- use_module(library(lists)).
+
+square(X-Y) :-
+    between(1, 4, X),
+    between(1, 4, Y).
+
+solve :-
+    findall(Board, solution(Board), Boards),
+    print_solutions(Boards, 1),
+    length(Boards, Count),
+    format('Total solutions: ~d~n', [Count]).
+
+solution(Board) :-
+    Pieces = [queen, king, rook, bishop, knight],
+    findall(S, square(S), Squares),
+    place_pieces(Pieces, Squares, Board),
+    safe(Board).
+
+place_pieces([], _, []).
+place_pieces([Piece | Pieces], Squares, [Piece-Square | Board]) :-
+    select(Square, Squares, RemainingSquares),
+    place_pieces(Pieces, RemainingSquares, Board).
+
+safe(Board) :-
+    safe(Board, Board).
+
+safe([], _).
+safe([Piece-Square | Rest], Board) :-
+    forall(
+        member(OtherPiece-OtherSquare, Rest),
+        non_attacking(Piece-Square, OtherPiece-OtherSquare, Board)
+    ),
+    safe(Rest, Board).
+
+non_attacking(P1-S1, P2-S2, Board) :-
+    \+ attacks(P1, S1, S2, Board),
+    \+ attacks(P2, S2, S1, Board).
+
+% Attack rules
+
+attacks(king, X1-Y1, X2-Y2, _) :-
+    X1-Y1 \= X2-Y2,
+    DX is abs(X1 - X2),
+    DY is abs(Y1 - Y2),
+    DX =&lt; 1,
+    DY =&lt; 1. attacks(knight, X1-Y1, X2-Y2, _) :- DX is abs(X1 - X2), DY is abs(Y1 - Y2), ( DX =:= 1, DY =:= 2 ; DX =:= 2, DY =:= 1 ). attacks(rook, S1, S2, Board) :- same_rank_or_file(S1, S2), clear_line(S1, S2, Board). attacks(bishop, S1, S2, Board) :- same_diagonal(S1, S2), clear_line(S1, S2, Board). attacks(queen, S1, S2, Board) :- ( same_rank_or_file(S1, S2) ; same_diagonal(S1, S2) ), clear_line(S1, S2, Board). same_rank_or_file(X1-Y1, X2-Y2) :- ( X1 =:= X2 ; Y1 =:= Y2 ). same_diagonal(X1-Y1, X2-Y2) :- DX is abs(X1 - X2), DY is abs(Y1 - Y2), DX =:= DY. % For sliding pieces, make sure no piece blocks the path. clear_line(X1-Y1, X2-Y2, Board) :- step(X1, X2, SX), step(Y1, Y2, SY), NX is X1 + SX, NY is Y1 + SY, clear_path(NX-NY, X2-Y2, SX-SY, Board). clear_path(Target, Target, _, _) :- !. clear_path(X-Y, Target, SX-SY, Board) :- \+ occupied(X-Y, Board), NX is X + SX, NY is Y + SY, clear_path(NX-NY, Target, SX-SY, Board). step(A, B, 0) :- A =:= B. step(A, B, 1) :- B &gt; A.
+step(A, B, -1) :-
+    B &lt; A.
+
+occupied(Square, Board) :-
+    member(_-Square, Board).
+
+% Printing
+
+print_solutions([], _).
+print_solutions([Board | Rest], N) :-
+    format('Solution ~d:~n', [N]),
+    print_coordinates(Board),
+    print_board(Board),
+    nl,
+    N1 is N + 1,
+    print_solutions(Rest, N1).
+
+print_coordinates(Board) :-
+    member(queen-Q, Board),
+    member(king-K, Board),
+    member(rook-R, Board),
+    member(bishop-B, Board),
+    member(knight-N, Board),
+    format('  queen=~w  king=~w  rook=~w  bishop=~w  knight=~w~n',
+           [Q, K, R, B, N]).
+
+print_board(Board) :-
+    forall(
+        between(1, 4, Row0),
+        (
+            Y is 5 - Row0,
+            forall(
+                between(1, 4, X),
+                (
+                    piece_at(X-Y, Board, Symbol),
+                    format('~w ', [Symbol])
+                )
+            ),
+            nl
+        )
+    ).
+
+piece_at(Square, Board, Symbol) :-
+    member(Piece-Square, Board),
+    !,
+    piece_symbol(Piece, Symbol).
+piece_at(_, _, '.').
+
+piece_symbol(queen,  'Q').
+piece_symbol(king,   'K').
+piece_symbol(rook,   'R').
+piece_symbol(bishop, 'B').
+piece_symbol(knight, 'N').
+</pre>
+<p>[1] I&#8217;ve played around with generating Prolog and Lean this weekend, and I&#8217;ve had better results with Prolog. The problems with Lean haven&#8217;t been Lean per se but the Mathlib library. The library is frequently refactored, which makes sense for a young language, but this makes it harder to generate and debug code.</p>The post <a href="https://www.johndcook.com/blog/2026/06/15/writing-prolog-with-chatgpt/">Writing Prolog with ChatGPT</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+					<wfw:commentRss>https://www.johndcook.com/blog/2026/06/15/writing-prolog-with-chatgpt/feed/</wfw:commentRss>
+			<slash:comments>2</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>RSA munitions T-shirt</title>
+		<link>https://www.johndcook.com/blog/2026/06/13/rsa-munitions-t-shirt/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Sat, 13 Jun 2026 20:10:20 +0000</pubDate>
+				<category><![CDATA[Computing]]></category>
+		<category><![CDATA[Cryptography]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247160</guid>
+
+					<description><![CDATA[<p>Back when the US government classified strong encryption as &#8220;munitions,&#8221; RSA public key cryptography was illegal to export. In 1995, Adam Back protested this by creating a terse, obfuscated implementation of RSA in Perl code and used it as an email signature. The code was also printed on T-shirts. The shirt was classified as munitions [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/13/rsa-munitions-t-shirt/">RSA munitions T-shirt</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>Back when the US government classified strong encryption as &#8220;munitions,&#8221; RSA public key cryptography was illegal to export. In 1995, Adam Back protested this by creating a terse, obfuscated implementation of RSA in Perl code and used it as an email signature.</p>
+<p>The code was also printed on T-shirts. The shirt was classified as munitions because it contained source code for strong encryption. More on the shirt <a href="http://www.cypherspace.org/adam/rsa/uk-shirt.html">here</a>.</p>
+<p><img loading="lazy" decoding="async" class="aligncenter size-medium" src="https://www.johndcook.com/munitions_shirt.jpg" alt="Adam Back's munitions T-shirt" width="499" height="574" /></p>
+<p>This was the code:</p>
+<pre>#!/bin/perl -s-- -export-a-crypto-system-sig -RSA-3-lines-PERL
+$m=unpack(H.$w,$m."\0"x$w),$_=`echo "16do$w 2+4Oi0$d*-^1[d2%Sa
+2/d0&lt;X+d*La1=z\U$n%0]SX$k"[$m*]\EszlXx++p|dc`,s/^.|\W//g,print
+pack('H*',$_)while read(STDIN,$m,($w=2*$d-1+length$n&amp;~1)/2)
+</pre>
+<p>My initial intention was to unpack the code, explaining each piece in detail. I don&#8217;t have the time or patience for that, and I imagine many readers don&#8217;t either. For more of a blow-by-blow explanation, see this <a href="http://www.cypherspace.org/rsa/org-post.html">commentary</a> from 1995.</p>
+<h2>dc</h2>
+<p>In the middle of the code is</p>
+<pre>    echo ... | dc</pre>
+<p>This is the most dense and most important part of the code. Perl calls the <code>dc</code> calculator to do the arbitrary precision arithmetic that RSA encryption requires.</p>
+<p>I&#8217;ve written about <code>bc</code> several times. <code>bc</code> (&#8220;basic calculator&#8221;) was a originally a more user-friendly wrapper around the reverse-Polish <code>dc</code> (&#8220;desktop calculator&#8221;). <code>dc</code> is still part of every Unix and Unix-like system, but I imagine <code>bc</code> is far more popular.</p>
+<p>The important feature of <code>dc</code> for this post is that it is stack-based, meaning that users would push data and commands on to the stack and pop results off the stack. A sequence of commands that might be understandable when interactively using <code>dc</code> would look cryptic in a transcript. This is part of what makes the code so cryptic.</p>
+<p>I&#8217;ll parse just a tiny bit of the <code>dc</code> code to give a flavor of what it does. The first four characters <code>16do</code> instructs <code>dc</code> to push 16 on to the stack, duplicate it, and set the output radix to 16, i.e. these four characters tell <code>dc</code> to work in hexadecimal.</p>
+<p>Believe it or not, the <code>dc</code> code is computing</p>
+<p style="padding-left: 40px;"><em>m</em><sup><em>k</em></sup> mod <em>n</em></p>
+<p>using <a href="https://www.johndcook.com/blog/2008/12/10/fast-exponentiation/">fast exponentiation</a>, which is the key step in the RSA algorithm.</p>
+<h2>Textbook RSA</h2>
+<p>Note that Adam Back&#8217;s code is computing what we would now call textbook RSA, not RSA as it has been refined over the years and is <a href="https://www.johndcook.com/blog/2023/08/05/rsa-oaep/">currently implemented</a>.</p>
+<h2>Related posts</h2>
+<ul>
+<li class="link"><a href="https://www.johndcook.com/blog/2025/08/05/martin-gardners-rsa/">Martin Gardner&#8217;s RSA article</a></li>
+<li class="link"><a href="https://www.johndcook.com/blog/2019/02/11/rsa-duplication-flaws/">RSA encryption flaws</a></li>
+<li class="link"><a href="https://www.johndcook.com/blog/2018/09/23/eulers-theorem/">Three applications of Euler&#8217;s theorem</a></li>
+</ul>The post <a href="https://www.johndcook.com/blog/2026/06/13/rsa-munitions-t-shirt/">RSA munitions T-shirt</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Solving a chess puzzle with Claude and Prolog</title>
+		<link>https://www.johndcook.com/blog/2026/06/11/prolog-claude/</link>
+					<comments>https://www.johndcook.com/blog/2026/06/11/prolog-claude/#comments</comments>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Thu, 11 Jun 2026 13:14:26 +0000</pubDate>
+				<category><![CDATA[Computing]]></category>
+		<category><![CDATA[Chess]]></category>
+		<category><![CDATA[Logic]]></category>
+		<category><![CDATA[Prolog]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247152</guid>
+
+					<description><![CDATA[<p>Prolog is the original logic programming language. The name comes from programming in logic. More specifically, the name comes from programmation en logique because the inventor of the language, Philippe Roussel, is French. Prolog has its advantages and disadvantages. One of the advantages is that the language represents logical problems directly. One of the disadvantages [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/11/prolog-claude/">Solving a chess puzzle with Claude and Prolog</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>Prolog is the original logic programming language. The name comes from <span style="text-decoration: underline;">pro</span>gramming in <span style="text-decoration: underline;">log</span>ic. More specifically, the name comes from <em><span lang="fr"><span style="text-decoration: underline;">pro</span>grammation en <span style="text-decoration: underline;">log</span>ique</span></em> because the inventor of the language, Philippe Roussel, is French.</p>
+<p>Prolog has its advantages and disadvantages. One of the advantages is that the language represents logical problems directly. One of the disadvantages is that the syntax can be quirky. But if an LLM is writing the code, or at least helping to write the code, the syntax doesn&#8217;t matter so much.</p>
+<p>I wanted to see how well Claude (Sonnet 4.6, medium effort) could solve a <a href="https://www.johndcook.com/blog/2025/05/14/another-little-chess-puzzle/">chess puzzle</a> by Martin Gardner that I wrote about a little over a year ago. I chose a relatively obscure problem rather than something like the Eight Queens puzzle because an LLM could simply quote one of countless articles on the puzzle.</p>
+<h2>The puzzle</h2>
+<p>As I stated in the post last year, the task is to place two rooks, two bishops, and two knights on a 4 by 4 chessboard so that no piece attacks any other.</p>
+<p><img loading="lazy" decoding="async" class="aligncenter size-medium" src="https://www.johndcook.com/crowded5.png" width="297" height="250" /></p>
+<p>There are two basic solutions, twelve if you count rotations and reflections as different solutions.</p>
+<h2>Prolog results</h2>
+<p>Claude wrote an SWI-Prolog program that I ran with</p>
+<pre>swipl -g "run, halt" chess_placement.pl
+</pre>
+<p>and it gave the following output.</p>
+<pre>Total solutions (raw): 12
+Solutions up to D4 symmetry: 2
+Solutions up to D4 symmetry: 2
+
+Solution 1:
+B . . N
+N . . B
+. R . .
+. . R .
+
+Solution 2:
+. B N .
+. . . R
+R . . .
+. N B .
+</pre>
+<p>Claude made a nice image of the solutions.</p>
+<p><img loading="lazy" decoding="async" class="aligncenter size-medium" src="https://www.johndcook.com/claude_chess_solution.svg" width="536" height="300" /></p>
+<p>Note that you can make eight variations of the first solution by a combination of rotations and flips. There are only four variations of the second solution because two rotations put you back where you started.</p>
+<h2>Prolog source</h2>
+<p>Here&#8217;s the Prolog code that Claude generated.</p>
+<pre>% ============================================================
+%  Non-attacking placement of 2 Rooks, 2 Bishops, 2 Knights
+%  on a 4x4 chessboard
+%
+%  Run with SWI-Prolog:
+%    swipl -g "run, halt" chess_placement.pl
+%
+%  Or interactively:
+%    swipl chess_placement.pl
+%    ?- run.
+%    ?- count_solutions(N).
+%    ?- count_unique(N).
+% ============================================================
+
+:- use_module(library(lists)).
+
+% ---- Board squares: (Row, Col) with Row, Col in 0..3 ----------------
+
+square(R, C) :- member(R, [0,1,2,3]), member(C, [0,1,2,3]).
+
+% ---- Attack predicates ----------------------------------------------
+
+rook_attacks(R,_,R,_).          % same row
+rook_attacks(_,C,_,C).          % same column
+
+bishop_attacks(R1,C1,R2,C2) :-
+    DR is abs(R1-R2), DC is abs(C1-C2),
+    DR =:= DC, DR &gt; 0.
+
+knight_attacks(R1,C1,R2,C2) :-
+    DR is abs(R1-R2), DC is abs(C1-C2),
+    ( DR =:= 1, DC =:= 2 ; DR =:= 2, DC =:= 1 ).
+
+% attacks(+Type1, +R1, +C1, +Type2, +R2, +C2)
+% True if either piece threatens the other's square.
+attacks(rook,   R1,C1, _,     R2,C2) :- rook_attacks(R1,C1,R2,C2).
+attacks(_,      R1,C1, rook,  R2,C2) :- rook_attacks(R1,C1,R2,C2).
+attacks(bishop, R1,C1, _,     R2,C2) :- bishop_attacks(R1,C1,R2,C2).
+attacks(_,      R1,C1, bishop,R2,C2) :- bishop_attacks(R1,C1,R2,C2).
+attacks(knight, R1,C1, _,     R2,C2) :- knight_attacks(R1,C1,R2,C2).
+attacks(_,      R1,C1, knight,R2,C2) :- knight_attacks(R1,C1,R2,C2).
+
+% ---- All pairs safe -------------------------------------------------
+
+% Check all unordered pairs in a list.
+no_attack_pair(_, []).
+no_attack_pair(T1-(R1,C1), [T2-(R2,C2)|Rest]) :-
+    \+ attacks(T1,R1,C1,T2,R2,C2),
+    no_attack_pair(T1-(R1,C1), Rest).
+
+all_pairs_safe([]).
+all_pairs_safe([P|Rest]) :-
+    no_attack_pair(P, Rest),
+    all_pairs_safe(Rest).
+
+% ---- Generate a placement -------------------------------------------
+%
+%  Placement = [rook-(R1,C1), rook-(R2,C2),
+%               bishop-(R3,C3), bishop-(R4,C4),
+%               knight-(R5,C5), knight-(R6,C6)]
+%
+%  We enforce an ordering within each pair to avoid counting
+%  same-type duplicates (rook1 vs rook2 swapped).
+%  Squares are represented canonically: (R,C) with R*4+C as index.
+
+sq_index(R, C, I) :- I is R*4 + C.
+
+placement(Placement) :-
+    % --- Rooks ---
+    square(R1r, C1r), square(R2r, C2r),
+    sq_index(R1r,C1r,I1r), sq_index(R2r,C2r,I2r),
+    I1r &lt; I2r,          % canonical order for the two rooks
+
+    % --- Bishops ---
+    square(R1b, C1b), square(R2b, C2b),
+    sq_index(R1b,C1b,I1b), sq_index(R2b,C2b,I2b),
+    I1b &lt; I2b,          % canonical order for the two bishops
+
+    % --- Knights ---
+    square(R1n, C1n), square(R2n, C2n),
+    sq_index(R1n,C1n,I1n), sq_index(R2n,C2n,I2n),
+    I1n &lt; I2n, % canonical order for the two knights % --- All six squares distinct --- Squares = [(R1r,C1r),(R2r,C2r),(R1b,C1b),(R2b,C2b),(R1n,C1n),(R2n,C2n)], all_distinct_squares(Squares), % --- Build placement list --- Placement = [ rook-(R1r,C1r), rook-(R2r,C2r), bishop-(R1b,C1b), bishop-(R2b,C2b), knight-(R1n,C1n), knight-(R2n,C2n) ], % --- No piece attacks any other --- all_pairs_safe(Placement). all_distinct_squares([]). all_distinct_squares([S|Rest]) :- \+ member(S, Rest), all_distinct_squares(Rest). % ---- Count all solutions -------------------------------------------- count_solutions(N) :- findall(P, placement(P), Ps), length(Ps, N), format("Total solutions (raw): ~w~n", [N]). % ---- D4 symmetry transformations on a 4x4 board --------------------- % Squares (R,C) in 0..3 transform(identity, R, C, R, C). transform(rot90, R, C, C, Nr) :- Nr is 3-R. transform(rot180, R, C, Nr, Nc) :- Nr is 3-R, Nc is 3-C. transform(rot270, R, C, Nc, R) :- Nc is 3-C. transform(flipH, R, C, R, Nc) :- Nc is 3-C. transform(flipV, R, C, Nr, C) :- Nr is 3-R. transform(flipD1, R, C, C, R). transform(flipD2, R, C, Nr, Nc) :- Nr is 3-C, Nc is 3-R. apply_transform(_, [], []). apply_transform(T, [Type-(R,C)|Rest], [Type-(NR,NC)|TRest]) :- transform(T, R, C, NR, NC), apply_transform(T, Rest, TRest). % Canonical form: sort pieces within same-type pairs, then sort the % whole list to get a unique representative. canonical_placement(Placement, Canonical) :- findall(T, member(T,[identity,rot90,rot180,rot270, flipH,flipV,flipD1,flipD2]), Ts), maplist(transform_and_sort(Placement), Ts, AllForms), msort(AllForms, Sorted), Sorted = [Canonical|_]. transform_and_sort(Placement, T, Sorted) :- apply_transform(T, Placement, TPl), msort(TPl, Sorted). % ---- Count solutions up to D4 symmetry ------------------------------ count_unique(N) :- findall(P, placement(P), Ps), maplist(canonical_placement, Ps, Canonicals), list_to_set(Canonicals, Unique), length(Unique, N), format("Solutions up to D4 symmetry: ~w~n", [N]). % ---- Pretty-print a board ------------------------------------------- print_board(Placement) :- forall(member(R, [0,1,2,3]), print_row(R, Placement)), nl. print_row(R, Placement) :- forall(member(C, [0,1,2,3]), print_cell(R, C, Placement)), nl. print_cell(R, C, Placement) :- ( member(rook-(R,C), Placement) -&gt; write('R ')
+    ;   member(bishop-(R,C), Placement) -&gt; write('B ')
+    ;   member(knight-(R,C), Placement) -&gt; write('N ')
+    ;   write('. ')
+    ).
+
+% ---- Print all unique solutions -------------------------------------
+
+print_unique_solutions :-
+    findall(P, placement(P), Ps),
+    maplist(canonical_placement, Ps, Canonicals),
+    list_to_set(Canonicals, Unique),
+    length(Unique, N),
+    format("~nSolutions up to D4 symmetry: ~w~n~n", [N]),
+    forall(nth1(I, Unique, Sol),
+           ( format("Solution ~w:~n", [I]),
+             print_board(Sol) )).
+
+% ---- Top-level entry point ------------------------------------------
+
+run :-
+    count_solutions(Raw),
+    count_unique(Sym),
+    format("~n"),
+    print_unique_solutions,
+    format("Summary: ~w raw solutions, ~w up to D4 symmetry.~n",
+           [Raw, Sym]).
+</pre>The post <a href="https://www.johndcook.com/blog/2026/06/11/prolog-claude/">Solving a chess puzzle with Claude and Prolog</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+					<wfw:commentRss>https://www.johndcook.com/blog/2026/06/11/prolog-claude/feed/</wfw:commentRss>
+			<slash:comments>5</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Formally proving a calculation with Claude and Lean</title>
+		<link>https://www.johndcook.com/blog/2026/06/10/claude-and-lean/</link>
+					<comments>https://www.johndcook.com/blog/2026/06/10/claude-and-lean/#comments</comments>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Wed, 10 Jun 2026 23:11:01 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Artificial intelligence]]></category>
+		<category><![CDATA[Formal methods]]></category>
+		<category><![CDATA[Lean]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247144</guid>
+
+					<description><![CDATA[<p>I ran an experiment today to see whether Claude [1] could generate Lean code to prove a calculation at the bottom of this post, six lines of calculus. I started with this prompt This page contains a mathematical proof that a Fourier coefficient, a_n, is given in terms of a Bessel function. The LaTeX source [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/10/claude-and-lean/">Formally proving a calculation with Claude and Lean</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>I ran an experiment today to see whether Claude [1] could generate Lean code to prove a calculation at the bottom of <a href="https://www.johndcook.com/blog/2026/06/06/from-kepler-to-bessel/">this post</a>, six lines of calculus.</p>
+<p>I started with this prompt</p>
+<p style="padding-left: 40px;">This page contains a mathematical proof that a Fourier coefficient, a_n, is given in terms of a Bessel function. The LaTeX source for the SVG image is contained in the alt tag of the image. Generate a formal proof of the result using Lean.</p>
+<p>and give it the URL of the post. It produced a proof without any further input, but the proof wouldn&#8217;t build.</p>
+<p>I pasted in the error messages and let Claude try to fix the proof, deliberately not giving it any help other than pasting in error messages. It took eight iterations, but eventually it worked.</p>
+<p>There were four places in the proof marked &#8220;sorry,&#8221; which Claude explained as follows.</p>
+<p style="padding-left: 40px;"><b>Why the <code>sorry</code>s?</b></p>
+<p style="padding-left: 40px;">Real.besselJ definition or a <code>Kepler</code> namespace. The three remaining <code>sorry</code>s correspond to <strong>standard analysis lemmas</strong> (IBP and change-of-variables) that exist in Mathlib under <code>intervalIntegral</code> — the file cites the exact lemma names needed to close each one. This is the accepted style for &#8220;roadmap&#8221; Lean proofs ahead of library coverage.</p>
+<p>The full proof is given below.</p>
+<pre>/-
+  KeplerBessel.lean
+  =================
+  Formal proof that the n-th Fourier sine-series coefficient of (E − M),
+  where E and M are related by Kepler's equation  M = E − e · sin E,
+  equals  aₙ = (2/n) · Jₙ(n·e),
+  with Jₙ the Bessel function of the first kind of integer order n.
+
+  Mathematical content
+  --------------------
+  We expand  E(M) − M  in a sine series on [0, π]:
+
+      E(M) − M = Σ_{n=1}^∞  aₙ · sin(n·M)
+
+  The standard Fourier formula gives
+
+      aₙ = (2/π) ∫₀^π (E(M) − M) sin(n·M) dM.
+
+  Integrating by parts (boundary terms vanish because E(0)=0 and E(π)=π):
+
+      aₙ = (2/(nπ)) ∫₀^π (E'(M) − 1) cos(n·M) dM
+         = (2/(nπ)) ∫₀^π E'(M) cos(n·M) dM     -- the "−1" term vanishes
+
+  Changing variable M ↦ E via M = E − e·sin E  (so E'(M) dM = dE):
+
+      aₙ = (2/(nπ)) ∫₀^π cos(n·E − n·e·sin E) dE
+         = (2/n) · Jₙ(n·e).
+
+  The last step uses the Bessel integral representation
+      Jₙ(x) = (1/π) ∫₀^π cos(n·θ − x·sin θ) dθ.
+-/
+
+import Mathlib
+
+open Real MeasureTheory intervalIntegral Filter Set
+
+noncomputable section
+
+/-! ---------------------------------------------------------------
+    §1  Variables
+    --------------------------------------------------------------- -/
+
+variable (e : ℝ) (he : 0 ≤ e) (he1 : e &lt; 1) /-! --------------------------------------------------------------- §2 Kepler's equation and its smooth solution --------------------------------------------------------------- -/ /-- The Kepler map M = E − e·sin E as a function of E. -/ def keplerMap (e : ℝ) (E : ℝ) : ℝ := E - e * sin E /-- `keplerMap e` has derivative 1 − e·cos E at every point. -/ lemma keplerMap_hasDerivAt (e E : ℝ) : HasDerivAt (keplerMap e) (1 - e * cos E) E := -- keplerMap e = fun x =&gt; x - e * sin x, so HasDerivAt follows directly
+  -- from sub-rule and const_mul applied to hasDerivAt_sin.
+  (hasDerivAt_id E).sub ((hasDerivAt_sin E).const_mul e)
+
+/-- The derivative of `keplerMap e` is positive when e &lt; 1. -/
+lemma keplerMap_deriv_pos {e' : ℝ} (he' : 0 ≤ e') (he1' : e' &lt; 1) (E : ℝ) :
+    0 &lt; 1 - e' * cos E := by
+  have hcos : cos E ≤ 1 := cos_le_one E
+  nlinarith [mul_le_of_le_one_right he' hcos]
+
+/-- `keplerMap e` is strictly monotone when e &lt; 1.
+    Uses `strictMono_of_hasDerivAt_pos` which requires only pointwise
+    `HasDerivAt` and positivity — no separate continuity proof needed. -/
+lemma keplerMap_strictMono {e' : ℝ} (he' : 0 ≤ e') (he1' : e' &lt; 1) : StrictMono (keplerMap e') := strictMono_of_hasDerivAt_pos (fun E =&gt; keplerMap_hasDerivAt e' E)
+    (fun E =&gt; keplerMap_deriv_pos he' he1' E)
+
+/-!
+  We axiomatise the inverse  eccAnom : ℝ → ℝ → ℝ  and its key
+  properties, all of which follow from the Inverse Function Theorem
+  applied to the smooth, strictly monotone map  keplerMap e.
+-/
+
+/-- The eccentric anomaly: the smooth right-inverse of `keplerMap e`. -/
+axiom eccAnom (e : ℝ) : ℝ → ℝ
+
+/-- `eccAnom e M` satisfies Kepler's equation. -/
+axiom eccAnom_kepler (e M : ℝ) :
+    keplerMap e (eccAnom e M) = M
+
+/-- `eccAnom e` is differentiable, derivative = 1/(1 − e·cos(eccAnom e M)). -/
+axiom eccAnom_hasDerivAt (e M : ℝ) :
+    HasDerivAt (eccAnom e) (1 / (1 - e * cos (eccAnom e M))) M
+
+/-- Boundary value at 0. -/
+axiom eccAnom_zero (e : ℝ) : eccAnom e 0 = 0
+
+/-- Boundary value at π. -/
+axiom eccAnom_pi (e : ℝ) : eccAnom e π = π
+
+/-! ---------------------------------------------------------------
+    §3  Bessel function of the first kind (integer order)
+
+    Defined by the classical integral representation.
+    --------------------------------------------------------------- -/
+
+/-- Bessel function J_n(x) via its integral representation. -/
+def besselJ (n : ℕ) (x : ℝ) : ℝ :=
+  (1 / π) * ∫ θ in (0 : ℝ)..π, cos (↑n * θ - x * sin θ)
+
+/-! ---------------------------------------------------------------
+    §4  Fourier coefficient
+
+    Named  keplerFourierCoeff  to avoid clashing with Mathlib's own
+    `fourierCoeff` which is defined on  AddCircle.
+    --------------------------------------------------------------- -/
+
+/-- The n-th Fourier sine coefficient of  eccAnom e M − M  on [0,π]. -/
+def keplerFourierCoeff (e : ℝ) (n : ℕ) : ℝ :=
+  (2 / π) * ∫ M in (0 : ℝ)..π,
+    (eccAnom e M - M) * sin (↑n * M)
+
+/-! ---------------------------------------------------------------
+    §5  Main theorem
+    --------------------------------------------------------------- -/
+
+/--
+  **Main theorem.** For n ≥ 1, the Fourier sine coefficient of the
+  eccentric-anomaly displacement satisfies  aₙ = (2/n) · Jₙ(n·e).
+-/
+theorem keplerFourierCoeff_eq_besselJ (n : ℕ) (hn : 1 ≤ n) :
+    keplerFourierCoeff e n = (2 / (n : ℝ)) * besselJ n (↑n * e) := by
+  simp only [keplerFourierCoeff, besselJ]
+  -- Goal:
+  --   (2/π) · ∫₀^π (E(M)−M)·sin(nM) dM
+  --   = (2/n) · (1/π) · ∫₀^π cos(nθ − ne·sinθ) dθ
+
+  -- ── Step 1: Integration by parts ─────────────────────────────────────
+  -- u = E(M)−M,  dv = sin(nM)dM  →  v = −cos(nM)/n
+  -- Boundary: [uv]₀^π = 0 by eccAnom_zero, eccAnom_pi.
+  -- Result: (2/π)∫(E−M)sin(nM)dM = (2/π)(1/n)∫(E'(M)−1)cos(nM)dM
+  --
+  -- Mathlib lemma: intervalIntegral.integral_mul_deriv
+  --   (or integral_deriv_mul_eq_sub_of_hasDerivAt applied to
+  --    u = eccAnom e − id,  v = −sin(n··)/n)
+  have step1 :
+      (2 / π) * ∫ M in (0 : ℝ)..π, (eccAnom e M - M) * sin (↑n * M)
+      = (2 / π) * (1 / ↑n) *
+          ∫ M in (0 : ℝ)..π, (deriv (eccAnom e) M - 1) * cos (↑n * M) := by
+    sorry
+
+  -- ── Step 2: The "−1" integral vanishes ───────────────────────────────
+  -- ∫₀^π cos(nM) dM = [sin(nM)/n]₀^π = 0  (integer n ≥ 1)
+  -- Mathlib: integral_cos, Real.sin_nat_mul_pi
+  have cos_int_zero :
+      ∫ M in (0 : ℝ)..π, cos (↑n * M) = 0 := by
+    sorry
+
+  have step2 :
+      ∫ M in (0 : ℝ)..π, (deriv (eccAnom e) M - 1) * cos (↑n * M)
+      = ∫ M in (0 : ℝ)..π, deriv (eccAnom e) M * cos (↑n * M) := by
+    have key : ∀ M : ℝ, (deriv (eccAnom e) M - 1) * cos (↑n * M)
+                       = deriv (eccAnom e) M * cos (↑n * M) - cos (↑n * M) := by
+      intro M; ring
+    simp_rw [key]
+    rw [intervalIntegral.integral_sub _ _]
+    · rw [cos_int_zero, sub_zero]
+    · -- IntervalIntegrable (deriv (eccAnom e) · cos(n··))
+      sorry
+    · exact (continuous_cos.comp (continuous_const.mul continuous_id')).intervalIntegrable 0 π
+
+  -- ── Step 3: Change of variable M ↦ E via Kepler's equation ───────────
+  -- Under M = E − e·sin E:  E'(M) dM = dE,  cos(nM) = cos(nE − ne·sinE)
+  -- Mathlib: MeasureTheory.integral_image_eq_integral_abs_deriv_smul
+  --       or intervalIntegral.integral_comp_deriv
+  have step3 :
+      ∫ M in (0 : ℝ)..π, deriv (eccAnom e) M * cos (↑n * M)
+      = ∫ E in (0 : ℝ)..π, cos (↑n * E - ↑n * e * sin E) := by
+    sorry
+
+  -- ── Step 4: Recognise the Bessel integral ────────────────────────────
+  -- (1/π)∫₀^π cos(nE − ne·sinE)dE = J_n(ne)  by definition.
+  have step4 :
+      (1 / π) * ∫ E in (0 : ℝ)..π, cos (↑n * E - ↑n * e * sin E)
+      = besselJ n (↑n * e) := by
+    simp only [besselJ]
+
+  -- ── Combine all steps ────────────────────────────────────────────────
+  have hpi : π &gt; 0 := Real.pi_pos
+  have hn_pos : (0 : ℝ) &lt; ↑n := by exact_mod_cast (show 0 &lt; n by omega)
+  rw [step1, step2, step3]
+  -- Goal: (2/π)·(1/n)·∫cos = (2/n)·(1/π)·∫cos
+  -- Both sides equal (2/(nπ))·∫cos; show by ring after moving (1/π) inside.
+  have factored : (2 / π) * (1 / ↑n) *
+      ∫ E in (0 : ℝ)..π, cos (↑n * E - ↑n * e * sin E)
+      = (2 / ↑n) * ((1 / π) *
+      ∫ E in (0 : ℝ)..π, cos (↑n * E - ↑n * e * sin E)) := by
+    ring
+  rw [factored, step4]
+
+end
+
+/-! ---------------------------------------------------------------
+    §6  Summary of proof obligations
+
+    Axioms (all standard consequences of the Inverse Function Theorem
+    applied to the smooth, strictly increasing map  keplerMap e):
+      • eccAnom           — existence of the smooth inverse
+      • eccAnom_kepler    — it satisfies Kepler's equation
+      • eccAnom_hasDerivAt — C¹ with derivative 1/(1 − e·cos E)
+      • eccAnom_zero      — E(0) = 0
+      • eccAnom_pi        — E(π) = π
+
+    `sorry`s (each closes with a standard Mathlib lemma):
+      • step1        IBP via
+                      intervalIntegral.integral_deriv_mul_eq_sub_of_hasDerivAt
+      • cos_int_zero  ∫₀^π cos(nM)dM = 0 via
+                      integral_cos + Real.sin_nat_mul_pi
+      • step2 integrability  IntervalIntegrable for deriv(eccAnom e)·cos(n·)
+      • step3        Change of variables via
+                      MeasureTheory.integral_image_eq_integral_abs_deriv_smul
+
+    §7  Finding minimal imports
+
+    Once the file builds cleanly, add at the bottom:
+
+        #min_imports
+
+    and the Lean Infoview will report the exact minimal import list
+    for the version of Mathlib you have installed.
+    --------------------------------------------------------------- -/
+</pre>
+<p>[1] I used the default setting: Sonnet 4.6, low effort, &#8220;thinking&#8221; turned off.</p>The post <a href="https://www.johndcook.com/blog/2026/06/10/claude-and-lean/">Formally proving a calculation with Claude and Lean</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+					<wfw:commentRss>https://www.johndcook.com/blog/2026/06/10/claude-and-lean/feed/</wfw:commentRss>
+			<slash:comments>1</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Pulling on a thread</title>
+		<link>https://www.johndcook.com/blog/2026/06/10/pulling-on-a-thread/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Wed, 10 Jun 2026 13:34:31 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247139</guid>
+
+					<description><![CDATA[<p>Often there&#8217;s a thread running through a sequence of my posts. Sometimes I make this explicit and sometimes I don&#8217;t. The latest thread started with this post commenting on a tweet that observed that exp(−x²) ≈ (1 + cos(sin(x) + x))/2. Some people said online that that the approximation is simply due to the first [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/10/pulling-on-a-thread/">Pulling on a thread</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>Often there&#8217;s a thread running through a sequence of my posts. Sometimes I make this explicit and sometimes I don&#8217;t.</p>
+<p>The latest thread started with <a href="https://www.johndcook.com/blog/2026/05/31/another-gaussian-approximation/">this post</a> commenting on a tweet that observed that</p>
+<p style="padding-left: 40px;">exp(−<em>x</em>²) ≈ (1 + cos(sin(<em>x</em>) + <em>x</em>))/2.</p>
+<p>Some people said online that that the approximation is simply due to the first few terms of the Taylor series on both sides matching up, so I wrote a <a href="https://www.johndcook.com/blog/2026/06/01/not-just-taylor-series/">follow up post</a> explaining that it&#8217;s not that simple.</p>
+<p>The series for the left hand side alternates and converges very slowly, which led to the post on <a href="https://www.johndcook.com/blog/2026/06/03/naive-sum/">naively summing</a> an alternating series.</p>
+<p>The series for the right hand side led to this point on <a href="https://www.johndcook.com/blog/2026/06/04/partitions-over-permutations/">partitions over permutations</a>.</p>
+<p>Integrating the right hand side led to <a href="https://www.johndcook.com/blog/2026/06/04/integrating-smooth-periodic-functions/">this post</a> on how the simplest numerical integration rule works shockingly well on some problems.</p>
+<p>The exact value of the integral turns out to be given by a <a href="https://www.johndcook.com/blog/2026/06/05/mr-bessels-eponymous-functions/">Bessel function</a>, details given in <a href="https://www.johndcook.com/blog/2026/06/06/from-kepler-to-bessel/">this post</a>.</p>
+<p>Mr. Bessel&#8217;s interest in the functions now named after him started with looking closely at a solution to Kepler&#8217;s equation in orbital mechanics. Thinking about Kepler&#8217;s equation led to the posts on <a href="https://www.johndcook.com/blog/2026/06/07/the-laplace-limit/">the Laplace limit</a> and on <a href="https://www.johndcook.com/blog/2026/06/07/aitkin-acceleration-kepler/">series acceleration</a>.</p>
+<p>I may be done pulling on this thread. I don&#8217;t have anything else in mind that I want to explore for now, but you never know.</p>The post <a href="https://www.johndcook.com/blog/2026/06/10/pulling-on-a-thread/">Pulling on a thread</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Aitken acceleration before Aitken</title>
+		<link>https://www.johndcook.com/blog/2026/06/07/aitkin-acceleration-kepler/</link>
+					<comments>https://www.johndcook.com/blog/2026/06/07/aitkin-acceleration-kepler/#comments</comments>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Sun, 07 Jun 2026 20:14:45 +0000</pubDate>
+				<category><![CDATA[Computing]]></category>
+		<category><![CDATA[Math]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247135</guid>
+
+					<description><![CDATA[<p>Kepler solved his eponymous equation M = E − e sin(E) by finding a fixed point of E = M + e sin(E). So guess a value of E and stick it into the right hand side. Then plug that value into the right hand side again. Kepler said a couple iterations should be enough. And a couple [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/07/aitkin-acceleration-kepler/">Aitken acceleration before Aitken</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>Kepler solved his eponymous equation</p>
+<p style="padding-left: 40px;"><em>M</em> = <em>E</em> − <em>e</em> sin(<em>E</em>)</p>
+<p>by finding a fixed point of</p>
+<p style="padding-left: 40px;"><em>E</em> = <em>M</em> + <em>e</em> sin(<em>E</em>).</p>
+<p>So guess a value of <em>E</em> and stick it into the right hand side. Then plug that value into the right hand side again. Kepler said a couple iterations should be enough. And a couple iterations <em>are</em> enough if the eccentricity <em>e</em> is small and you don&#8217;t need much accuracy.</p>
+<p>The rate of convergence is determined by <em>e</em>. Kepler implicitly had in mind small values of <em>e</em> because he wasn&#8217;t aware of anything orbiting the sun in a highly elliptical orbit. Here&#8217;s an example with eccentricity 0.05, about the eccentricity of the orbits of Jupiter and Saturn.</p>
+<pre>from math import sin
+
+M, E, e = 1, 1, 0.05
+for _ in range(5):
+    E = M + e*sin(E)
+    residual = M - (E - e*sin(E))
+    print(residual)
+</pre>
+<p>The residual after just two iterations is 2.77 × 10<sup>−5</sup>. If you change <em>e</em> to 0.2, the eccentricity of Mercury&#8217;s orbit, it takes three iterations to get comparable accuracy. Mercury has the most eccentric orbit of any object Kepler would have known about.</p>
+<p>Now suppose you&#8217;d like to solve for <em>E</em> when <em>M</em> = 1 for Halley&#8217;s comet, and you&#8217;d like an error of less than 10<sup>−8</sup>. Now you need 16 iterations.</p>
+<p>C. F. W. Peters discovered a faster algorithm in 1891.</p>
+<p style="padding-left: 40px;"><em>E</em><sub>1</sub> = <i>M</i> + <em>e</em> sin(<em>E</em><sub>0</sub>)<br />
+<em>E</em><sub>2</sub> = <i>M</i> + <em>e</em> sin(<em>E</em><sub>1</sub>)<br />
+<em>E</em><sub>3</sub> = (<em>E</em><sub>2</sub> <em>E</em><sub>0</sub> − <em>E</em><sub>1</sub>²)/(<em>E</em><sub>2</sub> − 2<em>E</em><sub>1</sub> + <em>E</em><sub>0</sub>)</p>
+<p>Let&#8217;s look at the results of doing three iterations of Peters&#8217; method for Halley&#8217;s comet.</p>
+<pre>M, E0, e = 1, 1, 0.967
+for _ in range(3):
+    E1 = M + e*sin(E0)
+    E2 = M + e*sin(E1)
+    E3 = (E2*E0 - E1**2)/(E2 - 2*E1 + E0)
+    residual = M - (E - e*sin(E3))
+    print(residual)
+    E0 = E3 # for next iteration
+</pre>
+<p>This gives a residual of −7.23 × 10<sup>−10</sup>. Each iteration of Peters&#8217; method requires a little more than twice as much work as an iteration of Kepler&#8217;s method, but 3 iterations of Peters&#8217; method accomplished more than 16 iterations of Kepler&#8217;s method.</p>
+<p>Peters&#8217; algorithm from 1891 was a special case of Alexander Aitken&#8217;s series acceleration method published in 1926.</p>
+<h2>Related posts</h2>
+<ul>
+<li class='link'><a href='https://www.johndcook.com/blog/2019/08/02/aitken-acceleration/'>Aitken acceleration</a></li>
+<li class='link'><a href='https://www.johndcook.com/blog/2019/08/01/accelerating-an-alternating-series/'>Euler acceleration</a></li>
+<li class='link'><a href='https://www.johndcook.com/blog/2020/08/06/cohen-acceleration/'>Cohen acceleration</a></li>
+</ul>The post <a href="https://www.johndcook.com/blog/2026/06/07/aitkin-acceleration-kepler/">Aitken acceleration before Aitken</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+					<wfw:commentRss>https://www.johndcook.com/blog/2026/06/07/aitkin-acceleration-kepler/feed/</wfw:commentRss>
+			<slash:comments>1</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>The Laplace limit</title>
+		<link>https://www.johndcook.com/blog/2026/06/07/the-laplace-limit/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Sun, 07 Jun 2026 19:06:36 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Orbital mechanics]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247128</guid>
+
+					<description><![CDATA[<p>An earlier post discussed how to solve Kepler&#8217;s equation M = E − e sin(E) using a sine series. You could also solve Kepler&#8217;s equation using a power series, which Lagrange did in 1771. Both approaches express E as a function of e and M, but from different perspectives. Bessel thought of his solution as a sum of sines in [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/07/the-laplace-limit/">The Laplace limit</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>An <a href="https://www.johndcook.com/blog/2026/06/06/from-kepler-to-bessel/">earlier post</a> discussed how to solve Kepler&#8217;s equation</p>
+<p style="padding-left: 40px;"><em>M</em> = <em>E</em> − <em>e</em> sin(<em>E</em>)</p>
+<p>using a sine series. You could also solve Kepler&#8217;s equation using a power series, which Lagrange did in 1771. Both approaches express <em>E</em> as a function of <em>e</em> and <em>M</em>, but from different perspectives. Bessel thought of his solution as a sum of sines in <em>M</em>, with coefficients that depend on <em>e</em>. Lagrange thought of his solution as a power series in <em>e</em> whose coefficients involve sines in <em>M</em>. You can rearrange the terms of either solution into the other.</p>
+<p>The most interesting thing about the power series solution, in my opinion, is that it only converges for <em>e</em> less than roughly 2/3 while the sine series solution is valid for all <em>e</em> &lt; 1. In astronomical terms, this means the power series solution works for the orbit of some planets but not others!</p>
+<p>In our solar system, the planets all have eccentricity well below 2/3, but not all minor planets do. For example, the orbit of Eris has eccentricity 0.4407 but the orbit of Sedna has eccentricity 0.8549. And in other solar systems there are planets with eccentricity much greater than 2/3.</p>
+<h2>The Laplace limit</h2>
+<p>The radius of convergence for Lagrange&#8217;s power series solution is called the Laplace limit. Its value is <em>e</em><sub><em>L</em></sub> = 0.6627…. There&#8217;s no obvious reason why there&#8217;s anything special about this value. There&#8217;s no astronomical reason for this value. It&#8217;s an artifact of the power series form of the solution.</p>
+<p>If the series works for <em>e</em> = 0.66, you would reasonably think it works for <em>e</em> = 0.67, but that&#8217;s not the case. And if you&#8217;re observant, you might notice that although the series works for <em>e</em> = 0.66, it takes longer to converge than for smaller values of <em>e</em>; the rate of convergence is slowing down, warning you of danger ahead.</p>
+<p>The exact value of <em>e</em><sub><em>L</em></sub> is the unique real solution to the equation</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/laplace_limit1.svg" alt="x \exp\left(\sqrt{1 + x^2}\right) = 1 + \sqrt{1 + x^2}" width="244" height="36" /></p>
+<p>There&#8217;s no obvious reason for this either. It has to do with finding the largest circle that can fit in a lens-shaped region of convergence. More on that <a href="https://mathworld.wolfram.com/LaplaceLimit.html">here</a>.</p>
+<p>We can calculate <em>e</em><sub><em>L</em></sub> with the following Python code.</p>
+<pre>from math import exp
+from scipy.optimize import root_scalar
+
+def f(x):
+    t = (1 + x*x)**0.5
+    return x*math.exp(t) - 1 - t
+
+sol = root_scalar(f, bracket=[0, 1], method='brentq')
+print(sol.root)
+</pre>
+<p>This prints 0.6627434193491817.</p>
+<h2>Series details</h2>
+<p>We can use the <a href="https://www.johndcook.com/blog/2020/08/05/lagrange-inversion-formula/">Lagrange inversion formula</a> to find the series, just as Lagrange did two and a half centuries ago.</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/laplace_limit2.svg" alt="E = M+ \sum_{n=1}^{\infty} \frac{e^n}{n!} \frac{d^{\,n-1}}{dM^{\,n-1}} \left(\sin^n M\right)" width="253" height="54" /></p>
+<p>The powers of sine can be expanded into the sum of sines of various frequencies and differentiated, leading to the equation</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/laplace_limit3.svg" alt="E = M+ \sum_{n=1}^{\infty} \frac{e^n}{2^{\,n-1}n!} \sum_{k=0}^{\lfloor n/2\rfloor} (-1)^k \binom{n}{k} (n-2k)^{n-1} \sin\!\big((n-2k)M\big)" width="495" height="59" /></p>
+<p>&nbsp;</p>The post <a href="https://www.johndcook.com/blog/2026/06/07/the-laplace-limit/">The Laplace limit</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>A crank formula for π</title>
+		<link>https://www.johndcook.com/blog/2026/06/07/a-crank-formula-for-%cf%80/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Sun, 07 Jun 2026 16:34:26 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247126</guid>
+
+					<description><![CDATA[<p>I ran across a cranky formula for π based on physical constants here and decided to play around with it. The source describes λ as &#8220;wavelength (chosen in the microwave region)&#8221; and I thought perhaps you could chose a value of λ to make the equation work. But as a comment pointed out, the bracketed [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/07/a-crank-formula-for-%cf%80/">A crank formula for π</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>I ran across a cranky formula for π based on physical constants <a href="https://x.com/mathsrick_/status/2063283732535226568?s=20">here</a></p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/crank1.svg" alt="\pi = \left( \frac{E}{\frac{1}{2}mc^{2}} \right)^{1/2} \left[ J_{\lambda} \cdot \lambda^{5} \left( e^{\frac{hc}{\lambda kT}} - 1 \right) \right]" width="278" height="64" /></p>
+<p>and decided to play around with it.</p>
+<p>The source describes λ as &#8220;wavelength (chosen in the microwave region)&#8221; and I thought perhaps you could chose a value of λ to make the equation work. But as a <a href="https://x.com/QualiaQuanta/status/2063384173318975788">comment</a> pointed out, the bracketed expression is simply 2<em>hc</em>², independent of λ, due to Planck&#8217;s blackbody law. That means we can simplify the expression above to</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/crank2.svg" alt="\pi = 2\sqrt{2} hc \sqrt{\frac{E}{m}}" width="125" height="48" /></p>
+<p>Now the values of <em>h</em> and <em>c</em> are known. In fact, they&#8217;re now <strong>exactly</strong> known by definition: other SI units are defined in terms of <em>h</em> and <em>c</em>. The mass of an electron is known to 11 significant figures.</p>
+<p>But <em>E</em> in the equation above is &#8220;Total energy of the universe.&#8221; I don&#8217;t even know what that means. Does it refer to the observable universe? Does it include dark energy? Does it include the energy equivalent of mass?</p>
+<p>I asked a couple LLMs that the total energy of the universe might mean and what its value might be, and they said something like &#8220;Depends. It might be zero. It might be infinite. But if I had to say, I&#8217;d say around 10<sup>70</sup> Joules.&#8221;</p>
+<p>If we solve the equation above for <em>E</em> we get 2.8480347886530404 × 10<sup>19</sup> Joules. I have no idea how to justify that.</p>
+<p>The expression for π is not dimensionless. I suppose you could choose some nonstandard units that would make the equation work.</p>
+<p>The source I linked to above cites Mathematical Cranks by Underwood Dudley, but I couldn&#8217;t find it in the book.</p>
+<h2>Related posts</h2>
+<ul>
+<li class="link"><a href="https://www.johndcook.com/blog/2018/09/11/koide/">Koide&#8217;s coincidence</a></li>
+<li class="link"><a href="https://www.johndcook.com/blog/2021/03/31/coulombs-constant/">Coulomb&#8217;s constant</a></li>
+<li class="link"><a href="https://www.johndcook.com/blog/2025/05/24/dungeons-dragons-and-numbers/">Dungeons, Dragons, and Numbers</a></li>
+</ul>The post <a href="https://www.johndcook.com/blog/2026/06/07/a-crank-formula-for-%cf%80/">A crank formula for π</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>From Kepler to Bessel</title>
+		<link>https://www.johndcook.com/blog/2026/06/06/from-kepler-to-bessel/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Sat, 06 Jun 2026 18:46:02 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Orbital mechanics]]></category>
+		<category><![CDATA[Special functions]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247118</guid>
+
+					<description><![CDATA[<p>The previous post very briefly said that the integral representation for Bessel functions was motived by solving Kepler&#8217;s equation. This post will go into more detail. Kepler&#8217;s equation There are multiple ways to describe the position of a planet in an elliptical orbit around a star. For historical reasons, these descriptions have arcane names such [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/06/from-kepler-to-bessel/">From Kepler to Bessel</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>The <a href="https://www.johndcook.com/blog/2026/06/05/mr-bessels-eponymous-functions/">previous post</a> very briefly said that the integral representation for Bessel functions was motived by solving Kepler&#8217;s equation. This post will go into more detail.</p>
+<h2>Kepler&#8217;s equation</h2>
+<p>There are multiple ways to describe the position of a planet in an elliptical orbit around a star. For historical reasons, these descriptions have arcane names such as mean anomaly, true anomaly, and eccentric anomaly. <a href="https://www.johndcook.com/blog/2022/10/22/orbital-anomalies/">This post</a> explains how these three are related.</p>
+<p>For this post, it is enough to say that often you know mean anomaly <em>M</em> and want to know eccentric anomaly <em>E</em>. These are related via Kepler&#8217;s equation</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/kepler_eqn.svg" alt="M = E - e \sin E" width="153" height="13" /><br />
+where <em>e</em> is the eccentricity of the orbit. You&#8217;d like to solve for <em>E</em> as a function of <em>M</em> and <em>e</em>, but there&#8217;s no elementary way to do that.</p>
+<p>One way to solve Kepler&#8217;s equation is to take a guess at <em>E</em> and plug it into the right hand side of</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/kepler_eqn2.svg" alt="E = M + e \sin E" width="141" height="13" /><br />
+to get a new <em>E</em>, and keep iterating until the two sides are closer together. I write more about this <a href="https://www.johndcook.com/blog/2018/12/21/contraction-mapping-theorem/">here</a>.</p>
+<p>Another approach to solving Kepler&#8217;s equation is to use Newton&#8217;s method. I write more about that <a href="https://www.johndcook.com/blog/2022/11/01/kepler-newton/">here</a>.</p>
+<p>Still another approach is to expand <em>E</em> in a sine series and find the series coefficients. An advantage to this approach is that once you have the coefficients, you have an expression for <em>E</em> as a function of <em>M</em>, and you can plug in more values of <em>M</em> without having to solve Kepler&#8217;s equation for each value of <em>M</em> separately.</p>
+<h2>Sine series coefficients</h2>
+<p>Kepler&#8217;s equation is easy to solve at <em>E</em> = 0 and at <em>E</em> = π. In both cases, <em>E</em> = <em>M</em>. So the function <em>E</em> − <em>M</em> is zero at both ends of [0, π], which suggests we try to expand <em>E</em> − <em>M</em> in a sine series</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/kepler_eqn3.svg" alt="E - M = \sum_{n=1}^\infty a_n \sin nM" width="179" height="54" /></p>
+<p>We then calculate the Fourier coefficients <em>a</em><sub><em>n</em></sub> as usual.</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/kepler_bessel2.svg" alt="\begin{align*} a_n &amp;= \frac{2}{\pi} \int_0^\pi (E-M) \sin(nM) \, dM \\ &amp;= \frac{2}{n \pi} \int_0^\pi (E^\prime - 1) \cos(nM)\, dM \\ &amp;= \frac{2}{n \pi} \int_0^\pi \cos(nM) E^\prime(M) \, dM \\ &amp;= \frac{2}{n \pi} \int_0^\pi \cos\Big(nE - ne\sin(E)\Big) E^\prime(M) \, dM \\ &amp;= \frac{2}{n} \left\{ \frac{1}{\pi} \int_0^\pi \cos\Big(nE - ne \sin(E)\Big)\, dE\right\} \\ &amp;= \frac{2}{n} J_n(ne) \end{align*}" width="353" height="305" /></p>
+<p>The second line uses integration by parts. The third line uses Kepler&#8217;s equation. The last line uses the definition of the Bessel functions <em>J</em><sub><em>n</em></sub> given in the previous post.</p>The post <a href="https://www.johndcook.com/blog/2026/06/06/from-kepler-to-bessel/">From Kepler to Bessel</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Mr. Bessel&#8217;s eponymous functions</title>
+		<link>https://www.johndcook.com/blog/2026/06/05/mr-bessels-eponymous-functions/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Fri, 05 Jun 2026 12:04:28 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Special functions]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247111</guid>
+
+					<description><![CDATA[<p>Yesterday I wrote a post showing that the trapezoid rule evaluates the integral very efficiently. But how do we know what the exact integral is for comparison? If you ask Mathematica, it will tell you the integral equals −2π J1(1) where J1 is a Bessel function. This may seem like rabbit out of a hat, [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/05/mr-bessels-eponymous-functions/">Mr. Bessel’s eponymous functions</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>Yesterday I wrote a post showing that the trapezoid rule evaluates the integral</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/cossinint.svg" alt="\int_{-\pi}^\pi \cos(\sin(x) + x)\, dx" width="184" height="45" /></p>
+<p>very efficiently. But how do we know what the exact integral is for comparison? If you ask Mathematica, it will tell you the integral equals −2π <em>J</em><sub>1</sub>(1) where <em>J</em><sub>1</sub> is a Bessel function. This may seem like rabbit out of a hat, but it&#8217;s actually a simple calculation given the integral definition of Bessel functions:</p>
+<p><img loading="lazy" decoding="async" class="aligncenter" style="background-color: white;" src="https://www.johndcook.com/bessel_integral_def.svg" alt="J_n(z) = \frac{1}{\pi}\int_0^\pi \cos(n\theta - z\sin(\theta))\, d\theta" width="289" height="45" /></p>
+<p>Since cosine is even, we can write our integral over [−π, π] as twice the integral over [0, π]. Then a change of variables turns this into the definition of <em>J</em><sub><em>n</em></sub>(<em>z</em>) with <em>n</em> = 1 and <em>z</em> = 1.</p>
+<p>A deeper question is what have we accomplished by just giving a new name to essentially the same problem we started with. Another question is why in the world are Bessel functions defined as above.</p>
+<p>As for what we&#8217;ve accomplished, we&#8217;ve related out integration problem to a very well-studied function. Bessel functions have been studied for two centuries and it&#8217;s easy to find software to evaluate them. Even the usually minimalist command line calculator <code>bc</code> has a function <code>j(x, n)</code> for evaluating <em>J</em><sub><em>n</em></sub>(<em>x</em>) for integer values of <em>n</em>. We could calculate our integral to 50 decimal places as follows.</p>
+<pre>~$ bc -l
+&gt;&gt;&gt; scale = 50
+&gt;&gt;&gt;  -8*a(1)*j(1,1)
+-2.76491937476833705153256665538788207487495025542883
+</pre>
+<p>Note that <code>bc</code> doesn&#8217;t have a value of π built in, but <code>a(x)</code> evaluates the arctangent function, and π = 4 arctan(1).</p>
+<p>There are multiple ways of defining Bessel functions. The three main ways would be in terms of their power series, in terms of the differential equations they solve, and in terms of their integral representation. Friedrich Bessel defined what we now call Bessel functions of the first kind, the <em>J</em><sub><em>n</em></sub> functions, in terms of their integral representations.</p>
+<p>Why did Bessel care about these integrals? They came out of his calculations in celestial mechanics. One example of this is solving <a href="https://www.johndcook.com/blog/2018/12/21/contraction-mapping-theorem/">Kepler&#8217;s equation</a> with Fourier series; the Fourier coefficients are given by Bessel functions. This is worked out in detail in the <a href="https://www.johndcook.com/blog/2026/06/06/from-kepler-to-bessel/">next post</a>.</p>
+<p>Bessel functions had occurred in applications before Mr. Bessel drew attention to them. The functions are named after him because he was the first to systematically study them.</p>
+<p>Mathematics is developed inductively but taught deductively. It&#8217;s common for things to be kicked around for years before someone decides they deserve a name and systematic study. See this post on the <a href="https://www.johndcook.com/blog/2010/01/05/how-the-central-limit-theorem-began/">central limit theorem</a> for another example. The CLT is older than the Gaussian distribution, even older than Gauss.</p>
+<h2>Related posts</h2>
+<ul>
+<li class="link"><a href="https://www.johndcook.com/blog/2016/02/17/analyzing-an-fm-signal/">FM radio and Bessel functions</a></li>
+<li class="link"><a href="https://www.johndcook.com/blog/2021/06/12/vibrating-circular-membranes/">Vibrating circular membranes</a></li>
+<li class="link"><a href="https://www.johndcook.com/blog/2017/11/04/fourier-bessel-series-and-gibbs-phenomena/">Fourier-Bessel series</a></li>
+</ul>The post <a href="https://www.johndcook.com/blog/2026/06/05/mr-bessels-eponymous-functions/">Mr. Bessel’s eponymous functions</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>The Latin of Linux</title>
+		<link>https://www.johndcook.com/blog/2026/06/04/the-latin-of-linux/</link>
+					<comments>https://www.johndcook.com/blog/2026/06/04/the-latin-of-linux/#comments</comments>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Thu, 04 Jun 2026 20:12:11 +0000</pubDate>
+				<category><![CDATA[Computing]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247093</guid>
+
+					<description><![CDATA[<p>One reason people study Latin is that it is the ancestor of many modern languages. English derives from West Germanic languages, not from Latin, but much of English vocabulary, perhaps as much as 60%, derives from Latin, either directly or indirectly through French. Knowing a bit of Latin makes sense of many things that would [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/04/the-latin-of-linux/">The Latin of Linux</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>One reason people study Latin is that it is the ancestor of many modern languages. English derives from West Germanic languages, not from Latin, but much of English vocabulary, perhaps as much as 60%, derives from Latin, either directly or indirectly through French.</p>
+<p>Knowing a bit of Latin makes sense of many things that would otherwise seem completely arbitrary, such as why the symbols for gold, silver, and lead are Au, Ag, and Pb respectively.</p>
+<p>Similarly, ed(1) is the Latin of Linux [1]. Many conventions in command line utilities follow conventions that go back to the ed(1) line editor. They may go back even further. Just as Latin didn&#8217;t come out of nowhere, neither did ed(1), but you can&#8217;t go back indefinitely. It&#8217;s convenient to start history somewhere, and this post will start with ed(1) just as much discussion of Western linguistics starts with Latin.</p>
+<p>The following are features of ed(1) that live on in sed, awk, grep, vi, perl, bash, etc.</p>
+<ol>
+<li>Using slashes to delimit regular expressions</li>
+<li>Using $ to indicate the end of a line or the end of a file</li>
+<li>The pattern of specifying address + action or address range + action</li>
+<li>Using regular expressions as address ranges</li>
+<li>Using \1, \2, etc to refer to regex captures</li>
+<li>Using &amp; to refer to the entire matched text</li>
+<li>The g/regexp/command pattern</li>
+<li>Using p for printing lines, as in g/re/p</li>
+<li>The commands a, c, d, i, j, l, p, q, r, and w in vi</li>
+<li>! for shell escape</li>
+</ol>
+<p>&nbsp;</p>
+<p>[1] Because the name &#8220;ed&#8221; is so short, and looks so much like the name Ed, it&#8217;s convenient to use its full Unix name ed(1). The parenthesized number is used to disambiguate different things that have the same name, such as the user command kill(1) and the system call kill(2). There is no ed(2) or any other higher-numbered ed. The number is there to make the name stand out, not to disambiguate anything.</p>The post <a href="https://www.johndcook.com/blog/2026/06/04/the-latin-of-linux/">The Latin of Linux</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+					<wfw:commentRss>https://www.johndcook.com/blog/2026/06/04/the-latin-of-linux/feed/</wfw:commentRss>
+			<slash:comments>3</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Integrating smooth periodic functions</title>
+		<link>https://www.johndcook.com/blog/2026/06/04/integrating-smooth-periodic-functions/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Thu, 04 Jun 2026 17:18:40 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Integration]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247102</guid>
+
+					<description><![CDATA[<p>Several posts lately have looked at the function f(x) = cos(sin(x) + x). This post will look at the function from a different angle. It&#8217;s a smooth function with period 2π. For reasons I wrote about here, this means that the trapezoid rule should find its integral very efficiently. In general, the error in the trapezoid [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/04/integrating-smooth-periodic-functions/">Integrating smooth periodic functions</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>Several posts lately have looked at the function</p>
+<p style="padding-left: 40px;"><em>f</em>(<em>x</em>) = cos(sin(<em>x</em>) + <em>x</em>).</p>
+<p>This post will look at the function from a different angle. It&#8217;s a smooth function with period 2π. For reasons I wrote about <a href="https://www.johndcook.com/blog/2017/03/01/numerically-integrating-periodic-functions/">here</a>, this means that the trapezoid rule should find its integral very efficiently.</p>
+<p>In general, the error in the trapezoid rule is on the order of 1/<em>N</em>² where <em>N</em> is the number of integration points. To be more specific, the error in integrating a function <em>f</em> over [<em>a</em>, <em>b</em>] with <em>N</em> points is bounded by</p>
+<p style="padding-left: 40px;">(<em>b</em> − <em>a</em>)³ <em>M</em> / 12<em>N</em>²</p>
+<p>where <em>M</em> is the maximum absolute value of the second derivative of <em>f</em>. So in our case we should expect the error to be less than 82.67/<em>N</em>². In fact we do <em>much</em> better than that. The error does not decrease quadratically, as it does in general, but exponentially.</p>
+<p><img loading="lazy" decoding="async" class="size-medium aligncenter" src="https://www.johndcook.com/periodic_gaussian.png" width="640" height="480" /></p>
+<p>With just 16 integration points, we&#8217;ve reached the limit of floating point representation.</p>The post <a href="https://www.johndcook.com/blog/2026/06/04/integrating-smooth-periodic-functions/">Integrating smooth periodic functions</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Partitions over permutations</title>
+		<link>https://www.johndcook.com/blog/2026/06/04/partitions-over-permutations/</link>
+					<comments>https://www.johndcook.com/blog/2026/06/04/partitions-over-permutations/#comments</comments>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Thu, 04 Jun 2026 13:48:56 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Combinatorics]]></category>
+		<category><![CDATA[Complex analysis]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247098</guid>
+
+					<description><![CDATA[<p>I was thinking more about the cosine approximation to the Gaussian exp(−z²) ≈ (1 + cos(sin(z) + z))/2 that I wrote about last week. The two expressions above are close along the real axis but not along the imaginary axis. If z = iy, the right side grows much faster than the left, behaving like exp(exp(y)). This led to [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/04/partitions-over-permutations/">Partitions over permutations</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>I was thinking more about the cosine approximation to the Gaussian</p>
+<p style="padding-left: 40px;">exp(−<em>z</em>²) ≈ (1 + cos(sin(<em>z</em>) + <em>z</em>))/2</p>
+<p>that I wrote about <a href="https://www.johndcook.com/blog/2026/05/31/another-gaussian-approximation/">last</a> <a href="https://www.johndcook.com/blog/2026/06/01/not-just-taylor-series/">week</a>. The two expressions above are close along the real axis but not along the imaginary axis.</p>
+<p>If <em>z</em> = <em>iy</em>, the right side grows much faster than the left, behaving like exp(exp(<em>y</em>)).</p>
+<p>This led to me looking up the power series for the double exponential function exp(exp(<em>y</em>)). This is an interesting series because the coefficient of <em>x</em><sup><em>n</em></sup> is</p>
+<p style="padding-left: 40px;"><em>e</em> <em>B</em><sub><em>n</em></sub> / <em>n</em>!</p>
+<p>where <em>B</em><sub><em>n</em></sub> is the <em>n</em>th <a href="https://www.johndcook.com/blog/2018/06/05/bell-numbers/">Bell number</a>, which equals the number of ways to <strong>partition</strong> a set of <em>n</em> labeled items [1]. And of course <em>n</em>! is the number of ways to <strong>permute</strong> a set of <em>n</em> labeled items. So the <em>n</em>th coefficient in the power series for exp(exp(<em>y</em>)) is the ratio of the number of partitions to permutations for a set of <em>n</em> labeled things, multiplied by <em>e</em>.</p>
+<p>The number of ways to partition a set of <em>n</em> things grows quickly as <em>n</em> increases, almost as quickly as the number of permutations, and so the series for the double exponential function converges very slowly.</p>
+<h2>Computing</h2>
+<p>SymPy has a function <code>bell</code> for computing Bell numbers, so you could compute the ratio of partitions to permutations as follows.</p>
+<pre>from sympy import bell, factorial
+f = lambda n: bell(n)/factorial(n)
+</pre>
+<p>This returns a number of type <code>sympy.core.numbers.Rational</code> and so the result is exact. You can cast it to float for convenience.</p>
+<h2>Asymptotics</h2>
+<p>If we look at only the terms in the asymptotic series for log <em>B</em><sub><em>n</em></sub> and log <em>n</em>! that grow with <em>n</em> we have</p>
+<p style="padding-left: 40px;">log <em>B</em><sub><em>n</em></sub> ~ <em>n</em> log <em>n</em> − <em>n</em> log log <em>n</em><br />
+log <em>n</em>! ~ <em>n</em> log <em>n</em> − ½ log <em>n</em></p>
+<p>and so</p>
+<p style="padding-left: 40px;">log( <em>B</em><sub><em>n</em></sub> / <em>n</em>! ) ~ ½ log <em>n − n</em> log log <em>n</em></p>
+<p>There&#8217;s also an asymptotic series for log( <em>B</em><sub><em>n</em></sub> / <em>n</em>! ) involving the <a href="https://www.johndcook.com/blog/2021/04/23/lambert-w/">Lambert <em>W</em> function</a>:</p>
+<p style="padding-left: 40px;">log( <em>B</em><sub><em>n</em></sub> / <em>n</em>! ) ~ <em>n</em>/<em>r</em> − 1 − <em>n</em> log <em>r</em></p>
+<p>where <em>r </em>= <em>W</em>(<em>n</em>).</p>
+<h2>Related posts</h2>
+<ul>
+<li class="link"><a href="https://www.johndcook.com/blog/2025/04/16/bell-numbers-2/">Mr. Bell and Bell numbers</a></li>
+<li class="link"><a href="https://www.johndcook.com/blog/2021/11/14/estimating-the-number-of-integer-partitions/">Estimating partition numbers</a></li>
+<li class="link"><a href="https://www.johndcook.com/TwelvefoldWay.pdf">Richard Stanley&#8217;s twelvefold way</a> (pdf)</li>
+</ul>
+<p>[1] It&#8217;s important that the items are labeled. Partition numbers are the number of partitions of an <em>unlabeled</em> set. Partition numbers are much smaller than Bell numbers.</p>The post <a href="https://www.johndcook.com/blog/2026/06/04/partitions-over-permutations/">Partitions over permutations</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+					<wfw:commentRss>https://www.johndcook.com/blog/2026/06/04/partitions-over-permutations/feed/</wfw:commentRss>
+			<slash:comments>2</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Naively summing an alternating series</title>
+		<link>https://www.johndcook.com/blog/2026/06/03/naive-sum/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Wed, 03 Jun 2026 15:13:24 +0000</pubDate>
+				<category><![CDATA[Computing]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247085</guid>
+
+					<description><![CDATA[<p>Suppose you run across the power series for the exponential function and decide to code it up. Good idea: you&#8217;ll probably learn something, though maybe not what you expect. Maybe you decide a tolerance of 10−12 is good enough, and so you sum the terms until the next term to add is below the tolerance. [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/03/naive-sum/">Naively summing an alternating series</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>Suppose you run across the power series for the exponential function and decide to code it up. Good idea: you&#8217;ll probably learn something, though maybe not what you expect.</p>
+<p>Maybe you decide a tolerance of 10<sup>−12</sup> is good enough, and so you sum the terms until the next term to add is below the tolerance.</p>
+<pre>from math import factorial, exp
+
+def naive_exp(x):
+    tolerance = 1e-12
+    s = 0
+    n = 0
+    while True:
+        delta = x**n / factorial(n)
+        s += delta
+        if abs(delta) &lt; tolerance:
+            return s
+        n += 1
+</pre>
+<p>You want to try your program out, so you compute <em>e</em> by calling the function at 1. If you compare this to calling <code>exp(1)</code> you find that you got all the digits correct.</p>
+<p>Now you try computing exp(-20). Calling <code>naive_exp(-20)</code> gives</p>
+<pre>    5.47893091802112e-10</pre>
+<p>but calling <code>exp(-20)</code> gives</p>
+<pre>    2.061153622438558e-09</pre>
+<p>Don&#8217;t brush things like this as flukes or compiler bugs [1]. This is your golden opportunity to learn something.</p>
+<p>Maybe you add a print statement to see the intermediate values of the sum stored in the variable <em>s</em>. If you do, you&#8217;ll see that the partial sums oscillate wildly before settling down.</p>
+<p>Maybe that seems wrong, but then you look more carefully at the series. The <em>n</em>th term is <em>x</em><sup><em>n</em></sup>/<em>n</em>!. Since <em>x</em> is negative, the terms alternate in sign. And the absolute values of the term get bigger before they get smaller. When <em>x</em> = −20, each numerator is 20 times larger than the previous, and each denominator is <em>n</em> times larger than the previous. So the terms will get bigger until <em>n</em> &gt; 20. So the wild oscillations are real, not a bug.</p>
+<p>The largest partial sum is 21822593.77927747 in absolute value. You know that exp(−20) is a very small number, so there&#8217;s going to have to be a lot of cancellation before the partial sums settle down to a small number. Maybe you&#8217;ve heard that cancellation is where numerical calculations lose precision. If not, now you know!</p>
+<p>Look again at the largest partial sum. There are eight figures to the right of the decimal point. The code is printing out results to as much precision as it has, so the error at this point is on the order of 10<sup>−8</sup>. We&#8217;re trying to compute a number on the order of 10<sup>−9</sup>, and if <em>any</em> digits in our result are correct, it would be a coincidence.</p>
+<p>If you go back and try your code on <em>x</em> = −22, the result is even worse, giving a negative result for a quantity that for theoretical reasons cannot be negative. But you can see why: you&#8217;re asking the code to compute a number that is closer to zero than the accuracy of the code.</p>
+<p>Computers don&#8217;t represent numbers in base 10 internally, but the argument above is sufficient in this case. If you want to dig deeper, look into the <a href="https://www.johndcook.com/blog/2009/04/06/anatomy-of-a-floating-point-number/">anatomy of a floating point number</a>.</p>
+<p>There is a simple way around the problem above, but discovering it sooner would short-circuit the learning process. You could calculate exp(−20) as 1/exp(20) and avoid all the cancellation because the series for exp(20) does not alternate.</p>
+<p>&nbsp;</p>
+<p>[1] Compilers do have bugs occasionally, but it&#8217;s orders of magnitude more likely that something is wrong with your code.</p>The post <a href="https://www.johndcook.com/blog/2026/06/03/naive-sum/">Naively summing an alternating series</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>It&#8217;s not just Taylor series</title>
+		<link>https://www.johndcook.com/blog/2026/06/01/not-just-taylor-series/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Mon, 01 Jun 2026 12:42:12 +0000</pubDate>
+				<category><![CDATA[Math]]></category>
+		<category><![CDATA[Complex analysis]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247071</guid>
+
+					<description><![CDATA[<p>There is still active discussion on X about the approximation exp(−x²) ≈ (1 + cos(sin(x) + x))/2 and some are saying this can just be explained by Taylor series: the series for the two sides differ for the first time at the x6 term, so that&#8217;s why you get a good approximation. As I wrote [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/01/not-just-taylor-series/">It’s not just Taylor series</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>There is still active discussion on X about the approximation</p>
+<p style="padding-left: 40px;">exp(−<em>x</em>²) ≈ (1 + cos(sin(<em>x</em>) + <em>x</em>))/2</p>
+<p>and some are saying this can just be explained by Taylor series: the series for the two sides differ for the first time at the <em>x</em><sup>6</sup> term, so that&#8217;s why you get a good approximation. As I wrote <a href="https://www.johndcook.com/blog/2026/05/31/another-gaussian-approximation/">yesterday</a>, that&#8217;s only part of it.</p>
+<p>If it were just about Taylor series you could use</p>
+<p style="padding-left: 40px;">exp(−<em>x</em>²) ≈ 1 − <em>x</em>² + <em>x</em><sup>4</sup>/2</p>
+<p>which also has error <em>O</em>(<em>x</em><sup>6</sup>). But this approximation is only good for fairly small <em>x</em>, say in [−0.5, 0.5], whereas the approximation at the top of the post is good over [−4, 4]. When <em>x</em> = 4, the error in the cosine approximation is 0.002579 but the error in the Taylor approximation is 113, five orders of magnitude larger.</p>
+<p>If the accuracy of the cosine approximation were due to Taylor series, then we&#8217;d expect the function</p>
+<p style="padding-left: 40px;">exp(−<em>x</em>²) − (1 + cos(sin(<em>x</em>) + <em>x</em>))/2</p>
+<p>to be small not just over the interval [−4, 4] but over a disk of radius 4 in the complex plane. But it&#8217;s not. When <em>x</em> = 4<em>i</em> the function is on the order of 10<sup>13</sup>.</p>
+<p>Both the cosine approximation and the Taylor approximation are good for small disks, say of radius 0.5. They&#8217;re both bad for much larger disks, and in fact the cosine approximation is worse.</p>
+<p>&nbsp;</p>The post <a href="https://www.johndcook.com/blog/2026/06/01/not-just-taylor-series/">It’s not just Taylor series</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+		<item>
+		<title>Subscribe by email</title>
+		<link>https://www.johndcook.com/blog/2026/06/01/subscribe-by-email/</link>
+		
+		<dc:creator><![CDATA[John]]></dc:creator>
+		<pubDate>Mon, 01 Jun 2026 11:01:26 +0000</pubDate>
+				<category><![CDATA[Uncategorized]]></category>
+		<guid isPermaLink="false">https://www.johndcook.com/blog/?p=247067</guid>
+
+					<description><![CDATA[<p>Readers have subscribed to this blog via email almost from its beginning in 2008, but how they have subscribed has changed several times. I&#8217;ve used several services to provide email subscription that have come and gone. For the past two years I&#8217;ve been using Substack to send out emails announcing new blog posts. That has [&#8230;]</p>
+The post <a href="https://www.johndcook.com/blog/2026/06/01/subscribe-by-email/">Subscribe by email</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></description>
+										<content:encoded><![CDATA[<p>Readers have subscribed to this blog via email almost from its beginning in 2008, but <em>how</em> they have subscribed has changed several times. I&#8217;ve used several services to provide email subscription that have come and gone.</p>
+<p>For the past two years I&#8217;ve been using Substack to send out emails announcing new blog posts. That has worked out well. Substack delivers email reliably, and that&#8217;s all I wanted. I&#8217;m not active on Substack other than using it to an email. I give a brief introduction to the latest two or three blog posts in each email, and sometimes I include additional ideas that occurred to me later.</p>
+<p>If you&#8217;d like to get blog post announcements and a little extra commentary via email, sign up for my free Substack newsletter <a href="https://johndcookconsulting.substack.com/">here</a>.</p>
+<p>If you&#8217;d like to learn about new posts sooner, you can subscribe via <a href="https://www.johndcook.com/blog/rss-feed/">RSS</a> or follow me on <a href="https://www.johndcook.com/blog/twitter_page/">X</a> or <a href="https://mathstodon.xyz/@johndcook">Mastodon</a>.</p>The post <a href="https://www.johndcook.com/blog/2026/06/01/subscribe-by-email/">Subscribe by email</a> first appeared on <a href="https://www.johndcook.com/blog">John D. Cook</a>.]]></content:encoded>
+					
+		
+		
+			</item>
+	</channel>
+</rss>

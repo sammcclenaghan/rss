@@ -1,0 +1,82 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "benchmark"
+require "rss"
+require_relative "../lib/feed_parser"
+
+ROOT = File.expand_path("..", __dir__)
+FIXTURE_GLOB = File.join(ROOT, "test/fixtures/{feedjira,real}/*.{xml,atom,rss}")
+DEFAULT_SECONDS = Float(ENV.fetch("SECONDS", "2.0"))
+DEFAULT_WARMUP = Integer(ENV.fetch("WARMUP", "25"))
+
+Fixture = Data.define(:name, :path, :data)
+Result = Data.define(:label, :iterations, :seconds, :allocations) do
+  def ips
+    iterations / seconds
+  end
+
+  def allocations_per_iteration
+    allocations.to_f / iterations
+  end
+end
+
+fixtures = Dir[FIXTURE_GLOB].sort.map do |path|
+  Fixture.new(name: path.delete_prefix("#{ROOT}/test/fixtures/"), path: path, data: File.binread(path))
+end
+
+abort "No fixtures found at #{FIXTURE_GLOB}" if fixtures.empty?
+
+PARSERS = {
+  "feed_parser" => ->(xml) { FeedParser.parse(xml) },
+  "rss_stdlib" => ->(xml) { RSS::Parser.parse(xml, false) },
+}.freeze
+
+def benchmark_parser(label, parser, fixture, seconds:, warmup:)
+  warmup.times { parser.call(fixture.data) }
+
+  GC.start
+  before_allocations = GC.stat.fetch(:total_allocated_objects)
+  started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+  deadline = started + seconds
+  iterations = 0
+
+  while Process.clock_gettime(Process::CLOCK_MONOTONIC) < deadline
+    parser.call(fixture.data)
+    iterations += 1
+  end
+
+  elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - started
+  allocations = GC.stat.fetch(:total_allocated_objects) - before_allocations
+
+  Result.new(label: label, iterations: iterations, seconds: elapsed, allocations: allocations)
+rescue StandardError => e
+  warn "skip #{label} #{fixture.name}: #{e.class}: #{e.message}"
+  nil
+end
+
+puts "Ruby: #{RUBY_DESCRIPTION}"
+puts "Fixtures: #{fixtures.size}"
+puts "Duration: #{DEFAULT_SECONDS}s/parser/fixture"
+puts
+
+fixtures.each do |fixture|
+  size_kb = fixture.data.bytesize / 1024.0
+  puts "#{fixture.name} (#{format('%.1f', size_kb)} KiB)"
+
+  results = PARSERS.filter_map do |label, parser|
+    benchmark_parser(label, parser, fixture, seconds: DEFAULT_SECONDS, warmup: DEFAULT_WARMUP)
+  end
+
+  fastest = results.map(&:ips).max
+  results.sort_by { |result| -result.ips }.each do |result|
+    relative = fastest ? fastest / result.ips : 1
+    puts "  %-12s %10.1f i/s  %8.1f allocs/i  %5.2fx slower" % [
+      result.label,
+      result.ips,
+      result.allocations_per_iteration,
+      relative,
+    ]
+  end
+  puts
+end

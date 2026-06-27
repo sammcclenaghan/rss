@@ -103,6 +103,24 @@ class Feed::ParserTest < ActiveSupport::TestCase
     assert_equal "Short teaser.", post.description
   end
 
+  test "carries feed-provided image URLs on parsed posts" do
+    rss = <<~XML
+      <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+        <channel><item>
+          <title>Image</title>
+          <link>https://example.com/image</link>
+          <guid>image</guid>
+          <pubDate>Tue, 10 Jun 2025 09:00:00 +0000</pubDate>
+          <media:thumbnail url="https://cdn.example.com/image.jpg" />
+        </item></channel>
+      </rss>
+    XML
+
+    post = @parser.parse(rss).first
+
+    assert_equal "https://cdn.example.com/image.jpg", post.feed_image_url
+  end
+
   test "captures <content> as the raw content for Atom entries" do
     post = @parser.parse(file_fixture_content("atom_feed.xml")).last
     assert_equal "Falls back to content when no summary.", post.raw_content

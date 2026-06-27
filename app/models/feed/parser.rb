@@ -1,89 +1,50 @@
 require "cgi"
+require_relative "../../../lib/feed_parser/lib/feed_parser"
 
 class Feed
-  # Parses RSS 2.0, Atom, and RSS 1.0 (RDF) feed data into unsaved Post records.
+  # Adapts normalized FeedParser output into unsaved Post records.
   class Parser
     MAX_TITLE = 250
     MAX_DESCRIPTION = 200
     MIN_VALID_TIMESTAMP = 1000
 
-    # Where the full article HTML lives. Only genuine full-content elements —
-    # never the summary/description, which is a teaser, not the article. After
-    # remove_namespaces!, content:encoded is just <encoded>.
-    RSS_CONTENT = %w[encoded].freeze
-    ATOM_CONTENT = %w[content].freeze
-
     def parse(data)
-      doc = Nokogiri::XML(data.to_s.strip)
-      doc.remove_namespaces!
-      items, format = locate_items(doc)
-      items.filter_map { |item| build_post(item, format) }
+      feed = FeedParser.parse(data.to_s.strip)
+      feed.entries.filter_map { |entry| build_post(entry) }
+    rescue FeedParser::ParseError
+      []
     end
 
     private
-      def locate_items(doc)
-        if (items = doc.xpath("/rss/channel/item")).any?
-          [ items, :rss ]
-        elsif (items = doc.xpath("/feed/entry")).any?
-          [ items, :atom ]
-        else
-          [ doc.xpath("//item"), :rss ]
-        end
-      end
-
-      def build_post(item, format)
-        attributes = format == :atom ? atom_attributes(item) : rss_attributes(item)
+      def build_post(entry)
+        attributes = post_attributes(entry)
         return unless valid?(attributes)
 
         raw_content = attributes.delete(:raw_content)
-        Post.new(attributes).tap { |post| post.raw_content = raw_content }
+        feed_image_url = attributes.delete(:feed_image_url)
+        Post.new(attributes).tap do |post|
+          post.raw_content = raw_content
+          post.feed_image_url = feed_image_url
+        end
       end
 
-      def rss_attributes(item)
-        link = text(item, "link")
+      def post_attributes(entry)
+        published_at = timestamp(entry.published || entry.updated)
+        url = entry.url.to_s
+
         {
-          title: truncate(text(item, "title"), MAX_TITLE),
-          description: format_description(text(item, "description")),
-          raw_content: full_content(item, RSS_CONTENT),
-          url: link,
-          guid: text(item, "guid").presence || link,
-          published_at: parse_time(text(item, "pubDate"), :rfc2822)
+          title: truncate(decode(entry.title), MAX_TITLE),
+          description: format_description(entry.summary || entry.content),
+          raw_content: entry.content.to_s,
+          feed_image_url: entry.image,
+          url: url,
+          guid: entry.id.to_s.empty? ? url : entry.id,
+          published_at: published_at,
         }
       end
 
-      def atom_attributes(item)
-        link = item.at_xpath("link")&.then { |el| (el["href"] || el.text).to_s.strip }.to_s
-        published = text(item, "published").presence || text(item, "updated")
-        summary = text(item, "summary").presence
-        content = text(item, "content").presence
-        {
-          title: truncate(decode(text(item, "title")), MAX_TITLE),
-          description: format_description(summary || content),
-          # Many Atom feeds (e.g. simonwillison.net) put the full article in
-          # <summary> and omit <content>. Per the Atom spec, summary is allowed
-          # to carry the full body, so fall back to it when <content> is absent.
-          raw_content: content || summary,
-          url: link,
-          guid: text(item, "id").presence || link,
-          published_at: parse_time(published, :iso8601)
-        }
-      end
-
-      def text(item, selector)
-        item.at_xpath(selector)&.text.to_s.strip
-      end
-
-      # Raw, untruncated article HTML from the first populated selector. Left
-      # unsanitized here; Feed::Refresher runs it through ContentFilters.
-      def full_content(item, selectors)
-        selectors.filter_map { |selector| text(item, selector).presence }.first.to_s
-      end
-
-      def parse_time(string, format)
-        return 0 if string.blank?
-        (format == :iso8601 ? Time.iso8601(string) : Time.rfc2822(string)).to_i
-      rescue ArgumentError
-        0
+      def timestamp(time)
+        time&.to_i || 0
       end
 
       def format_description(html)
