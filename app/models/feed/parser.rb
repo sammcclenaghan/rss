@@ -54,10 +54,15 @@ class Feed
       def atom_attributes(item)
         link = item.at_xpath("link")&.then { |el| (el["href"] || el.text).to_s.strip }.to_s
         published = text(item, "published").presence || text(item, "updated")
+        summary = text(item, "summary").presence
+        content = text(item, "content").presence
         {
           title: truncate(decode(text(item, "title")), MAX_TITLE),
-          description: format_description(text(item, "summary").presence || text(item, "content")),
-          raw_content: full_content(item, ATOM_CONTENT),
+          description: format_description(summary || content),
+          # Many Atom feeds (e.g. simonwillison.net) put the full article in
+          # <summary> and omit <content>. Per the Atom spec, summary is allowed
+          # to carry the full body, so fall back to it when <content> is absent.
+          raw_content: content || summary,
           url: link,
           guid: text(item, "id").presence || link,
           published_at: parse_time(published, :iso8601)

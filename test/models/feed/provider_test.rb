@@ -14,6 +14,34 @@ class Feed::ProviderTest < ActiveSupport::TestCase
     end
   end
 
+  test "auto-enqueues a refresh for newly-created feeds" do
+    config = "https://example.com/fresh.xml Fresh #blog"
+
+    assert_enqueued_with(job: RefreshFeedJob) do
+      new_feed = nil
+      assert_difference -> { Feed.count }, 1 do
+        new_feed = provider_for(config).all.first.feed
+      end
+      assert_equal "https://example.com/fresh.xml", new_feed.url
+    end
+  end
+
+  test "does not enqueue a refresh when refresh_new_feeds is false" do
+    config = "https://example.com/staged.xml Staged #blog"
+
+    assert_no_enqueued_jobs only: RefreshFeedJob do
+      Feed::Provider.new(config: Feed::Config.new.parse(config), refresh_new_feeds: false)
+    end
+  end
+
+  test "does not enqueue a refresh for already-existing feeds" do
+    config = "#{feeds(:xkcd).url} XKCD #comics"
+
+    assert_no_enqueued_jobs only: RefreshFeedJob do
+      provider_for(config).all
+    end
+  end
+
   test "all returns every configured feed" do
     provider = provider_for("#{feeds(:xkcd).url} XKCD\nhttps://example.com/a.xml A")
     assert_equal 2, provider.all.size

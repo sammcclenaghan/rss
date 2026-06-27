@@ -108,9 +108,29 @@ class Feed::ParserTest < ActiveSupport::TestCase
     assert_equal "Falls back to content when no summary.", post.raw_content
   end
 
-  test "does not capture the summary as raw content" do
+  test "falls back to <summary> as raw content when <content> is missing" do
     post = @parser.parse(file_fixture_content("atom_feed.xml")).first
-    assert_equal "", post.raw_content
+    assert_equal "The summary of entry one.", post.raw_content
+  end
+
+  test "prefers <content> over <summary> when both are present" do
+    atom = <<~XML
+      <?xml version="1.0" encoding="UTF-8"?>
+      <feed xmlns="http://www.w3.org/2005/Atom">
+        <entry>
+          <title>Both</title>
+          <link href="https://example.com/both"/>
+          <id>tag:example.com,2025:both</id>
+          <updated>2025-06-12T10:00:00Z</updated>
+          <summary>Short teaser.</summary>
+          <content>Full article body.</content>
+        </entry>
+      </feed>
+    XML
+
+    post = @parser.parse(atom).first
+    assert_equal "Full article body.", post.raw_content
+    assert_equal "Short teaser.", post.description
   end
 
   test "returns an empty array for malformed xml" do

@@ -53,6 +53,7 @@ https://unixmen.com/feed Unixmen[#FCC624] #linux #open_source #sysadmin
 
 
 #### Culture🦠 ####
+https://zed.dev/blog.rss[#181717] #zed #rust #editor
 
 #### Gaming👾 ####
 https://www.nintendolife.com/feed Nintendo_Life[#E60012] #nintendo #gaming #reviews
@@ -75,6 +76,13 @@ https://waitbutwhy.com/feed Wait_But_Why[#3498DB] #longform #science #philosophy
 #### News🗞️ ####
 https://www.propublica.org/feed ProPublica[#E74C3C] #investigative #journalism #accountability
 
+#### Longform ####
+https://aeon.co/feed.rss Aeon[#C8102E] #essays #philosophy #ideas
+https://electrelit.com/feed/ Electric_Literature[#FF3B30] #literature #essays #books
+https://orionmagazine.org/feed/ Orion[#2E5D3A] #essays #nature #culture
+https://www.theatlantic.com/feed/all/ The_Atlantic[#1B3B6F] #essays #journalism #culture
+https://www.newyorker.com/feed/magazine/reporting/rss The_New_Yorker[#1A1A1A] #essays #journalism #literature
+
 #### Economist ####
 https://www.economist.com/asia/rss.xml Economist_Asia[#E3120B] #economist #asia #economics
 https://www.economist.com/briefing/rss.xml Economist_Briefing[#E3120B] #economist #briefing
@@ -93,20 +101,12 @@ https://www.economist.com/the-americas/rss.xml Economist_The_Americas[#E3120B] #
 https://www.economist.com/the-world-this-week/rss.xml Economist_The_World_This_Week[#E3120B] #economist #weekly
 https://www.economist.com/united-states/rss.xml Economist_United_States[#E3120B] #economist #us
 
-#### Nice🫶 ####
-https://damninteresting.com/feed Damn_Interesting[#2C3E50] #history #science #stories
-https://longreads.com/feed Longreads[#333333] #longform #journalism #essays
-https://www.nasa.gov/feed NASA_Image_of_the_Day[#0B3D91] #nasa #space #photography
-
 #### STEM🧬🧑‍🏫💊 ####
 https://flowingdata.com/feed FlowingData[#E74C3C] #data_visualization #statistics #design
 https://m-phi.blogspot.com/feeds/posts/default M-Phi[#2C3E50] #logic #philosophy #math
 https://jeremykun.com/feed Math_∩_Programming[#2980B9] #math #programming #algorithms
 https://www.nasa.gov/rss NASA[#0B3D91] #nasa #space #science
 https://www.quantamagazine.org/feed Quanta_Magazine[#005CB9] #science #math #physics #biology
-https://backreaction.blogspot.com/feeds/posts/default Sabine_Hossenfelder[#2C3E50] #physics #critique #science
-https://xkcd.com/rss.xml xkcd[#96A8C8] #comics #science #tech #humor
-https://yourlocalepidemiologist.substack.com/feed Your_Local_Epidemiologist[#3498DB] #public_health #epidemiology #science
 
 
 #### Tech📲 ####

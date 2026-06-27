@@ -2,12 +2,13 @@ class Feed
   # Loads feed configuration, ensures a Feed record exists for each configured
   # URL, and exposes filtered views (all / visible / by tag / by url).
   class Provider
-    def self.from_app_config
-      new(config: Config.from_app_config)
+    def self.from_app_config(refresh_new_feeds: true)
+      new(config: Config.from_app_config, refresh_new_feeds: refresh_new_feeds)
     end
 
-    def initialize(config: Config.new)
+    def initialize(config: Config.new, refresh_new_feeds: true)
       @config = config
+      @refresh_new_feeds = refresh_new_feeds
       @configured_feeds = build_configured_feeds
     end
 
@@ -48,7 +49,7 @@ class Feed
         existing = Feed.where(url: @config.feed_urls).index_by(&:url)
 
         @config.feed_urls.map do |url|
-          feed = existing[url] || Feed.create!(url: url)
+          feed = existing[url] || create_feed(url)
 
           ConfiguredFeed.new(
             feed: feed,
@@ -59,6 +60,15 @@ class Feed
             hidden: @config.hidden?(url)
           )
         end
+      end
+
+      # Creates a Feed record for a URL that wasn't in the database, and kicks
+      # off a refresh so the new feed's first fetch happens automatically
+      # instead of waiting for the next scheduled RefreshOutdatedFeedsJob tick.
+      def create_feed(url)
+        feed = Feed.create!(url: url)
+        RefreshFeedJob.perform_later(feed) if @refresh_new_feeds
+        feed
       end
 
       def touch_accessed(configured_feeds)
