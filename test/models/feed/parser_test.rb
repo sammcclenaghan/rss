@@ -80,8 +80,22 @@ class Feed::ParserTest < ActiveSupport::TestCase
     XML
 
     title = @parser.parse(rss).first.title
-    assert_equal 253, title.length
+    assert_equal 250, title.length
     assert title.end_with?("...")
+  end
+
+  test "skips items with urls longer than the post limit" do
+    long_url = "https://example.com/#{'a' * 260}"
+    rss = <<~XML
+      <rss><channel><item>
+        <title>Too Long URL</title>
+        <link>#{long_url}</link>
+        <guid>long-url</guid>
+        <pubDate>Tue, 10 Jun 2025 09:00:00 +0000</pubDate>
+      </item></channel></rss>
+    XML
+
+    assert_empty @parser.parse(rss)
   end
 
   test "captures content:encoded as the raw content for RSS items" do

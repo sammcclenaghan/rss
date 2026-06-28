@@ -1,4 +1,5 @@
 require "cgi"
+require "digest"
 require_relative "../../../lib/feed_parser/lib/feed_parser"
 
 class Feed
@@ -38,7 +39,7 @@ class Feed
           raw_content: entry.content.to_s,
           feed_image_url: entry.image,
           url: url,
-          guid: entry.id.to_s.empty? ? url : entry.id,
+          guid: normalize_guid(entry.id.to_s.empty? ? url : entry.id),
           published_at: published_at,
         }
       end
@@ -57,13 +58,27 @@ class Feed
 
       def truncate(string, max)
         string = string.to_s.strip
-        string.length > max ? "#{string[0, max]}..." : string
+        return string if string.length <= max
+        return string[0, max] if max <= 3
+
+        "#{string[0, max - 3]}..."
+      end
+
+      def normalize_guid(guid)
+        guid = guid.to_s.strip
+        return guid if guid.length <= 250
+
+        digest = Digest::SHA256.hexdigest(guid)
+        "#{guid[0, 250 - digest.length - 1]}:#{digest}"
       end
 
       def valid?(attributes)
         attributes[:title].present? &&
+          attributes[:title].length <= MAX_TITLE &&
           attributes[:guid].present? &&
+          attributes[:guid].length <= 250 &&
           attributes[:url].to_s.match?(%r{\Ahttps?://}) &&
+          attributes[:url].length <= 250 &&
           attributes[:published_at] > MIN_VALID_TIMESTAMP
       end
   end

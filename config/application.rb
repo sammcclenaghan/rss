@@ -26,7 +26,10 @@ module Rss
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
-    config.autoload_lib(ignore: %w[assets tasks])
+    # `feed_parser` is a self-contained vendored library that loads itself via
+    # `require_relative`; keep it out of Zeitwerk so it isn't mapped to constants
+    # like `FeedParser::Lib::FeedParser::Parser`.
+    config.autoload_lib(ignore: %w[assets tasks feed_parser])
 
     # Configuration for the application, engines, and railties goes here.
     #
