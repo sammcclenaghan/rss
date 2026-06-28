@@ -3,15 +3,10 @@ class Post < ApplicationRecord
 
   belongs_to :feed
   has_one :read_post, dependent: :delete
-  has_one :content, class_name: "Post::Content", dependent: :delete
 
   # Transient presentation metadata (the post's ConfiguredFeed), attached at
   # query time. Not persisted.
   attr_accessor :feed_config
-
-  # Transient full article HTML carried from Feed::Parser to Feed::Refresher,
-  # which sanitizes it into the post's Content record. Not persisted directly.
-  attr_accessor :raw_content
 
   # Transient image URL discovered from the feed itself. Feed::Refresher passes
   # this to thumbnail fetching so we can avoid fetching the article page just to

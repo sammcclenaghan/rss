@@ -98,7 +98,7 @@ class Feed::ParserTest < ActiveSupport::TestCase
     assert_empty @parser.parse(rss)
   end
 
-  test "captures content:encoded as the raw content for RSS items" do
+  test "uses the description, not content:encoded, for the post summary" do
     rss = <<~XML
       <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
         <channel><item>
@@ -113,7 +113,6 @@ class Feed::ParserTest < ActiveSupport::TestCase
     XML
 
     post = @parser.parse(rss).first
-    assert_equal "<p>The <b>full</b> article body.</p>", post.raw_content
     assert_equal "Short teaser.", post.description
   end
 
@@ -135,17 +134,7 @@ class Feed::ParserTest < ActiveSupport::TestCase
     assert_equal "https://cdn.example.com/image.jpg", post.feed_image_url
   end
 
-  test "captures <content> as the raw content for Atom entries" do
-    post = @parser.parse(file_fixture_content("atom_feed.xml")).last
-    assert_equal "Falls back to content when no summary.", post.raw_content
-  end
-
-  test "falls back to <summary> as raw content when <content> is missing" do
-    post = @parser.parse(file_fixture_content("atom_feed.xml")).first
-    assert_equal "The summary of entry one.", post.raw_content
-  end
-
-  test "prefers <content> over <summary> when both are present" do
+  test "prefers <summary> over <content> for the description when both are present" do
     atom = <<~XML
       <?xml version="1.0" encoding="UTF-8"?>
       <feed xmlns="http://www.w3.org/2005/Atom">
@@ -161,7 +150,6 @@ class Feed::ParserTest < ActiveSupport::TestCase
     XML
 
     post = @parser.parse(atom).first
-    assert_equal "Full article body.", post.raw_content
     assert_equal "Short teaser.", post.description
   end
 

@@ -5,7 +5,7 @@ import { Controller } from '@hotwired/stimulus'
 // behaviour stays in one place.
 //
 //   j / k        next / previous post
-//   o / Enter    open the selected post (marks it read)
+//   o / Enter    open the selected post's original article (marks it read)
 //   m            toggle read/unread on the selected post
 //   u            toggle the "unread only" filter
 //   Shift+A      mark all read (current scope)

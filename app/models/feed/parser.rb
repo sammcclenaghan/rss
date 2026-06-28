@@ -21,10 +21,8 @@ class Feed
         attributes = post_attributes(entry)
         return unless valid?(attributes)
 
-        raw_content = attributes.delete(:raw_content)
         feed_image_url = attributes.delete(:feed_image_url)
         Post.new(attributes).tap do |post|
-          post.raw_content = raw_content
           post.feed_image_url = feed_image_url
         end
       end
@@ -36,11 +34,10 @@ class Feed
         {
           title: truncate(decode(entry.title), MAX_TITLE),
           description: format_description(entry.summary || entry.content),
-          raw_content: entry.content.to_s,
           feed_image_url: entry.image,
           url: url,
           guid: normalize_guid(entry.id.to_s.empty? ? url : entry.id),
-          published_at: published_at,
+          published_at: published_at
         }
       end
 
