@@ -12,9 +12,8 @@
     <% if feed_cfg.hidden %>
       <span title="Posts hidden by default" class="shrink-0 flex"><%= icon "eye-off", class: "size-3.5 text-gray-400" %></span>
     <% end %>
-    <% if unread_count > 0 %>
-      <span class="shrink-0 text-xs text-gray-500 dark:text-gray-500 tabular-nums"><%= unread_count %></span>
-    <% end %>
+    <span data-counts-target="feed" data-feed-id="<%= feed_cfg.feed.id %>"
+          class="shrink-0 text-xs text-gray-500 dark:text-gray-500 tabular-nums <%= "hidden" if unread_count == 0 %>"><%= unread_count %></span>
   <% end %>
   <div data-feed-poll-target="status" class="hidden flex items-center gap-2 text-gray-600 text-xs pl-7 py-1">
     <%= icon "refresh-cw", class: "size-3.5 animate-spin" %>

@@ -11,7 +11,7 @@ module ApplicationHelper
     if @selected_feed.present? && @display_feeds.length == 1
       @display_feeds.first.name
     elsif @tag.present?
-      @tag
+      @tag.capitalize
     elsif @starred_only
       "Starred"
     elsif @unread_only

@@ -41,13 +41,13 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     get root_path
     assert_response :success
     # The #comics tag becomes a folder header linking to the tag view.
-    assert_select "a[href=?]", tag_posts_path("comics"), /comics/
+    assert_select "a[href=?]", tag_posts_path("comics"), /Comics/
   end
 
   test "tag filters posts to a tag" do
     get tag_posts_path("comics")
     assert_response :success
-    assert_select "h1", /comics/
+    assert_select "h1", /Comics/
   end
 
   test "feed filters posts to a single feed" do

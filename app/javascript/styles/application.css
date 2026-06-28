@@ -7,38 +7,50 @@
 @source "../../helpers";
 @source "../../controllers";
 
+:root {
+  --primary: oklch(0.55 0.18 250);
+}
+
 /* Matches the Inertia mount point (#app) height in the reference app so the
    md:h-full / md:overflow-auto scroll regions resolve against a full-height
    ancestor chain. */
 #app { height: 100%; }
 
 /* Per-post hover actions (mark read / star / open) are hidden until the row is
-   hovered or keyboard-selected, mirroring Fusion's reveal-on-hover controls. */
+   hovered or keyboard-selected, mirroring Fusion's reveal-on-hover controls.
+   Using opacity (not display) keeps the buttons in the layout so a button that
+   becomes visible directly under the cursor activates its own :hover state
+   immediately, without needing the pointer to move. No transition = instant. */
 .post-actions { opacity: 0; }
 .rss-post:hover .post-actions,
-.rss-post.is-selected .post-actions,
-.rss-post:focus-within .post-actions { opacity: 1; }
+.rss-post.is-selected .post-actions { opacity: 1; }
 
-/* Read toggle icon: hollow circle when unread, filled check when read. The
-   post_read controller flips the row's `is-read` class to swap them. */
+/* Read toggle icon: hollow grey circle when unread, primary check-circle when
+   read, on a faint primary-tinted (primary/10) background. The post_read
+   controller flips the row's `is-read` class. */
 .rss-post .read-done { display: none; }
 .rss-post.is-read .read-undone { display: none; }
-.rss-post.is-read .read-done { display: inline; }
+.rss-post.is-read .read-done { display: inline; color: var(--primary); }
+.rss-post.is-read .read-btn {
+  background-color: color-mix(in oklch, var(--primary) 10%, transparent);
+}
 
-/* Star toggle: outline star by default; the star fills amber when starred. The
-   star controller flips the row's `is-starred` class (optimistic). The CSS
-   `fill` overrides the Lucide icon's `fill="none"` attribute. */
+/* Star toggle: outline star by default; the star fills amber when starred, and
+   its control gets a light amber background box. The star controller flips the
+   row's `is-starred` class (optimistic). The CSS `fill` overrides the Lucide
+   icon's `fill="none"` attribute. */
 .rss-post.is-starred .star-icon { fill: currentColor; color: #f59e0b; }
+.rss-post.is-starred .star-btn { background-color: rgb(254 243 199); } /* amber-100 */
+@media (prefers-color-scheme: dark) {
+  .rss-post.is-starred .star-btn { background-color: rgb(69 26 3 / 0.4); } /* amber-950/40 */
+}
 
-/* Read posts are dimmed so unread items stand out; hovering restores full
-   emphasis so a read post is still easy to revisit. */
-.rss-post.is-read { opacity: 0.5; }
-.rss-post.is-read:hover { opacity: 1; }
+/* Read state is conveyed by muting the title colour (driven by the row's
+   `is-read` class so it updates instantly on toggle), not by dimming the row. */
+.rss-post.is-read .post-title { color: #6b7280; } /* gray-500 */
 
-/* Keyboard-selected post: a "stuck hover" tint plus a left accent bar. Defined
-   after .is-read so a selected read post is shown at full opacity. */
+/* Keyboard-selected post: a "stuck hover" tint plus a left accent bar. */
 .rss-post.is-selected {
-  opacity: 1;
   background-color: #f3f4f6; /* gray-100 */
   box-shadow: inset 3px 0 0 0 #9ca3af; /* gray-400 */
 }

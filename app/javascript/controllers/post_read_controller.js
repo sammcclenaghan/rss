@@ -5,7 +5,7 @@ import { Controller } from '@hotwired/stimulus'
 // driven by the `is-read` class on the row (see application.css). Requests are
 // sent to the reads endpoint with the CSRF token and update the UI optimistically.
 export default class extends Controller {
-  static values = { url: String, read: Boolean }
+  static values = { url: String, read: Boolean, feedId: Number }
   static targets = ['toggle']
 
   // Fired when the external post link is opened; only marks read (never unread).
@@ -13,18 +13,25 @@ export default class extends Controller {
     if (this.readValue) return
     this.#send('POST')
     this.#setRead(true)
+    this.#notify(-1)
   }
 
   // Explicit button: flip read <-> unread.
   toggle() {
-    const method = this.readValue ? 'DELETE' : 'POST'
-    this.#send(method)
-    this.#setRead(!this.readValue)
+    const wasRead = this.readValue
+    this.#send(wasRead ? 'DELETE' : 'POST')
+    this.#setRead(!wasRead)
+    this.#notify(wasRead ? +1 : -1)
   }
 
   #setRead(read) {
     this.readValue = read
     this.element.classList.toggle('is-read', read)
+  }
+
+  // Tell the sidebar to adjust unread counts for this feed (-1 read, +1 unread).
+  #notify(delta) {
+    this.dispatch('changed', { detail: { feedId: this.feedIdValue, delta } })
   }
 
   #send(method) {

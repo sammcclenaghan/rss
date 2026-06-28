@@ -1,19 +1,16 @@
 <div class="md:flex h-full min-h-0"
-     data-controller="mobile-sidebar keyboard">
+     data-controller="mobile-sidebar keyboard counts"
+     data-action="post-read:changed->counts#update">
 
   <%# Sidebar — only rendered on full-page requests; turbo-frame requests
       (search, pagination) update just the #posts frame and skip sidebar data. %>
   <% if @sidebar_feeds %>
-  <div class="md:w-72 xl:w-80 shrink-0 md:border-r border-gray-200 dark:border-black bg-gray-50 dark:bg-gray-900 md:overflow-auto px-4 md:px-3 py-3 md:h-full">
+  <div class="md:w-72 xl:w-80 shrink-0 md:border-r border-gray-200 dark:border-black bg-gray-50 dark:bg-gray-900 md:overflow-auto px-4 md:px-3 py-3 md:pt-6 md:h-full">
 
-    <%# Brand + mobile toggle %>
-    <div class="flex items-center justify-between mb-4 px-2">
-      <%= link_to root_path, class: "flex items-center gap-2 text-black dark:text-gray-100" do %>
-        <%= icon "rss", class: "size-6 text-blue-600 dark:text-blue-500" %>
-        <span class="font-bold text-lg"><%= content_for(:title) || "Rss" %></span>
-      <% end %>
+    <%# Mobile toggle (collapses on desktop) %>
+    <div class="md:hidden flex justify-end mb-2">
       <button data-action="click->mobile-sidebar#toggle"
-              class="md:hidden rounded p-1.5 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+              class="rounded p-1.5 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
         <%= icon "chevron-right", class: "size-[18px] transition-transform", data: { mobile_sidebar_target: "icon" } %>
       </button>
     </div>
@@ -37,9 +34,9 @@
       <% home_active = global_scope && !@unread_only && !@starred_only %>
       <nav class="space-y-0.5 mb-5">
         <%= link_to root_path(unread: 1), class: sidebar_nav_class(global_scope && @unread_only) do %>
-          <%= icon "mail", class: "size-4" %>
+          <%= icon "inbox", class: "size-4" %>
           <span>Unread</span>
-          <% if @unread_total.to_i > 0 %><span class="ml-auto text-xs text-gray-500 dark:text-gray-500 tabular-nums"><%= @unread_total %></span><% end %>
+          <span data-counts-target="total" class="ml-auto text-xs text-gray-500 dark:text-gray-500 tabular-nums <%= "hidden" if @unread_total.to_i == 0 %>"><%= @unread_total.to_i %></span>
         <% end %>
 
         <%= link_to root_path(starred: 1), class: sidebar_nav_class(global_scope && @starred_only) do %>
@@ -51,30 +48,28 @@
         <%= link_to root_path, class: sidebar_nav_class(home_active) do %>
           <%= icon "list", class: "size-4" %>
           <span>All</span>
-          <% if @unread_total.to_i > 0 %><span class="ml-auto text-xs text-gray-500 dark:text-gray-500 tabular-nums"><%= @unread_total %></span><% end %>
+          <span data-counts-target="total" class="ml-auto text-xs text-gray-500 dark:text-gray-500 tabular-nums <%= "hidden" if @unread_total.to_i == 0 %>"><%= @unread_total.to_i %></span>
         <% end %>
       </nav>
 
       <%# Feeds — grouped into collapsible folders by tag. %>
-      <h2 class="px-2 mb-1 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Feeds</h2>
+      <h2 class="px-2 mb-1 text-xs font-medium text-gray-400 dark:text-gray-500">Feeds</h2>
       <% grouped_feeds(@sidebar_feeds, @sidebar_unread_counts).each do |group| %>
         <% folder_active = group[:tag].present? && @tag == group[:tag] %>
-        <div class="mb-1" data-controller="folder" data-folder-key-value="<%= group[:name] %>">
+        <div class="mb-1" data-controller="folder" data-folder-key-value="<%= group[:name] %>" data-counts-folder>
           <div class="group flex items-center rounded-md px-2 py-1 <%= "bg-gray-100 dark:bg-gray-800/60" if folder_active %>">
             <button type="button" data-action="folder#toggle"
                     class="shrink-0 mr-1 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 cursor-pointer">
               <%= icon "chevron-down", class: "size-3.5 transition-transform", data: { folder_target: "chevron" } %>
             </button>
             <% if group[:tag] %>
-              <%= link_to group[:name], tag_posts_path(group[:tag]),
-                    class: "flex-1 min-w-0 truncate text-sm font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-gray-100" %>
+              <%= link_to group[:name].capitalize, tag_posts_path(group[:tag]),
+                    class: "flex-1 min-w-0 truncate text-sm font-normal text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-gray-100" %>
             <% else %>
               <button type="button" data-action="folder#toggle"
-                      class="flex-1 min-w-0 truncate text-left text-sm font-semibold text-gray-700 dark:text-gray-300 cursor-pointer"><%= group[:name] %></button>
+                      class="flex-1 min-w-0 truncate text-left text-sm font-normal text-gray-700 dark:text-gray-300 cursor-pointer"><%= group[:name].capitalize %></button>
             <% end %>
-            <% if group[:unread] > 0 %>
-              <span class="ml-2 shrink-0 text-xs text-gray-500 dark:text-gray-500 tabular-nums"><%= group[:unread] %></span>
-            <% end %>
+            <span data-counts-target="folder" class="ml-2 shrink-0 text-xs text-gray-500 dark:text-gray-500 tabular-nums <%= "hidden" if group[:unread] == 0 %>"><%= group[:unread] %></span>
           </div>
           <div data-folder-target="content">
             <% group[:feeds].each do |feed| %>
