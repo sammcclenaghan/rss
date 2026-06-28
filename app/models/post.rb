@@ -3,6 +3,7 @@ class Post < ApplicationRecord
 
   belongs_to :feed
   has_one :read_post, dependent: :delete
+  has_one :starred_post, dependent: :delete
 
   # Transient presentation metadata (the post's ConfiguredFeed), attached at
   # query time. Not persisted.
@@ -17,6 +18,9 @@ class Post < ApplicationRecord
   # queries. nil means "not loaded"; `read?` then falls back to a lookup.
   attr_accessor :read_state
 
+  # Transient starred flag, batch-loaded by Post::Fetcher (mirrors read_state).
+  attr_accessor :starred_state
+
   validates :guid, presence: true, uniqueness: { scope: :feed_id }
   validates :title, presence: true, length: { maximum: 250 }
   validates :url, presence: true, length: { maximum: 250 }
@@ -29,9 +33,14 @@ class Post < ApplicationRecord
   }
   scope :read, -> { where(id: ReadPost.select(:post_id)) }
   scope :unread, -> { where.not(id: ReadPost.select(:post_id)) }
+  scope :starred, -> { where(id: StarredPost.select(:post_id)) }
 
   def read?
     read_state.nil? ? read_post.present? : read_state
+  end
+
+  def starred?
+    starred_state.nil? ? starred_post.present? : starred_state
   end
 
   def published_at_time

@@ -42,3 +42,5 @@ end
 
 gem "vite_rails", "~> 3.11"
 gem "turbo-rails", "~> 2.0"
+
+gem "rails_icons", "~> 1.9"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_27_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_28_120000) do
   create_table "feeds", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "last_accessed_at", default: 0, null: false
@@ -44,6 +44,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_27_120000) do
     t.index ["post_id"], name: "index_read_posts_on_post_id", unique: true
   end
 
+  create_table "starred_posts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "post_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_starred_posts_on_post_id", unique: true
+  end
+
   add_foreign_key "posts", "feeds"
   add_foreign_key "read_posts", "posts", on_delete: :cascade
+  add_foreign_key "starred_posts", "posts", on_delete: :cascade
 end

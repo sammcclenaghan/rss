@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount RailsIcons::Engine, at: '/rails_icons'
   root "posts#index"
 
   # Feed info JSON endpoint
@@ -12,6 +13,10 @@ Rails.application.routes.draw do
   post "posts/read_all", to: "reads#create_all", as: :read_all_posts
   post "posts/:id/read", to: "reads#create", as: :post_read
   delete "posts/:id/read", to: "reads#destroy"
+
+  # Starred state
+  post "posts/:id/star", to: "stars#create", as: :post_star
+  delete "posts/:id/star", to: "stars#destroy"
 
   # Background job dashboard (Solid Queue)
   mount MissionControl::Jobs::Engine, at: "/jobs"

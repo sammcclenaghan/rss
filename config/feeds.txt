@@ -1,118 +1,102 @@
 # RSS Feeds — curated from the RSS Starter Set (starikov.co)
-# Format: URL Name[#color] #tag1 #tag2
+# Format: URL Name[#color] #tag
 # Feeds preceded by "-" are hidden by default
 # Comments start with "#"
+# Each feed has a single tag; tags become the sidebar folders.
 
 
-#### Apple🍎 ####
-https://developer.apple.com/news/rss/news.rss Apple_Developer[#555555] #apple #developer
+#### Apple ####
+https://developer.apple.com/news/rss/news.rss Apple_Developer[#555555] #apple
 https://www.apple.com/newsroom/rss-feed.rss Apple_Newsroom[#555555] #apple
-https://www.macstories.net/feed MacStories[#FF3B30] #apple #ios #reviews
-https://marco.org/rss Marco_org[#405060] #apple #development
-https://sixcolors.com/feed Six_Colors[#007AFF] #apple #technology
-https://thesweetsetup.com/feed The_Sweet_Setup[#FF9500] #apple #productivity
+https://www.macstories.net/feed MacStories[#FF3B30] #apple
+https://marco.org/rss Marco_org[#405060] #apple
+https://sixcolors.com/feed Six_Colors[#007AFF] #apple
+https://thesweetsetup.com/feed The_Sweet_Setup[#FF9500] #apple
 
-#### Companies🏢 ####
-https://android-developers.googleblog.com/feeds/posts/default Android_Developers[#3DDC84] #google #android #mobile
-https://aws.amazon.com/blogs/machine-learning/feed AWS_Machine_Learning[#FF9900] #aws #cloud #machine_learning
-https://blog.chromium.org/feeds/posts/default?alt=rss Chromium[#36A854] #google #browser #open_source
-https://engineering.fb.com/feed Facebook_Engineering[#0866FF] #meta #engineering #infrastructure
--https://www.garmin.com/blog/feed Garmin[#FFCC00] #fitness #outdoor #navigation
-https://github.blog/engineering/feed GitHub_Engineering[#181717] #github #development #devops
-https://about.meta.com/blog/rss Meta[#1877F2] #meta #corporate
-https://www.microsoft.com/en-us/research/feed Microsoft_Research[#00BCF2] #microsoft #research
-https://netflixtechblog.com/feed Netflix_TechBlog[#E50914] #netflix #engineering #streaming
-https://blogs.nvidia.com/feed NVIDIA[#76B900] #nvidia #gpu #ai
-https://blog.tensorflow.org/feeds/posts/default?alt=rss TensorFlow[#FF6F00] #google #tensorflow #machine_learning
-https://blog.wolfram.com/feed Wolfram[#DD1100] #wolfram #computation #science
-https://openai.com/news/rss.xml OpenAI[#10A37F] #openai #ai #research
-https://rss.app/feeds/QI0wIZkdu3SwrSMA.xml Shopify_Engineering[#7AB55C] #shopify #engineering #ecommerce
+#### Companies ####
+https://android-developers.googleblog.com/feeds/posts/default Android_Developers[#3DDC84] #companies
+https://aws.amazon.com/blogs/machine-learning/feed AWS_Machine_Learning[#FF9900] #companies
+https://blog.chromium.org/feeds/posts/default?alt=rss Chromium[#36A854] #companies
+https://engineering.fb.com/feed Facebook_Engineering[#0866FF] #companies
+-https://www.garmin.com/blog/feed Garmin[#FFCC00] #companies
+https://github.blog/engineering/feed GitHub_Engineering[#181717] #companies
+https://about.meta.com/blog/rss Meta[#1877F2] #companies
+https://www.microsoft.com/en-us/research/feed Microsoft_Research[#00BCF2] #companies
+https://netflixtechblog.com/feed Netflix_TechBlog[#E50914] #companies
+https://blogs.nvidia.com/feed NVIDIA[#76B900] #companies
+https://blog.tensorflow.org/feeds/posts/default?alt=rss TensorFlow[#FF6F00] #companies
+https://blog.wolfram.com/feed Wolfram[#DD1100] #companies
+https://openai.com/news/rss.xml OpenAI[#10A37F] #companies
+https://rss.app/feeds/QI0wIZkdu3SwrSMA.xml Shopify_Engineering[#7AB55C] #companies
+https://deepmind.google/blog/feed Google_DeepMind[#4285F4] #companies
+https://developers.googleblog.com/feeds/posts/default Google_Developers[#4285F4] #companies
+https://security.googleblog.com/feeds/posts/default Google_Security[#34A853] #companies
 
-#### Computer Science🐛 ####
-https://aiimpacts.org/feed AI_Impacts[#6B5B95] #ai #safety #research
-https://karpathy.github.io/feed Andrej_Karpathy[#2C3E50] #deep_learning #ai #research
-https://bair.berkeley.edu/blog/feed Berkeley_AI[#003262] #berkeley #ai #research
-https://blog.bytebytego.com/feed ByteByteGo[#FF6B35] #system_design #architecture #distributed_systems
-https://blog.codinghorror.com/rss Coding_Horror[#2C3E50] #programming #software #craftsmanship
-https://statmodeling.stat.columbia.edu/feed Columbia_Statistical_Modeling[#75AADB] #statistics #bayesian #data_science
-https://hnrss.org/frontpage?points=50 Hacker_News[#FF6600] #news #technology #startups
-https://registerspill.thorstenball.com/feed Register_Spill[#E67E22] #engineering #ai #coding
-https://spectrum.ieee.org/rss IEEE_Spectrum[#00629B] #engineering #technology #innovation
-https://www.joelonsoftware.com/feed Joel_on_Software[#336699] #software #management #essays
-https://www.johndcook.com/feed John_D_Cook[#2E86AB] #math #statistics #programming
-https://jvns.ca/atom.xml Julia_Evans[#E91E63] #linux #networking #debugging #tutorials
-https://keet.wordpress.com/feed Keet[#2C3E50] #knowledge_representation #semantic_web #ontologies
-https://krebsonsecurity.com/feed Krebs_on_Security[#CC0000] #security #cybercrime #investigation
-https://intelligence.org/feed MIRI[#8E44AD] #ai #alignment #safety
-https://machinelearningmastery.com/feed ML_Mastery[#27AE60] #machine_learning #tutorials #python
-https://simonwillison.net/atom/everything Simon_Willison[#FF6B6B] #python #datasette #llm #open_data
-https://www.swift.org/atom.xml Swift_org[#F05138] #swift #apple #open_source
-https://thegradient.pub/feed The_Gradient[#1A1A2E] #machine_learning #research #ai
-https://blog.pragmaticengineer.com/feed The_Pragmatic_Engineer[#E74C3C] #engineering #management #career
-https://unixmen.com/feed Unixmen[#FCC624] #linux #open_source #sysadmin
+#### Tech ####
+https://aiimpacts.org/feed AI_Impacts[#6B5B95] #tech
+https://karpathy.github.io/feed Andrej_Karpathy[#2C3E50] #tech
+https://bair.berkeley.edu/blog/feed Berkeley_AI[#003262] #tech
+https://blog.bytebytego.com/feed ByteByteGo[#FF6B35] #tech
+https://blog.codinghorror.com/rss Coding_Horror[#2C3E50] #tech
+https://statmodeling.stat.columbia.edu/feed Columbia_Statistical_Modeling[#75AADB] #tech
+https://hnrss.org/frontpage?points=50 Hacker_News[#FF6600] #tech
+https://registerspill.thorstenball.com/feed Register_Spill[#E67E22] #tech
+https://spectrum.ieee.org/rss IEEE_Spectrum[#00629B] #tech
+https://www.joelonsoftware.com/feed Joel_on_Software[#336699] #tech
+https://www.johndcook.com/feed John_D_Cook[#2E86AB] #tech
+https://jvns.ca/atom.xml Julia_Evans[#E91E63] #tech
+https://keet.wordpress.com/feed Keet[#2C3E50] #tech
+https://krebsonsecurity.com/feed Krebs_on_Security[#CC0000] #tech
+https://intelligence.org/feed MIRI[#8E44AD] #tech
+https://machinelearningmastery.com/feed ML_Mastery[#27AE60] #tech
+https://simonwillison.net/atom/everything Simon_Willison[#FF6B6B] #tech
+https://www.swift.org/atom.xml Swift_org[#F05138] #tech
+https://thegradient.pub/feed The_Gradient[#1A1A2E] #tech
+https://blog.pragmaticengineer.com/feed The_Pragmatic_Engineer[#E74C3C] #tech
+https://unixmen.com/feed Unixmen[#FCC624] #tech
+https://zed.dev/blog.rss Zed[#181717] #tech
+https://www.nintendolife.com/feed Nintendo_Life[#E60012] #tech
+-https://www.purenintendo.com/feed Pure_Nintendo[#E60012] #tech
+https://www.platformer.news/feed Platformer[#1A1A2E] #tech
+https://www.producthunt.com/feed Product_Hunt[#DA552F] #tech
+https://www.sandofsky.com/feed Sandofsky[#2C3E50] #tech
+https://newsroom.spotify.com/feed Spotify[#1DB954] #tech
+https://stratechery.com/feed Stratechery[#E74C3C] #tech
 
+#### Science ####
+https://www.strongerbyscience.com/feed Stronger_by_Science[#E74C3C] #science
+https://flowingdata.com/feed FlowingData[#E74C3C] #science
+https://m-phi.blogspot.com/feeds/posts/default M-Phi[#2C3E50] #science
+https://jeremykun.com/feed Math_∩_Programming[#2980B9] #science
+https://www.nasa.gov/rss NASA[#0B3D91] #science
+https://www.quantamagazine.org/feed Quanta_Magazine[#005CB9] #science
 
-#### Culture🦠 ####
-https://zed.dev/blog.rss[#181717] #zed #rust #editor
-
-#### Gaming👾 ####
-https://www.nintendolife.com/feed Nintendo_Life[#E60012] #nintendo #gaming #reviews
--https://www.purenintendo.com/feed Pure_Nintendo[#E60012] #nintendo #gaming #indie
-
-#### Google ####
-https://deepmind.google/blog/feed Google_DeepMind[#4285F4] #google #deepmind #ai #research
-https://developers.googleblog.com/feeds/posts/default Google_Developers[#4285F4] #google #development
-https://security.googleblog.com/feeds/posts/default Google_Security[#34A853] #google #security
-
-#### Health⚕️ ####
-https://www.strongerbyscience.com/feed Stronger_by_Science[#E74C3C] #fitness #strength_training #science
-
-#### Interest(ing)⌚️💼 ####
-https://www.atlasobscura.com/feeds/latest Atlas_Obscura[#1E3F66] #travel #curiosities #history
-https://ilovetypography.com/feed I_Love_Typography[#2C3E50] #typography #design #fonts
-https://randsinrepose.com/feed Rands_in_Repose[#34495E] #leadership #engineering #culture
-https://waitbutwhy.com/feed Wait_But_Why[#3498DB] #longform #science #philosophy
-
-#### News🗞️ ####
-https://www.propublica.org/feed ProPublica[#E74C3C] #investigative #journalism #accountability
+#### News ####
+https://www.propublica.org/feed ProPublica[#E74C3C] #news
+https://www.economist.com/asia/rss.xml Economist_Asia[#E3120B] #news
+https://www.economist.com/briefing/rss.xml Economist_Briefing[#E3120B] #news
+https://www.economist.com/business/rss.xml Economist_Business[#E3120B] #news
+https://www.economist.com/china/rss.xml Economist_China[#E3120B] #news
+https://www.economist.com/economic-and-financial-indicators/rss.xml Economist_Economic_Indicators[#E3120B] #news
+https://www.economist.com/europe/rss.xml Economist_Europe[#E3120B] #news
+https://www.economist.com/the-economist-explains/rss.xml Economist_Explains[#E3120B] #news
+https://www.economist.com/finance-and-economics/rss.xml Economist_Finance_&_Economics[#E3120B] #news
+https://www.economist.com/graphic-detail/rss.xml Economist_Graphic_Detail[#E3120B] #news
+https://www.economist.com/international/rss.xml Economist_International[#E3120B] #news
+https://www.economist.com/leaders/rss.xml Economist_Leaders[#E3120B] #news
+https://www.economist.com/middle-east-and-africa/rss.xml Economist_Middle_East_&_Africa[#E3120B] #news
+https://www.economist.com/science-and-technology/rss.xml Economist_Science_&_Technology[#E3120B] #news
+https://www.economist.com/the-americas/rss.xml Economist_The_Americas[#E3120B] #news
+https://www.economist.com/the-world-this-week/rss.xml Economist_The_World_This_Week[#E3120B] #news
+https://www.economist.com/united-states/rss.xml Economist_United_States[#E3120B] #news
 
 #### Longform ####
-https://aeon.co/feed.rss Aeon[#C8102E] #essays #philosophy #ideas
-https://electrelit.com/feed/ Electric_Literature[#FF3B30] #literature #essays #books
-https://orionmagazine.org/feed/ Orion[#2E5D3A] #essays #nature #culture
-https://www.theatlantic.com/feed/all/ The_Atlantic[#1B3B6F] #essays #journalism #culture
-https://www.newyorker.com/feed/magazine/reporting/rss The_New_Yorker[#1A1A1A] #essays #journalism #literature
-
-#### Economist ####
-https://www.economist.com/asia/rss.xml Economist_Asia[#E3120B] #economist #asia #economics
-https://www.economist.com/briefing/rss.xml Economist_Briefing[#E3120B] #economist #briefing
-https://www.economist.com/business/rss.xml Economist_Business[#E3120B] #economist #business
-https://www.economist.com/china/rss.xml Economist_China[#E3120B] #economist #china
-https://www.economist.com/economic-and-financial-indicators/rss.xml Economist_Economic_Indicators[#E3120B] #economist #finance #data
-https://www.economist.com/europe/rss.xml Economist_Europe[#E3120B] #economist #europe
-https://www.economist.com/the-economist-explains/rss.xml Economist_Explains[#E3120B] #economist #explainers
-https://www.economist.com/finance-and-economics/rss.xml Economist_Finance_&_Economics[#E3120B] #economist #finance
-https://www.economist.com/graphic-detail/rss.xml Economist_Graphic_Detail[#E3120B] #economist #data_visualization
-https://www.economist.com/international/rss.xml Economist_International[#E3120B] #economist #international
-https://www.economist.com/leaders/rss.xml Economist_Leaders[#E3120B] #economist #opinion
-https://www.economist.com/middle-east-and-africa/rss.xml Economist_Middle_East_&_Africa[#E3120B] #economist #middle_east #africa
-https://www.economist.com/science-and-technology/rss.xml Economist_Science_&_Technology[#E3120B] #economist #science #technology
-https://www.economist.com/the-americas/rss.xml Economist_The_Americas[#E3120B] #economist #americas
-https://www.economist.com/the-world-this-week/rss.xml Economist_The_World_This_Week[#E3120B] #economist #weekly
-https://www.economist.com/united-states/rss.xml Economist_United_States[#E3120B] #economist #us
-
-#### STEM🧬🧑‍🏫💊 ####
-https://flowingdata.com/feed FlowingData[#E74C3C] #data_visualization #statistics #design
-https://m-phi.blogspot.com/feeds/posts/default M-Phi[#2C3E50] #logic #philosophy #math
-https://jeremykun.com/feed Math_∩_Programming[#2980B9] #math #programming #algorithms
-https://www.nasa.gov/rss NASA[#0B3D91] #nasa #space #science
-https://www.quantamagazine.org/feed Quanta_Magazine[#005CB9] #science #math #physics #biology
-
-
-#### Tech📲 ####
-https://www.platformer.news/feed Platformer[#1A1A2E] #social_media #governance #moderation
-https://www.producthunt.com/feed Product_Hunt[#DA552F] #products #startups #launches
-https://www.sandofsky.com/feed Sandofsky[#2C3E50] #mobile_photography #design #indie
-https://newsroom.spotify.com/feed Spotify[#1DB954] #spotify #audio #streaming
-https://stratechery.com/feed Stratechery[#E74C3C] #tech #business #strategy
-
+https://aeon.co/feed.rss Aeon[#C8102E] #longform
+https://electrelit.com/feed/ Electric_Literature[#FF3B30] #longform
+https://orionmagazine.org/feed/ Orion[#2E5D3A] #longform
+https://www.theatlantic.com/feed/all/ The_Atlantic[#1B3B6F] #longform
+https://www.newyorker.com/feed/magazine/reporting/rss The_New_Yorker[#1A1A1A] #longform
+https://www.atlasobscura.com/feeds/latest Atlas_Obscura[#1E3F66] #longform
+https://ilovetypography.com/feed I_Love_Typography[#2C3E50] #longform
+https://randsinrepose.com/feed Rands_in_Repose[#34495E] #longform
+https://waitbutwhy.com/feed Wait_But_Why[#3498DB] #longform

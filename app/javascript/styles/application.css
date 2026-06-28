@@ -12,34 +12,23 @@
    ancestor chain. */
 #app { height: 100%; }
 
-/* Post thumbnails are desaturated by default and return to full color on
-   hover (mirrors `.rss-post:hover img { @apply saturate-100 }`). The image's
-   `saturate-50` utility already applies the filter composition that reads this
-   variable, so overriding it here restores full saturation on hover. The
-   transition smooths the desaturate→saturate swap so it feels intentional. */
-.rss-post img { transition: filter 200ms ease; }
-.rss-post:hover img {
-  @apply saturate-100;
-}
+/* Per-post hover actions (mark read / star / open) are hidden until the row is
+   hovered or keyboard-selected, mirroring Fusion's reveal-on-hover controls. */
+.post-actions { opacity: 0; }
+.rss-post:hover .post-actions,
+.rss-post.is-selected .post-actions,
+.rss-post:focus-within .post-actions { opacity: 1; }
 
-/* The post list renders all three body layouts and shows only the one matching
-   the active format. Card is the default; the format-selector controller swaps
-   the `format-*` marker class on the container. */
-.format-list-only,
-.format-compact-only { display: none; }
+/* Read toggle icon: hollow circle when unread, filled check when read. The
+   post_read controller flips the row's `is-read` class to swap them. */
+.rss-post .read-done { display: none; }
+.rss-post.is-read .read-undone { display: none; }
+.rss-post.is-read .read-done { display: inline; }
 
-.format-list .format-card-only { display: none; }
-.format-list .format-list-only { display: flex; }
-
-.format-compact .format-card-only { display: none; }
-.format-compact .format-compact-only { display: block; }
-
-/* Compact view tightens each post's vertical padding (the reference adds
-   `py-2` to the post in compact mode). */
-.format-compact .rss-post {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}
+/* Star toggle: outline star by default; the star fills amber when starred. The
+   star controller flips the row's `is-starred` class (optimistic). The CSS
+   `fill` overrides the Lucide icon's `fill="none"` attribute. */
+.rss-post.is-starred .star-icon { fill: currentColor; color: #f59e0b; }
 
 /* Read posts are dimmed so unread items stand out; hovering restores full
    emphasis so a read post is still easy to revisit. */

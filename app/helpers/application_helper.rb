@@ -1,29 +1,24 @@
 module ApplicationHelper
-  # Mirrors the reference app's `timestampToRelativeTime` (resources/js/util.js)
-  # so post timestamps read identically — e.g. "2 days", "1 hour", "3 weeks".
-  # The view wraps the result as "About <time> ago".
-  RELATIVE_TIME_FORMATS = [
-    { limit: 45, label: "second", div: 60 },
-    { limit: 50, label: "minute", div: 60 },
-    { limit: 22, label: "hour", div: 24 },
-    { limit: 6, label: "day", div: 7 },
-    { limit: 51, label: "week", div: 52 },
-    { limit: 10_000, label: "year", div: 1 }
-  ].freeze
+  # A post's publish date as YYYY/M/D (e.g. "2025/6/10"), matching the Fusion
+  # reference app's compact date format.
+  def post_date(timestamp)
+    Time.at(timestamp).strftime("%Y/%-m/%-d")
+  end
 
-  def relative_published_time(timestamp)
-    count = (Time.now.to_i - timestamp).abs
-    label = RELATIVE_TIME_FORMATS.first[:label]
-
-    RELATIVE_TIME_FORMATS.each do |format|
-      label = format[:label]
-      break if count < format[:limit]
-
-      count = count.to_f / format[:div]
+  # The heading for the current content view: the selected feed or tag, the
+  # active filter when there's no scope, or "All Posts" on the homepage.
+  def current_view_title
+    if @selected_feed.present? && @display_feeds.length == 1
+      @display_feeds.first.name
+    elsif @tag.present?
+      @tag
+    elsif @starred_only
+      "Starred"
+    elsif @unread_only
+      "Unread"
+    else
+      "All Posts"
     end
-
-    int = count.round
-    "#{int} #{label}#{int == 1 ? '' : 's'}"
   end
 
   # Path the search form submits to. Scoped to the current tag/feed view (or
@@ -38,12 +33,87 @@ module ApplicationHelper
     end
   end
 
-  # Current path with the unread filter toggled on or off, preserving the
-  # active tag/feed scope (in the path) and search query (in the params).
-  def unread_filter_path(enable:)
-    query = request.query_parameters.except("page", "unread")
-    query["unread"] = "1" if enable
+  # Path for the All / Unread / Starred content tabs. Preserves the current
+  # tag/feed scope (the request path) and search query, swapping only the
+  # mutually-exclusive unread/starred filter. `filter` is :all, :unread, or
+  # :starred.
+  def filter_path(filter)
+    query = request.query_parameters.except("page", "unread", "starred")
+    query["unread"] = "1" if filter == :unread
+    query["starred"] = "1" if filter == :starred
     query.empty? ? request.path : "#{request.path}?#{query.to_query}"
+  end
+
+  # Whether a given content tab (:all / :unread / :starred) is the active one.
+  def filter_active?(filter)
+    case filter
+    when :unread  then @unread_only
+    when :starred then @starred_only
+    else !@unread_only && !@starred_only
+    end
+  end
+
+  # Classes for one segment of the All / Unread / Starred content tab control.
+  def content_tab_class(filter)
+    base = "rounded-md px-3 py-1 transition-colors"
+    state =
+      if filter_active?(filter)
+        "bg-white dark:bg-gray-700 font-semibold text-black dark:text-gray-100 shadow-sm"
+      else
+        "text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-gray-200"
+      end
+    "#{base} #{state}"
+  end
+
+  # Classes for a top-level sidebar nav row (Unread / Starred / All), with an
+  # active state that matches the highlighted feed rows.
+  def sidebar_nav_class(active)
+    base = "flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm font-medium transition-colors"
+    state =
+      if active
+        "bg-gray-200 text-black dark:bg-gray-800 dark:text-gray-100"
+      else
+        "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-black dark:hover:text-gray-200"
+      end
+    "#{base} #{state}"
+  end
+
+  # Groups configured feeds into sidebar folders by tag. Untagged feeds fall
+  # into a "Default" folder (placed first); each tagged feed appears under every
+  # tag it carries. Tag folders are ordered most-used-first (ties broken
+  # alphabetically), mirroring the sidebar's previous Tags ordering. Returns an
+  # array of { name:, tag:, feeds:, unread: } hashes; `tag` is nil for Default.
+  def grouped_feeds(feed_list, unread_counts = {})
+    default = []
+    by_tag = Hash.new { |h, k| h[k] = [] }
+    tag_counts = Hash.new(0)
+
+    feed_list.each do |feed|
+      tags = feed.tags.map { |tag| tag.delete_prefix("#") }.reject(&:blank?).uniq
+      if tags.empty?
+        default << feed
+      else
+        tags.each do |tag|
+          by_tag[tag] << feed
+          tag_counts[tag] += 1
+        end
+      end
+    end
+
+    ordered_tags = by_tag.keys.sort_by { |tag| [ -tag_counts[tag], tag ] }
+
+    groups = ordered_tags.map do |tag|
+      feeds = by_tag[tag]
+      { name: tag, tag: tag, feeds: feeds, unread: folder_unread(feeds, unread_counts) }
+    end
+
+    if default.any?
+      groups.unshift(
+        { name: "Default", tag: nil, feeds: default, unread: folder_unread(default, unread_counts) }
+      )
+    end
+
+    groups
   end
 
   # Clamps a feed's configured colour to a lightness range that stays legible
@@ -59,6 +129,10 @@ module ApplicationHelper
   end
 
   private
+    def folder_unread(feeds, unread_counts)
+      feeds.sum { |feed| unread_counts.fetch(feed.feed.id, 0).to_i }
+    end
+
     def hex_to_rgb(color)
       hex = color.to_s.delete_prefix("#")
       hex = hex.chars.map { |c| c * 2 }.join if hex.length == 3

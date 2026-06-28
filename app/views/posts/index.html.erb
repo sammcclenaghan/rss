@@ -1,182 +1,154 @@
 <div class="md:flex h-full min-h-0"
-     data-controller="mobile-sidebar format-selector keyboard"
-     data-format-selector-storage-key-value="post-format">
+     data-controller="mobile-sidebar keyboard">
 
-  <%# Sidebar %>
-  <div class="md:w-1/3 xl:w-1/4 md:flex md:justify-end md:border-r border-gray-200 dark:border-black px-6 bg-gray-50 dark:bg-gray-800 md:px-12 md:overflow-auto py-3">
+  <%# Sidebar — only rendered on full-page requests; turbo-frame requests
+      (search, pagination) update just the #posts frame and skip sidebar data. %>
+  <% if @sidebar_feeds %>
+  <div class="md:w-72 xl:w-80 shrink-0 md:border-r border-gray-200 dark:border-black bg-gray-50 dark:bg-gray-900 md:overflow-auto px-4 md:px-3 py-3 md:h-full">
 
-    <%# Mobile toggle %>
-    <div class="md:hidden mb-2">
+    <%# Brand + mobile toggle %>
+    <div class="flex items-center justify-between mb-4 px-2">
+      <%= link_to root_path, class: "flex items-center gap-2 text-black dark:text-gray-100" do %>
+        <%= icon "rss", class: "size-6 text-blue-600 dark:text-blue-500" %>
+        <span class="font-bold text-lg"><%= content_for(:title) || "Rss" %></span>
+      <% end %>
       <button data-action="click->mobile-sidebar#toggle"
-              class="border w-full rounded py-1 px-3 hover:bg-gray-100 dark:hover:bg-gray-700 border-2 border-gray-200 text-gray-600 dark:text-gray-400 dark:border-gray-600 gap-3 font-bold flex items-center">
-        <svg data-mobile-sidebar-target="icon"
-             class="transition-transform"
-             xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-          <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
-        </svg>
-        Toggle filters &amp; options
+              class="md:hidden rounded p-1.5 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+        <%= icon "chevron-right", class: "size-[18px] transition-transform", data: { mobile_sidebar_target: "icon" } %>
       </button>
     </div>
 
     <%# Sidebar content %>
-    <div data-mobile-sidebar-target="content"
-         class="md:max-w-xs w-full hidden md:block">
-
-      <%# Back to home %>
-      <% if @query.present? || @tag.present? || @selected_feed.present? || @page > 1 %>
-        <div class="mb-8">
-          <%= link_to raw("&laquo; Back to home"), root_path, class: "font-bold text-black dark:text-gray-400" %>
-        </div>
-      <% end %>
+    <div data-mobile-sidebar-target="content" class="hidden md:block">
 
       <%# Search %>
-      <div class="mb-8">
-        <h2 class="font-bold mb-2 dark:text-gray-400">Search</h2>
-        <%= form_tag search_scope_path, method: :get, data: { controller: "search", action: "input->search#submit submit->search#cancel", turbo_frame: "posts" }, class: "flex gap-2" do %>
-          <%= text_field_tag :query, @query, placeholder: "Post name or description",
-                class: "border border-gray-300 dark:border-black rounded px-2 py-1 w-full bg-white dark:bg-gray-900 text-black dark:text-gray-200 placeholder:text-gray-400",
-                data: { search_target: "input" } %>
-          <%= hidden_field_tag :unread, "1" if @unread_only %>
-        <% end %>
-      </div>
-
-      <%# Tags — most-used first; the long tail collapses behind "Show all". %>
-      <% tag_counts = @display_feeds.flat_map(&:tags).tally %>
-      <% sorted_tags = tag_counts.keys.sort_by { |t| [ -tag_counts[t], t ] } %>
-      <% if sorted_tags.any? %>
-        <div class="mb-8" data-controller="reveal">
-          <h2 class="font-bold mb-2 dark:text-gray-400">Tags</h2>
-          <% sorted_tags.first(12).each do |tag| %>
-            <% cleaned = tag.delete_prefix("#") %>
-            <% next if cleaned.blank? %>
-            <%= link_to tag, tag_posts_path(cleaned), class: "inline-block mr-3 font-bold text-gray-600 dark:text-gray-500 hover:text-black dark:hover:text-gray-300" %>
-          <% end %>
-          <% if sorted_tags.size > 12 %>
-            <span data-reveal-target="more" class="hidden">
-              <% sorted_tags.drop(12).each do |tag| %>
-                <% cleaned = tag.delete_prefix("#") %>
-                <% next if cleaned.blank? %>
-                <%= link_to tag, tag_posts_path(cleaned), class: "inline-block mr-3 font-bold text-gray-600 dark:text-gray-500 hover:text-black dark:hover:text-gray-300" %>
-              <% end %>
-            </span>
-            <button type="button" data-reveal-target="trigger" data-action="reveal#show"
-                    class="inline-block mt-1 text-sm text-gray-500 dark:text-gray-500 hover:text-black dark:hover:text-gray-300 cursor-pointer">
-              Show all (<%= sorted_tags.size %>)
-            </button>
-          <% end %>
-        </div>
+      <%= form_tag search_scope_path, method: :get, data: { controller: "search", action: "input->search#submit submit->search#cancel", turbo_frame: "posts" }, class: "relative mb-4" do %>
+        <%= icon "search", class: "size-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" %>
+        <%= text_field_tag :query, @query, placeholder: "Search",
+              class: "w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-black dark:text-gray-200 placeholder:text-gray-400 pl-8 pr-9 py-1.5 text-sm",
+              data: { search_target: "input" } %>
+        <kbd class="absolute right-2 top-1/2 -translate-y-1/2 rounded border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-900 px-1.5 text-xs text-gray-500 font-mono">/</kbd>
+        <%= hidden_field_tag :unread, "1" if @unread_only %>
+        <%= hidden_field_tag :starred, "1" if @starred_only %>
       <% end %>
 
-      <%# Feeds %>
-      <div class="mb-8">
-        <h2 class="font-bold dark:text-gray-400">Feeds</h2>
-        <% @display_feeds.each do |feed| %>
-          <%= render "feeds/feed", feed: feed %>
-          <hr class="last:hidden border-gray-200 dark:border-gray-700">
+      <%# Top nav — global, root-scoped views. %>
+      <% global_scope = @tag.blank? && @selected_feed.blank? %>
+      <% home_active = global_scope && !@unread_only && !@starred_only %>
+      <nav class="space-y-0.5 mb-5">
+        <%= link_to root_path(unread: 1), class: sidebar_nav_class(global_scope && @unread_only) do %>
+          <%= icon "mail", class: "size-4" %>
+          <span>Unread</span>
+          <% if @unread_total.to_i > 0 %><span class="ml-auto text-xs text-gray-500 dark:text-gray-500 tabular-nums"><%= @unread_total %></span><% end %>
         <% end %>
-      </div>
+
+        <%= link_to root_path(starred: 1), class: sidebar_nav_class(global_scope && @starred_only) do %>
+          <%= icon "star", class: "size-4" %>
+          <span>Starred</span>
+          <% if @starred_count.to_i > 0 %><span class="ml-auto text-xs text-gray-500 dark:text-gray-500 tabular-nums"><%= @starred_count %></span><% end %>
+        <% end %>
+
+        <%= link_to root_path, class: sidebar_nav_class(home_active) do %>
+          <%= icon "list", class: "size-4" %>
+          <span>All</span>
+          <% if @unread_total.to_i > 0 %><span class="ml-auto text-xs text-gray-500 dark:text-gray-500 tabular-nums"><%= @unread_total %></span><% end %>
+        <% end %>
+      </nav>
+
+      <%# Feeds — grouped into collapsible folders by tag. %>
+      <h2 class="px-2 mb-1 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Feeds</h2>
+      <% grouped_feeds(@sidebar_feeds, @sidebar_unread_counts).each do |group| %>
+        <% folder_active = group[:tag].present? && @tag == group[:tag] %>
+        <div class="mb-1" data-controller="folder" data-folder-key-value="<%= group[:name] %>">
+          <div class="group flex items-center rounded-md px-2 py-1 <%= "bg-gray-100 dark:bg-gray-800/60" if folder_active %>">
+            <button type="button" data-action="folder#toggle"
+                    class="shrink-0 mr-1 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 cursor-pointer">
+              <%= icon "chevron-down", class: "size-3.5 transition-transform", data: { folder_target: "chevron" } %>
+            </button>
+            <% if group[:tag] %>
+              <%= link_to group[:name], tag_posts_path(group[:tag]),
+                    class: "flex-1 min-w-0 truncate text-sm font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-gray-100" %>
+            <% else %>
+              <button type="button" data-action="folder#toggle"
+                      class="flex-1 min-w-0 truncate text-left text-sm font-semibold text-gray-700 dark:text-gray-300 cursor-pointer"><%= group[:name] %></button>
+            <% end %>
+            <% if group[:unread] > 0 %>
+              <span class="ml-2 shrink-0 text-xs text-gray-500 dark:text-gray-500 tabular-nums"><%= group[:unread] %></span>
+            <% end %>
+          </div>
+          <div data-folder-target="content">
+            <% group[:feeds].each do |feed| %>
+              <%= render "feeds/feed", feed: feed, unread_counts: @sidebar_unread_counts %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
 
     </div>
   </div>
+  <% end %>
 
   <%# Main content %>
-  <div class="md:w-2/3 xl:w-3/4 px-6 md:px-12 md:overflow-auto md:h-full py-2">
-    <%= turbo_frame_tag "posts", data: { format_selector_target: "container" }, class: "block format-card max-w-lg" do %>
+  <div class="md:flex-1 min-w-0 flex flex-col md:h-full md:overflow-hidden">
 
-      <%# Title bar %>
-      <div class="flex items-center justify-between mb-2">
-        <h2 class="font-bold text-black dark:text-gray-400">
-          <%= link_to "Posts", root_path %>
-          <% if @tag.present? %>
-            / #<%= @tag %>
-          <% end %>
-          <% if @selected_feed.present? && @display_feeds.length == 1 %>
-            / <span style="color: <%= legible_feed_color(@display_feeds.first.color) %>"><%= @display_feeds.first.name %></span>
-          <% end %>
-          <% if @query.present? %>
-            / ?= <%= @query %>
-          <% end %>
-        </h2>
+    <%# Header: current view title + mark all as read %>
+    <div class="flex items-center justify-between gap-4 px-6 md:px-10 py-3 border-b border-gray-200 dark:border-gray-800">
+      <h1 class="text-xl font-bold text-black dark:text-gray-100 truncate"><%= current_view_title %></h1>
+      <%= button_to read_all_posts_path,
+            params: { tag: @tag, feed: @selected_feed, query: @query },
+            data: { keyboard_target: "markAll" },
+            class: "shrink-0 inline-flex items-center gap-1.5 rounded-md border border-gray-300 dark:border-gray-700 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer" do %>
+        <%= icon "check-check", class: "size-4" %>
+        Mark all as read
+      <% end %>
+    </div>
 
-        <%# Format selector %>
-        <div class="border rounded border-gray-300 dark:border-gray-600 divide-x divide-gray-300 dark:divide-gray-600 text-gray-600 dark:text-gray-400 flex">
-          <button title="Card View" type="button"
-                  data-format-selector-target="button"
-                  data-action="click->format-selector#select" data-format="card"
-                  class="format-btn px-2 py-1 bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-              <path d="M3 8.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm0-5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-1z"/>
-            </svg>
-          </button>
-          <button title="List View" type="button"
-                  data-format-selector-target="button"
-                  data-action="click->format-selector#select" data-format="list"
-                  class="format-btn px-2 py-1">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M3 4.5h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1H3zM1 2a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 2zm0 12a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 14z"/>
-            </svg>
-          </button>
-          <button title="Compact View" type="button"
-                  data-format-selector-target="button"
-                  data-action="click->format-selector#select" data-format="compact"
-                  class="format-btn px-2 py-1">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5H2zM3 3H2v1h1V3z"/>
-              <path d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9z"/>
-              <path fill-rule="evenodd" d="M1.5 7a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5V7zM2 7h1v1H2V7zm0 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5H2zm1 .5H2v1h1v-1z"/>
-            </svg>
-          </button>
-        </div>
-      </div>
+    <div class="md:flex-1 md:overflow-auto px-6 md:px-10 py-4">
+      <%= turbo_frame_tag "posts", class: "block" do %>
 
-      <%# Read controls %>
-      <div class="flex items-center gap-4 mb-2 text-sm text-gray-600 dark:text-gray-500">
-        <% if @unread_only %>
-          <%= link_to "Show all", unread_filter_path(enable: false),
-                data: { keyboard_target: "unreadToggle", turbo_frame: "posts" },
-                class: "font-bold hover:text-black dark:hover:text-gray-300" %>
-        <% else %>
-          <%= link_to "Unread only", unread_filter_path(enable: true),
-                data: { keyboard_target: "unreadToggle", turbo_frame: "posts" },
-                class: "font-bold hover:text-black dark:hover:text-gray-300" %>
-        <% end %>
-        <%= button_to "Mark all read", read_all_posts_path,
-              params: { tag: @tag, feed: @selected_feed, query: @query },
-              data: { keyboard_target: "markAll" },
-              class: "font-bold hover:text-black dark:hover:text-gray-300 cursor-pointer" %>
-      </div>
-
-      <%# Posts %>
-      <div class="-mx-4">
-        <% if @posts.empty? %>
-          <p class="px-4 py-8 text-gray-600 dark:text-gray-500"><%= @unread_only ? "No unread posts." : "No posts yet." %></p>
-        <% end %>
-        <% @posts.each do |post| %>
-          <%= render "posts/post", post: post %>
-          <div class="px-4">
-            <hr class="border-gray-200 dark:border-gray-700">
+        <%# Filter tabs %>
+        <div class="mb-4">
+          <div class="inline-flex rounded-lg bg-gray-100 dark:bg-gray-800 p-0.5 text-sm">
+            <%= link_to "All", filter_path(:all), class: content_tab_class(:all) %>
+            <%= link_to "Unread", filter_path(:unread),
+                  data: { keyboard_target: (@unread_only ? nil : "unreadToggle") },
+                  class: content_tab_class(:unread) %>
+            <%= link_to "Starred", filter_path(:starred), class: content_tab_class(:starred) %>
           </div>
-        <% end %>
-      </div>
+          <%# Keep the unread toggle reachable from the keyboard when unread is on. %>
+          <% if @unread_only %>
+            <%= link_to "", filter_path(:all), data: { keyboard_target: "unreadToggle" }, class: "hidden" %>
+          <% end %>
+        </div>
 
-      <%# Pagination %>
-      <div class="py-2 flex">
-        <% if @page > 1 %>
-          <%= link_to raw("&laquo; Previous Page"),
-              url_for(page: @page - 1, query: @query, unread: @unread_only ? "1" : nil),
-              data: { turbo_frame: "posts" },
-              class: "text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 font-bold py-2 hover:text-black" %>
+        <%# Posts %>
+        <% if @posts.empty? %>
+          <p class="py-16 text-center text-gray-500 dark:text-gray-500"><%= @starred_only ? "No starred posts." : @unread_only ? "No unread posts." : "No posts yet." %></p>
         <% end %>
-        <% if @posts.length == 100 %>
-          <%= link_to raw("Next Page &raquo;"),
-              url_for(page: @page + 1, query: @query, unread: @unread_only ? "1" : nil),
-              data: { turbo_frame: "posts" },
-              class: "ml-auto text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 font-bold py-2 hover:text-black" %>
-        <% end %>
-      </div>
+        <div class="border-t border-gray-200 dark:border-gray-800">
+          <% @posts.each do |post| %>
+            <%= render "posts/post", post: post %>
+          <% end %>
+        </div>
 
-    <% end %>
+        <%# Pagination %>
+        <div class="py-2 flex">
+          <% if @page > 1 %>
+            <%= link_to raw("&laquo; Previous Page"),
+                url_for(page: @page - 1, query: @query, unread: @unread_only ? "1" : nil, starred: @starred_only ? "1" : nil),
+                data: { turbo_frame: "posts" },
+                class: "text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 font-bold py-2 hover:text-black" %>
+          <% end %>
+          <% if @posts.length == 100 %>
+            <%= link_to raw("Next Page &raquo;"),
+                url_for(page: @page + 1, query: @query, unread: @unread_only ? "1" : nil, starred: @starred_only ? "1" : nil),
+                data: { turbo_frame: "posts" },
+                class: "ml-auto text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 font-bold py-2 hover:text-black" %>
+          <% end %>
+        </div>
+
+      <% end %>
+    </div>
   </div>
 
   <%# Keyboard shortcuts help %>

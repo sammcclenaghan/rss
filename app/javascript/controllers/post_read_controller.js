@@ -1,8 +1,9 @@
 import { Controller } from '@hotwired/stimulus'
 
-// Tracks a post's read state. Opening the post (clicking its title/image link)
-// marks it read; the toggle button flips it either way. Requests are sent to
-// the reads endpoint with the CSRF token and update the UI optimistically.
+// Tracks a post's read state. Opening the post (clicking its title/link) marks
+// it read; the toggle button flips it either way. The read/unread icon is
+// driven by the `is-read` class on the row (see application.css). Requests are
+// sent to the reads endpoint with the CSRF token and update the UI optimistically.
 export default class extends Controller {
   static values = { url: String, read: Boolean }
   static targets = ['toggle']
@@ -24,9 +25,6 @@ export default class extends Controller {
   #setRead(read) {
     this.readValue = read
     this.element.classList.toggle('is-read', read)
-    if (this.hasToggleTarget) {
-      this.toggleTarget.textContent = read ? 'Read' : 'Mark read'
-    }
   }
 
   #send(method) {

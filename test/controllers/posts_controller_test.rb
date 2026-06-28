@@ -11,7 +11,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   test "index renders posts" do
     get root_path
     assert_response :success
-    assert_select "h2", /Posts/
+    assert_select "h1", /All Posts/
     assert_select ".rss-post", minimum: 1
   end
 
@@ -22,16 +22,38 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "starred filter shows only starred posts" do
+    StarredPost.create!(post: posts(:recent_xkcd))
+    get root_path, params: { starred: "1" }
+    assert_response :success
+    assert_select "h1", /Starred/
+    assert_select ".rss-post", 1
+  end
+
+  test "sidebar shows the Starred nav" do
+    StarredPost.create!(post: posts(:recent_xkcd))
+    get root_path
+    assert_response :success
+    assert_select "a[href=?]", root_path(starred: 1), /Starred/
+  end
+
+  test "sidebar groups feeds into folders by tag" do
+    get root_path
+    assert_response :success
+    # The #comics tag becomes a folder header linking to the tag view.
+    assert_select "a[href=?]", tag_posts_path("comics"), /comics/
+  end
+
   test "tag filters posts to a tag" do
     get tag_posts_path("comics")
     assert_response :success
-    assert_select "h2", /#comics/
+    assert_select "h1", /comics/
   end
 
   test "feed filters posts to a single feed" do
     get feed_posts_path(Feed::Config.encode_feed_url(feeds(:xkcd).url))
     assert_response :success
-    assert_select "span", "XKCD"
+    assert_select "h1", /XKCD/
   end
 
   test "query narrows the result set" do
@@ -59,7 +81,16 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   test "sidebar shows an unread count per feed" do
     get root_path
     assert_response :success
-    assert_select "h4", /unread/
+    # Each feed row links to its feed view and shows a numeric unread badge.
+    href = feed_posts_path(Feed::Config.encode_feed_url(feeds(:xkcd).url))
+    assert_select "a[href=?] span.tabular-nums", href
+  end
+
+  test "turbo-frame search request renders without the sidebar" do
+    get root_path, params: { query: "h", unread: "1" }, headers: { "Turbo-Frame" => "posts" }
+    assert_response :success
+    assert_select "turbo-frame#posts"
+    assert_select "h2", text: "Feeds", count: 0
   end
 
   test "search form submits globally on the homepage" do
