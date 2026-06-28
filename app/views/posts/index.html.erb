@@ -5,12 +5,12 @@
   <%# Sidebar — only rendered on full-page requests; turbo-frame requests
       (search, pagination) update just the #posts frame and skip sidebar data. %>
   <% if @sidebar_feeds %>
-  <div class="md:w-72 xl:w-80 shrink-0 md:border-r border-gray-200 dark:border-black bg-gray-50 dark:bg-gray-900 md:overflow-auto px-4 md:px-3 py-3 md:pt-6 md:h-full">
+  <div class="md:w-72 xl:w-80 shrink-0 md:border-r border-sidebar-border bg-sidebar text-sidebar-foreground md:overflow-auto px-4 md:px-3 py-3 md:pt-6 md:h-full">
 
     <%# Mobile toggle (collapses on desktop) %>
     <div class="md:hidden flex justify-end mb-2">
       <button data-action="click->mobile-sidebar#toggle"
-              class="rounded p-1.5 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+              class="rounded p-1.5 text-muted-foreground hover:bg-sidebar-accent">
         <%= icon "chevron-right", class: "size-[18px] transition-transform", data: { mobile_sidebar_target: "icon" } %>
       </button>
     </div>
@@ -20,11 +20,11 @@
 
       <%# Search %>
       <%= form_tag search_scope_path, method: :get, data: { controller: "search", action: "input->search#submit submit->search#cancel", turbo_frame: "posts" }, class: "relative mb-4" do %>
-        <%= icon "search", class: "size-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" %>
+        <%= icon "search", class: "size-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" %>
         <%= text_field_tag :query, @query, placeholder: "Search",
-              class: "w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-black dark:text-gray-200 placeholder:text-gray-400 pl-8 pr-9 py-1.5 text-sm",
+              class: "w-full rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground pl-8 pr-9 py-1.5 text-sm",
               data: { search_target: "input" } %>
-        <kbd class="absolute right-2 top-1/2 -translate-y-1/2 rounded border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-900 px-1.5 text-xs text-gray-500 font-mono">/</kbd>
+        <kbd class="absolute right-2 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 text-xs text-muted-foreground font-mono">/</kbd>
         <%= hidden_field_tag :unread, "1" if @unread_only %>
         <%= hidden_field_tag :starred, "1" if @starred_only %>
       <% end %>
@@ -36,40 +36,40 @@
         <%= link_to root_path(unread: 1), class: sidebar_nav_class(global_scope && @unread_only) do %>
           <%= icon "inbox", class: "size-4" %>
           <span>Unread</span>
-          <span data-counts-target="total" class="ml-auto text-xs text-gray-500 dark:text-gray-500 tabular-nums <%= "hidden" if @unread_total.to_i == 0 %>"><%= @unread_total.to_i %></span>
+          <span data-counts-target="total" class="ml-auto text-xs text-muted-foreground tabular-nums <%= "hidden" if @unread_total.to_i == 0 %>"><%= @unread_total.to_i %></span>
         <% end %>
 
         <%= link_to root_path(starred: 1), class: sidebar_nav_class(global_scope && @starred_only) do %>
           <%= icon "star", class: "size-4" %>
           <span>Starred</span>
-          <% if @starred_count.to_i > 0 %><span class="ml-auto text-xs text-gray-500 dark:text-gray-500 tabular-nums"><%= @starred_count %></span><% end %>
+          <% if @starred_count.to_i > 0 %><span class="ml-auto text-xs text-muted-foreground tabular-nums"><%= @starred_count %></span><% end %>
         <% end %>
 
         <%= link_to root_path, class: sidebar_nav_class(home_active) do %>
           <%= icon "list", class: "size-4" %>
           <span>All</span>
-          <span data-counts-target="total" class="ml-auto text-xs text-gray-500 dark:text-gray-500 tabular-nums <%= "hidden" if @unread_total.to_i == 0 %>"><%= @unread_total.to_i %></span>
+          <span data-counts-target="total" class="ml-auto text-xs text-muted-foreground tabular-nums <%= "hidden" if @unread_total.to_i == 0 %>"><%= @unread_total.to_i %></span>
         <% end %>
       </nav>
 
       <%# Feeds — grouped into collapsible folders by tag. %>
-      <h2 class="px-2 mb-1 text-xs font-medium text-gray-400 dark:text-gray-500">Feeds</h2>
+      <h2 class="px-2 mb-1 text-xs font-medium text-muted-foreground">Feeds</h2>
       <% grouped_feeds(@sidebar_feeds, @sidebar_unread_counts).each do |group| %>
         <% folder_active = group[:tag].present? && @tag == group[:tag] %>
         <div class="mb-1" data-controller="folder" data-folder-key-value="<%= group[:name] %>" data-counts-folder>
-          <div class="group flex items-center rounded-md px-2 py-1 <%= "bg-gray-100 dark:bg-gray-800/60" if folder_active %>">
+          <div class="group flex items-center rounded-md px-2 py-1 <%= "bg-sidebar-accent" if folder_active %>">
             <button type="button" data-action="folder#toggle"
-                    class="shrink-0 mr-1 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 cursor-pointer">
+                    class="shrink-0 mr-1 text-muted-foreground hover:text-foreground cursor-pointer">
               <%= icon "chevron-down", class: "size-3.5 transition-transform", data: { folder_target: "chevron" } %>
             </button>
             <% if group[:tag] %>
               <%= link_to group[:name].capitalize, tag_posts_path(group[:tag]),
-                    class: "flex-1 min-w-0 truncate text-sm font-normal text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-gray-100" %>
+                    class: "flex-1 min-w-0 truncate text-sm font-normal text-sidebar-foreground hover:text-sidebar-accent-foreground" %>
             <% else %>
               <button type="button" data-action="folder#toggle"
-                      class="flex-1 min-w-0 truncate text-left text-sm font-normal text-gray-700 dark:text-gray-300 cursor-pointer"><%= group[:name].capitalize %></button>
+                      class="flex-1 min-w-0 truncate text-left text-sm font-normal text-sidebar-foreground cursor-pointer"><%= group[:name].capitalize %></button>
             <% end %>
-            <span data-counts-target="folder" class="ml-2 shrink-0 text-xs text-gray-500 dark:text-gray-500 tabular-nums <%= "hidden" if group[:unread] == 0 %>"><%= group[:unread] %></span>
+            <span data-counts-target="folder" class="ml-2 shrink-0 text-xs text-muted-foreground tabular-nums <%= "hidden" if group[:unread] == 0 %>"><%= group[:unread] %></span>
           </div>
           <div data-folder-target="content">
             <% group[:feeds].each do |feed| %>
@@ -86,16 +86,52 @@
   <%# Main content %>
   <div class="md:flex-1 min-w-0 flex flex-col md:h-full md:overflow-hidden">
 
-    <%# Header: current view title + mark all as read %>
-    <div class="flex items-center justify-between gap-4 px-6 md:px-10 py-3 border-b border-gray-200 dark:border-gray-800">
-      <h1 class="text-xl font-bold text-black dark:text-gray-100 truncate"><%= current_view_title %></h1>
-      <%= button_to read_all_posts_path,
-            params: { tag: @tag, feed: @selected_feed, query: @query },
-            data: { keyboard_target: "markAll" },
-            class: "shrink-0 inline-flex items-center gap-1.5 rounded-md border border-gray-300 dark:border-gray-700 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer" do %>
-        <%= icon "check-check", class: "size-4" %>
-        Mark all as read
-      <% end %>
+    <%# Header: current view title + mark all as read + appearance menu %>
+    <div class="flex items-center justify-between gap-4 px-6 md:px-10 py-3 border-b border-border">
+      <h1 class="text-xl font-bold text-foreground truncate"><%= current_view_title %></h1>
+      <div class="shrink-0 flex items-center gap-2">
+        <%= button_to read_all_posts_path,
+              params: { tag: @tag, feed: @selected_feed, query: @query },
+              data: { keyboard_target: "markAll" },
+              class: "inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground cursor-pointer" do %>
+          <%= icon "check-check", class: "size-4" %>
+          Mark all as read
+        <% end %>
+
+        <%# Appearance menu — sets a `theme` in localStorage, applied to <html>. %>
+        <div class="relative" data-controller="theme" data-action="keydown.esc->theme#close click@window->theme#closeOutside">
+          <button type="button" data-action="theme#toggle"
+                  title="Appearance" aria-label="Appearance" aria-haspopup="true"
+                  class="inline-flex items-center justify-center rounded-md border border-border p-1.5 text-foreground hover:bg-accent hover:text-accent-foreground cursor-pointer">
+            <%= icon "palette", class: "size-4" %>
+          </button>
+
+          <div data-theme-target="menu"
+               class="hidden absolute right-0 mt-1.5 z-40 w-44 rounded-lg border border-border bg-popover text-popover-foreground shadow-lg p-1">
+            <% [
+                 [ "system",  "Auto",    "linear-gradient(135deg, #ffffff 50%, #18181b 50%)" ],
+                 [ "light",   "Light",   "#ffffff" ],
+                 [ "sepia",   "Sepia",   "#f4ecd7" ],
+                 [ "latte",   "Latte",   "#eff1f5" ],
+                 [ "minimal", "Minimal", "#faf9f7" ],
+                 [ "dark",    "Dark",    "#18181b" ],
+                 [ "vercel",  "Vercel",  "#0a0a0a" ],
+                 [ "gruvbox", "Gruvbox", "#282828" ]
+               ].each do |value, label, swatch| %>
+              <button type="button"
+                      data-theme-target="option"
+                      data-theme="<%= value %>"
+                      data-action="theme#select"
+                      aria-pressed="false"
+                      class="w-full flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer aria-pressed:font-semibold">
+                <span class="shrink-0 size-3.5 rounded-full border border-border" style="background: <%= swatch %>"></span>
+                <span class="flex-1 text-left"><%= label %></span>
+                <%= icon "check", class: "theme-check size-4 hidden" %>
+              </button>
+            <% end %>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="md:flex-1 md:overflow-auto px-6 md:px-10 py-4">
@@ -103,7 +139,7 @@
 
         <%# Filter tabs %>
         <div class="mb-4">
-          <div class="inline-flex rounded-lg bg-gray-100 dark:bg-gray-800 p-0.5 text-sm">
+          <div class="inline-flex rounded-lg bg-muted p-0.5 text-sm">
             <%= link_to "All", filter_path(:all), class: content_tab_class(:all) %>
             <%= link_to "Unread", filter_path(:unread),
                   data: { keyboard_target: (@unread_only ? nil : "unreadToggle") },
@@ -118,9 +154,9 @@
 
         <%# Posts %>
         <% if @posts.empty? %>
-          <p class="py-16 text-center text-gray-500 dark:text-gray-500"><%= @starred_only ? "No starred posts." : @unread_only ? "No unread posts." : "No posts yet." %></p>
+          <p class="py-16 text-center text-muted-foreground"><%= @starred_only ? "No starred posts." : @unread_only ? "No unread posts." : "No posts yet." %></p>
         <% end %>
-        <div class="border-t border-gray-200 dark:border-gray-800">
+        <div class="border-t border-border">
           <% @posts.each do |post| %>
             <%= render "posts/post", post: post %>
           <% end %>
@@ -132,13 +168,13 @@
             <%= link_to raw("&laquo; Previous Page"),
                 url_for(page: @page - 1, query: @query, unread: @unread_only ? "1" : nil, starred: @starred_only ? "1" : nil),
                 data: { turbo_frame: "posts" },
-                class: "text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 font-bold py-2 hover:text-black" %>
+                class: "text-muted-foreground hover:text-foreground font-bold py-2" %>
           <% end %>
           <% if @posts.length == 100 %>
             <%= link_to raw("Next Page &raquo;"),
                 url_for(page: @page + 1, query: @query, unread: @unread_only ? "1" : nil, starred: @starred_only ? "1" : nil),
                 data: { turbo_frame: "posts" },
-                class: "ml-auto text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 font-bold py-2 hover:text-black" %>
+                class: "ml-auto text-muted-foreground hover:text-foreground font-bold py-2" %>
           <% end %>
         </div>
 
@@ -149,8 +185,8 @@
   <%# Keyboard shortcuts help %>
   <div data-keyboard-target="help" data-action="click->keyboard#closeHelp"
        class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-    <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded p-6 max-w-sm w-full text-gray-700 dark:text-gray-300">
-      <h2 class="font-bold mb-4 text-black dark:text-gray-200">Keyboard shortcuts</h2>
+    <div class="bg-popover border border-border rounded p-6 max-w-sm w-full text-popover-foreground">
+      <h2 class="font-bold mb-4 text-foreground">Keyboard shortcuts</h2>
       <dl class="space-y-2 text-sm">
         <% [
              [ "j / k", "Next / previous post" ],
@@ -165,7 +201,7 @@
            ].each do |keys, label| %>
           <div class="flex items-center justify-between gap-4">
             <span><%= label %></span>
-            <kbd class="shrink-0 px-1.5 py-0.5 rounded border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-900 font-mono text-xs"><%= keys %></kbd>
+            <kbd class="shrink-0 px-1.5 py-0.5 rounded border border-border bg-muted text-muted-foreground font-mono text-xs"><%= keys %></kbd>
           </div>
         <% end %>
       </dl>

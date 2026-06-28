@@ -6,16 +6,16 @@
      data-feed-poll-url-value="<%= feed_cfg.url %>"
      data-feed-poll-reloading-value="<%= feed_cfg.reloading? %>">
   <%= link_to feed_posts_path(feed_cfg.encoded_url),
-        class: "group flex items-center gap-2 rounded-md pl-7 pr-2 py-1 text-sm #{active ? 'bg-gray-200 text-black dark:bg-gray-800 dark:text-gray-100' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-black dark:hover:text-gray-200'}" do %>
+        class: "group flex items-center gap-2 rounded-md pl-7 pr-2 py-1 text-sm #{active ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'}" do %>
     <span class="shrink-0 w-2 h-2 rounded-sm" style="background-color: <%= legible_feed_color(feed_cfg.color) %>"></span>
     <span class="flex-1 min-w-0 truncate"><%= feed_cfg.name %></span>
     <% if feed_cfg.hidden %>
-      <span title="Posts hidden by default" class="shrink-0 flex"><%= icon "eye-off", class: "size-3.5 text-gray-400" %></span>
+      <span title="Posts hidden by default" class="shrink-0 flex"><%= icon "eye-off", class: "size-3.5 text-muted-foreground" %></span>
     <% end %>
     <span data-counts-target="feed" data-feed-id="<%= feed_cfg.feed.id %>"
-          class="shrink-0 text-xs text-gray-500 dark:text-gray-500 tabular-nums <%= "hidden" if unread_count == 0 %>"><%= unread_count %></span>
+          class="shrink-0 text-xs text-muted-foreground tabular-nums <%= "hidden" if unread_count == 0 %>"><%= unread_count %></span>
   <% end %>
-  <div data-feed-poll-target="status" class="hidden flex items-center gap-2 text-gray-600 text-xs pl-7 py-1">
+  <div data-feed-poll-target="status" class="hidden flex items-center gap-2 text-muted-foreground text-xs pl-7 py-1">
     <%= icon "refresh-cw", class: "size-3.5 animate-spin" %>
     <span>Reloading…</span>
   </div>

@@ -58,9 +58,9 @@ module ApplicationHelper
     base = "rounded-md px-3 py-1 transition-colors"
     state =
       if filter_active?(filter)
-        "bg-white dark:bg-gray-700 font-semibold text-black dark:text-gray-100 shadow-sm"
+        "bg-background font-semibold text-foreground shadow-sm"
       else
-        "text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-gray-200"
+        "text-muted-foreground hover:text-foreground"
       end
     "#{base} #{state}"
   end
@@ -71,9 +71,9 @@ module ApplicationHelper
     base = "flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm font-medium transition-colors"
     state =
       if active
-        "bg-gray-200 text-black dark:bg-gray-800 dark:text-gray-100"
+        "bg-sidebar-accent text-sidebar-accent-foreground"
       else
-        "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-black dark:hover:text-gray-200"
+        "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
       end
     "#{base} #{state}"
   end
@@ -117,9 +117,9 @@ module ApplicationHelper
   end
 
   # Clamps a feed's configured colour to a lightness range that stays legible
-  # on both the dark (gray-900) and light (gray-50) backgrounds. Near-black
-  # values like "#000000" would otherwise vanish in dark mode. Non-hex colours
-  # (CSS names) are returned unchanged.
+  # on both dark and light theme backgrounds. Near-black values like "#000000"
+  # would otherwise vanish in dark mode. Non-hex colours (CSS names) are
+  # returned unchanged.
   def legible_feed_color(color)
     rgb = hex_to_rgb(color)
     return color unless rgb

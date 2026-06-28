@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full dark:bg-gray-900">
+<html class="h-full">
   <head>
     <title><%= content_for(:title) || "Rss" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -8,6 +8,23 @@
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+
+    <%# Apply the saved theme before first paint to avoid a flash of the wrong
+        theme. Must run synchronously, ahead of the stylesheet. Mirrors the
+        resolution in theme_controller.js. %>
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('theme') || 'system'
+          var effective = t === 'system'
+            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+            : t
+          var el = document.documentElement
+          el.dataset.theme = effective
+          el.classList.toggle('dark', ['dark', 'vercel', 'gruvbox'].indexOf(effective) !== -1)
+        } catch (e) {}
+      })()
+    </script>
 
     <%= yield :head %>
 
@@ -24,7 +41,7 @@
 
   </head>
 
-  <body class="h-full text-gray-900 dark:text-gray-300">
+  <body class="h-full">
     <%= yield %>
   </body>
 </html>

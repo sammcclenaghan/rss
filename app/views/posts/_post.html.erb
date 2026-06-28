@@ -1,6 +1,6 @@
 <% feed_cfg = post.respond_to?(:feed_config) ? post.feed_config : nil %>
 <% description = format_post_description(post) %>
-<div class="rss-post group relative px-4 py-4 border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/40 <%= "is-read" if post.read? %> <%= "is-starred" if post.starred? %>"
+<div class="rss-post group relative px-4 py-4 border-b border-border hover:bg-muted/50 <%= "is-read" if post.read? %> <%= "is-starred" if post.starred? %>"
      data-controller="post-read star"
      data-post-read-url-value="<%= post_read_path(post.id) %>"
      data-post-read-read-value="<%= post.read? %>"
@@ -9,17 +9,17 @@
      data-star-starred-value="<%= post.starred? %>">
 
   <%# Title — full emphasis when unread, muted once read (driven by .is-read) %>
-  <h3 class="post-title text-black dark:text-gray-100 font-medium text-[15px] leading-snug pr-24 line-clamp-2">
+  <h3 class="post-title text-foreground font-medium text-[15px] leading-snug pr-24 line-clamp-2">
     <a href="<%= post.url %>" target="_blank" rel="noopener" data-action="post-read#markRead" data-post-open class="hover:underline"><%= post.title %></a>
   </h3>
 
   <%# Excerpt %>
   <% if description.present? %>
-    <p class="text-gray-600 dark:text-gray-400 mt-1 line-clamp-2"><%= description %></p>
+    <p class="text-muted-foreground mt-1 line-clamp-2"><%= description %></p>
   <% end %>
 
   <%# Meta row %>
-  <div class="flex items-center gap-2 mt-2 text-xs text-gray-500 dark:text-gray-500">
+  <div class="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
     <% if feed_cfg %>
       <span class="shrink-0 w-2.5 h-2.5 rounded-sm" style="background-color: <%= legible_feed_color(feed_cfg.color) %>"></span>
       <span class="min-w-0 truncate font-medium"><%= feed_cfg.name %></span>
@@ -32,18 +32,18 @@
   <div class="post-actions absolute right-3 top-3 flex items-center gap-1">
     <button type="button" data-post-read-target="toggle" data-action="post-read#toggle"
             title="Toggle read" aria-label="Toggle read"
-            class="read-btn inline-flex items-center justify-center rounded-md p-1.5 text-gray-500 bg-gray-100 dark:bg-gray-700/60 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer">
+            class="read-btn inline-flex items-center justify-center rounded-md p-1.5 text-muted-foreground bg-muted hover:bg-accent hover:text-accent-foreground cursor-pointer">
       <%= icon "circle", class: "read-undone size-4", stroke_width: 2.5 %>
       <%= icon "circle-check", class: "read-done size-4", stroke_width: 2.5 %>
     </button>
     <button type="button" data-action="star#toggle"
             title="Star" aria-label="Star"
-            class="star-btn inline-flex items-center justify-center rounded-md p-1.5 text-gray-500 bg-gray-100 dark:bg-gray-700/60 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer">
+            class="star-btn inline-flex items-center justify-center rounded-md p-1.5 text-muted-foreground bg-muted hover:bg-accent hover:text-accent-foreground cursor-pointer">
       <%= icon "star", class: "star-icon size-4", stroke_width: 2.5 %>
     </button>
     <a href="<%= post.url %>" target="_blank" rel="noopener" data-action="post-read#markRead"
        title="Open original" aria-label="Open original"
-       class="inline-flex items-center justify-center rounded-md p-1.5 text-gray-500 bg-gray-100 dark:bg-gray-700/60 hover:bg-gray-200 dark:hover:bg-gray-600">
+       class="inline-flex items-center justify-center rounded-md p-1.5 text-muted-foreground bg-muted hover:bg-accent hover:text-accent-foreground">
       <%= icon "external-link", class: "size-4", stroke_width: 2.5 %>
     </a>
   </div>
