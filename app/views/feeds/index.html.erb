@@ -1,0 +1,101 @@
+<% content_for :title, "Manage feeds" %>
+<% existing_groups = @feeds.flat_map(&:tags).map { |t| t.delete_prefix("#") }.reject(&:blank?).uniq.sort %>
+
+<div class="min-h-full bg-background text-foreground">
+  <div class="mx-auto max-w-3xl px-6 py-8">
+
+    <%# Header %>
+    <div class="flex items-center justify-between gap-4 mb-6">
+      <div class="flex items-center gap-3 min-w-0">
+        <%= link_to root_path, class: "shrink-0 rounded-md border border-border p-1.5 text-muted-foreground hover:bg-accent hover:text-accent-foreground", title: "Back to reader" do %>
+          <%= icon "arrow-left", class: "size-4" %>
+        <% end %>
+        <h1 class="text-xl font-bold truncate">Manage feeds</h1>
+      </div>
+      <div class="shrink-0 flex items-center gap-2">
+        <%= link_to feeds_export_path, class: "inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground" do %>
+          <%= icon "download", class: "size-4" %>
+          <span class="hidden sm:inline">Export</span>
+        <% end %>
+        <details class="relative">
+          <summary class="list-none inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground cursor-pointer">
+            <%= icon "upload", class: "size-4" %>
+            <span class="hidden sm:inline">Import</span>
+          </summary>
+          <%= form_with url: feeds_import_path, method: :post, multipart: true,
+                class: "absolute right-0 mt-1.5 z-30 w-72 rounded-lg border border-border bg-popover text-popover-foreground shadow-lg p-3 space-y-2" do %>
+            <p class="text-sm text-muted-foreground">Import feeds from an OPML file.</p>
+            <input type="file" name="file" accept=".opml,.xml,text/xml,application/xml" required
+                   class="block w-full text-sm file:mr-2 file:rounded-md file:border file:border-border file:bg-background file:px-2 file:py-1 file:text-sm file:text-foreground">
+            <%= submit_tag "Import", class: "w-full rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90 cursor-pointer" %>
+          <% end %>
+        </details>
+      </div>
+    </div>
+
+    <%# Add feed %>
+    <%= form_with url: feeds_path, method: :post, class: "rounded-xl border border-border bg-card p-4 mb-8" do %>
+      <h2 class="text-sm font-semibold mb-3 flex items-center gap-2"><%= icon "plus", class: "size-4" %> Add a feed</h2>
+      <div class="grid gap-3 sm:grid-cols-2">
+        <label class="sm:col-span-2 block">
+          <span class="block text-xs font-medium text-muted-foreground mb-1">Feed URL</span>
+          <input type="url" name="url" required placeholder="https://example.com/feed.xml"
+                 class="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm placeholder:text-muted-foreground">
+        </label>
+        <label class="block">
+          <span class="block text-xs font-medium text-muted-foreground mb-1">Name <span class="font-normal">(optional — auto-detected)</span></span>
+          <input type="text" name="name" placeholder="The Verge"
+                 class="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm placeholder:text-muted-foreground">
+        </label>
+        <label class="block">
+          <span class="block text-xs font-medium text-muted-foreground mb-1">Group <span class="font-normal">(optional)</span></span>
+          <input type="text" name="tag" list="group-options" placeholder="news"
+                 class="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm placeholder:text-muted-foreground">
+        </label>
+        <div>
+          <span class="block text-xs font-medium text-muted-foreground mb-1">Colour <span class="font-normal">(optional)</span></span>
+          <%= render "feeds/color_field" %>
+        </div>
+        <label class="flex items-center gap-2 text-sm">
+          <input type="checkbox" name="hidden" value="1" class="rounded border-input">
+          <span>Hide from the default view</span>
+        </label>
+        <label class="sm:col-span-2 block">
+          <span class="block text-xs font-medium text-muted-foreground mb-1">Library proxy host <span class="font-normal">(optional)</span></span>
+          <input type="text" name="proxy" placeholder="ezproxy.library.uvic.ca"
+                 class="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm placeholder:text-muted-foreground">
+          <span class="block text-xs text-muted-foreground mt-1">Opens this feed's articles through your library's EZProxy so you read them with institutional access. Leave blank for normal links.</span>
+        </label>
+      </div>
+      <div class="mt-3 flex justify-end">
+        <%= submit_tag "Add feed", class: "rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90 cursor-pointer" %>
+      </div>
+    <% end %>
+
+    <datalist id="group-options">
+      <% existing_groups.each { |g| %><option value="<%= g %>"></option><% } %>
+    </datalist>
+
+    <%# Feed list, grouped by folder %>
+    <% if @feeds.none? %>
+      <p class="text-sm text-muted-foreground text-center py-10">No feeds yet. Add one above.</p>
+    <% else %>
+      <div class="space-y-6">
+        <% grouped_feeds(@feeds).each do |group| %>
+          <section>
+            <h2 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+              <%= icon "folder", class: "size-3.5" %><%= group[:name].capitalize %>
+              <span class="font-normal normal-case">(<%= group[:feeds].size %>)</span>
+            </h2>
+            <div class="rounded-xl border border-border divide-y divide-border overflow-hidden">
+              <% group[:feeds].each do |feed| %>
+                <%= render "feeds/manage_feed", feed: feed, groups: existing_groups %>
+              <% end %>
+            </div>
+          </section>
+        <% end %>
+      </div>
+    <% end %>
+
+  </div>
+</div>

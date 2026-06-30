@@ -10,7 +10,7 @@
 
   <%# Title — full emphasis when unread, muted once read (driven by .is-read) %>
   <h3 class="post-title text-foreground font-medium text-[15px] leading-snug pr-24 line-clamp-2">
-    <a href="<%= post.url %>" target="_blank" rel="noopener" data-action="post-read#markRead" data-post-open class="hover:underline"><%= post.title %></a>
+    <a href="<%= post_link(post) %>" target="_blank" rel="noopener" data-action="post-read#markRead" data-post-open class="hover:underline"><%= post.title %></a>
   </h3>
 
   <%# Excerpt %>
@@ -41,7 +41,7 @@
             class="star-btn inline-flex items-center justify-center rounded-md p-1.5 text-muted-foreground bg-muted hover:bg-accent hover:text-accent-foreground cursor-pointer">
       <%= icon "star", class: "star-icon size-4", stroke_width: 2.5 %>
     </button>
-    <a href="<%= post.url %>" target="_blank" rel="noopener" data-action="post-read#markRead"
+    <a href="<%= post_link(post) %>" target="_blank" rel="noopener" data-action="post-read#markRead"
        title="Open original" aria-label="Open original"
        class="inline-flex items-center justify-center rounded-md p-1.5 text-muted-foreground bg-muted hover:bg-accent hover:text-accent-foreground">
       <%= icon "external-link", class: "size-4", stroke_width: 2.5 %>

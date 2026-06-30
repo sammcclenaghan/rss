@@ -79,6 +79,18 @@
         </div>
       <% end %>
 
+      <%# Manage / settings — pinned below the feed list. %>
+      <nav class="mt-6 pt-4 border-t border-sidebar-border space-y-0.5">
+        <%= link_to feeds_path, class: sidebar_nav_class(false) do %>
+          <%= icon "rss", class: "size-4" %>
+          <span>Manage feeds</span>
+        <% end %>
+        <%= link_to settings_path, class: sidebar_nav_class(false) do %>
+          <%= icon "settings", class: "size-4" %>
+          <span>Settings</span>
+        <% end %>
+      </nav>
+
     </div>
   </div>
   <% end %>

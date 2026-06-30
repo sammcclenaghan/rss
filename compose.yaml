@@ -19,6 +19,10 @@ services:
       # Run the Solid Queue worker inside Puma so feed refresh / pruning /
       # thumbnail jobs actually run in this single container.
       SOLID_QUEUE_IN_PUMA: "true"
+      # Store the feeds list on the persisted volume (seeded from the bundled
+      # config/feeds.txt on first boot) so feeds added via the UI survive
+      # redeploys. Must point inside the rss_storage mount below.
+      RSS_CONFIG_FILE: "/rails/storage/feeds.txt"
       # Optional HTTP Basic auth for the /jobs dashboard. Left unset it fails
       # closed (401), so the dashboard is never exposed by accident.
       MISSION_CONTROL_JOBS_HTTP_BASIC_AUTH_USER: ${MISSION_CONTROL_JOBS_HTTP_BASIC_AUTH_USER:-}
@@ -27,6 +31,9 @@ services:
       # Persist all SQLite databases (primary holds feeds + read/starred state;
       # cache/queue are regenerable). Back up this volume.
       - rss_storage:/rails/storage
+      # Persist runtime-generated post thumbnails. The DB stores relative paths
+      # under public/storage, so this must survive redeploys or thumbnails 404.
+      - rss_thumbnails:/rails/public/storage
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/up"]
       interval: 30s
@@ -36,3 +43,4 @@ services:
 
 volumes:
   rss_storage:
+  rss_thumbnails:

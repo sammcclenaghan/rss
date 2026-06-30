@@ -9,7 +9,7 @@ class Feed
   #
   # Underscores in names render as spaces; lines starting with "#" are comments.
   class Config
-    Entry = Struct.new(:name, :tags, :color, :hidden, keyword_init: true)
+    Entry = Struct.new(:name, :tags, :color, :hidden, :proxy, keyword_init: true)
 
     NAME_COLOR = /\A(?<name>.*)\[(?<color>.*)\]\z/
 
@@ -41,9 +41,39 @@ class Feed
     def tags_for(url) = @entries[url]&.tags || []
     def color_for(url) = @entries[url]&.color.to_s
     def hidden?(url) = @entries[url]&.hidden || false
+    def proxy_for(url) = @entries[url]&.proxy.to_s
+    def include?(url) = @entries.key?(url)
 
-    def add(url, name:, tags: [], color: "", hidden: false)
-      @entries[url] = Entry.new(name: name, tags: tags, color: color, hidden: hidden)
+    # The on-disk path the config is read from and written back to. Set via
+    # RSS_CONFIG_FILE (see config/initializers/rss.rb); volume-backed in
+    # production so feed edits survive redeploys.
+    def self.config_path = Rails.configuration.x.rss.config_file
+
+    def add(url, name:, tags: [], color: "", hidden: false, proxy: "")
+      @entries[url] = Entry.new(name: name, tags: tags, color: color, hidden: hidden, proxy: proxy)
+      self
+    end
+
+    # Adds an entry to the front of the list (newest feeds surface first in the
+    # sidebar's Default folder before any tag ordering kicks in).
+    def prepend(url, name:, tags: [], color: "", hidden: false, proxy: "")
+      entry = Entry.new(name: name, tags: tags, color: color, hidden: hidden, proxy: proxy)
+      @entries = { url => entry }.merge(@entries.except(url))
+      self
+    end
+
+    def remove(url)
+      @entries.delete(url)
+      self
+    end
+
+    # Atomically writes the current entries back to disk (temp file + rename so
+    # a crash mid-write can't truncate the live config). Note: comments and
+    # blank lines from the source file are not preserved — grouping is by tag.
+    def save!(path = self.class.config_path)
+      tmp = "#{path}.#{Process.pid}.tmp"
+      File.write(tmp, "#{to_s}\n")
+      File.rename(tmp, path)
       self
     end
 
@@ -92,8 +122,9 @@ class Feed
 
         name, color = split_name_and_color(raw_name)
         tags = rest.select { |part| part.start_with?("#") }
+        proxy = rest.find { |part| part.start_with?("proxy=") }&.delete_prefix("proxy=").to_s
 
-        add(url, name: name.tr("_", " "), tags: tags, color: color, hidden: hidden)
+        add(url, name: name.tr("_", " "), tags: tags, color: color, hidden: hidden, proxy: proxy)
       end
 
       def split_name_and_color(raw_name)
@@ -108,6 +139,7 @@ class Feed
         line = +"#{url} #{entry.name.tr(" ", "_")}"
         line << "[#{entry.color}]" if entry.color.present?
         entry.tags.each { |tag| line << " #{tag}" }
+        line << " proxy=#{entry.proxy}" if entry.proxy.present?
         entry.hidden ? "-#{line}" : line
       end
   end

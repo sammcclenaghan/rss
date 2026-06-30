@@ -16,6 +16,14 @@ class Feed
       []
     end
 
+    # The feed's channel title, used to auto-name a newly added feed. Returns
+    # nil when the data can't be parsed or carries no title.
+    def title(data)
+      FeedParser.parse(data.to_s.strip).title.to_s.strip.presence
+    rescue FeedParser::ParseError
+      nil
+    end
+
     private
       def build_post(entry)
         attributes = post_attributes(entry)

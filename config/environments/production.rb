@@ -27,6 +27,14 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
 
+  # Behind a TLS-terminating reverse proxy (Nginx Proxy Manager), the browser's
+  # Origin header (https://public-host) doesn't match the request URL Rails
+  # reconstructs, which trips Rails' supplementary CSRF Origin check and returns
+  # 422 on every form POST (e.g. "mark all as read", managing feeds). Disabling
+  # only the Origin comparison is the documented fix for this setup; token-based
+  # CSRF protection stays fully active, and access is also network-gated.
+  config.action_controller.forgery_protection_origin_check = false
+
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 

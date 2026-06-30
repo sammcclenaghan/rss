@@ -73,22 +73,22 @@ https://www.quantamagazine.org/feed Quanta_Magazine[#005CB9] #science
 
 #### News ####
 https://www.propublica.org/feed ProPublica[#E74C3C] #news
-https://www.economist.com/asia/rss.xml Economist_Asia[#E3120B] #news
-https://www.economist.com/briefing/rss.xml Economist_Briefing[#E3120B] #news
-https://www.economist.com/business/rss.xml Economist_Business[#E3120B] #news
-https://www.economist.com/china/rss.xml Economist_China[#E3120B] #news
-https://www.economist.com/economic-and-financial-indicators/rss.xml Economist_Economic_Indicators[#E3120B] #news
-https://www.economist.com/europe/rss.xml Economist_Europe[#E3120B] #news
-https://www.economist.com/the-economist-explains/rss.xml Economist_Explains[#E3120B] #news
-https://www.economist.com/finance-and-economics/rss.xml Economist_Finance_&_Economics[#E3120B] #news
-https://www.economist.com/graphic-detail/rss.xml Economist_Graphic_Detail[#E3120B] #news
-https://www.economist.com/international/rss.xml Economist_International[#E3120B] #news
-https://www.economist.com/leaders/rss.xml Economist_Leaders[#E3120B] #news
-https://www.economist.com/middle-east-and-africa/rss.xml Economist_Middle_East_&_Africa[#E3120B] #news
-https://www.economist.com/science-and-technology/rss.xml Economist_Science_&_Technology[#E3120B] #news
-https://www.economist.com/the-americas/rss.xml Economist_The_Americas[#E3120B] #news
-https://www.economist.com/the-world-this-week/rss.xml Economist_The_World_This_Week[#E3120B] #news
-https://www.economist.com/united-states/rss.xml Economist_United_States[#E3120B] #news
+https://www.economist.com/asia/rss.xml Economist_Asia[#E3120B] #news proxy=ezproxy.library.uvic.ca
+https://www.economist.com/briefing/rss.xml Economist_Briefing[#E3120B] #news proxy=ezproxy.library.uvic.ca
+https://www.economist.com/business/rss.xml Economist_Business[#E3120B] #news proxy=ezproxy.library.uvic.ca
+https://www.economist.com/china/rss.xml Economist_China[#E3120B] #news proxy=ezproxy.library.uvic.ca
+https://www.economist.com/economic-and-financial-indicators/rss.xml Economist_Economic_Indicators[#E3120B] #news proxy=ezproxy.library.uvic.ca
+https://www.economist.com/europe/rss.xml Economist_Europe[#E3120B] #news proxy=ezproxy.library.uvic.ca
+https://www.economist.com/the-economist-explains/rss.xml Economist_Explains[#E3120B] #news proxy=ezproxy.library.uvic.ca
+https://www.economist.com/finance-and-economics/rss.xml Economist_Finance_&_Economics[#E3120B] #news proxy=ezproxy.library.uvic.ca
+https://www.economist.com/graphic-detail/rss.xml Economist_Graphic_Detail[#E3120B] #news proxy=ezproxy.library.uvic.ca
+https://www.economist.com/international/rss.xml Economist_International[#E3120B] #news proxy=ezproxy.library.uvic.ca
+https://www.economist.com/leaders/rss.xml Economist_Leaders[#E3120B] #news proxy=ezproxy.library.uvic.ca
+https://www.economist.com/middle-east-and-africa/rss.xml Economist_Middle_East_&_Africa[#E3120B] #news proxy=ezproxy.library.uvic.ca
+https://www.economist.com/science-and-technology/rss.xml Economist_Science_&_Technology[#E3120B] #news proxy=ezproxy.library.uvic.ca
+https://www.economist.com/the-americas/rss.xml Economist_The_Americas[#E3120B] #news proxy=ezproxy.library.uvic.ca
+https://www.economist.com/the-world-this-week/rss.xml Economist_The_World_This_Week[#E3120B] #news proxy=ezproxy.library.uvic.ca
+https://www.economist.com/united-states/rss.xml Economist_United_States[#E3120B] #news proxy=ezproxy.library.uvic.ca
 
 #### Longform ####
 https://aeon.co/feed.rss Aeon[#C8102E] #longform

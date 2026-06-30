@@ -2,8 +2,16 @@ Rails.application.routes.draw do
   mount RailsIcons::Engine, at: '/rails_icons'
   root "posts#index"
 
-  # Feed info JSON endpoint
+  # Feed info JSON endpoint (used by the sidebar reload poller)
   get "feeds/info", to: "feeds#show"
+
+  # Feed management (add / edit / remove) and OPML import/export.
+  get  "feeds/export", to: "feeds#export", as: :feeds_export
+  post "feeds/import", to: "feeds#import", as: :feeds_import
+  resources :feeds, only: %i[index create update destroy]
+
+  # Settings (appearance + read-only behaviour config)
+  get "settings", to: "settings#show"
 
   # Post listing with filters
   get "tag/:tag", to: "posts#tag", as: :tag_posts

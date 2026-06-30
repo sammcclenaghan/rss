@@ -1,0 +1,16 @@
+<%# Optional feed colour: a native swatch picker synced to a hex text input.
+    The text input ("color") is what's submitted; blank = use the default. %>
+<% value = local_assigns.fetch(:value, "").to_s %>
+<div class="flex items-center gap-2" data-controller="color-field">
+  <input type="color" data-color-field-target="swatch"
+         value="<%= value.presence || "#888888" %>"
+         data-action="input->color-field#fromSwatch"
+         aria-label="Pick a colour"
+         class="h-8 w-9 shrink-0 rounded border border-input bg-background p-0.5 cursor-pointer">
+  <input type="text" name="color" value="<%= value %>" placeholder="#FF9500 (optional)"
+         data-color-field-target="text"
+         data-action="input->color-field#fromText"
+         class="flex-1 min-w-0 rounded-md border border-input bg-background px-3 py-1.5 text-sm placeholder:text-muted-foreground">
+  <button type="button" data-action="color-field#clear"
+          class="shrink-0 text-xs text-muted-foreground hover:text-foreground px-1.5 py-1 cursor-pointer">Default</button>
+</div>

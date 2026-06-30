@@ -24,6 +24,20 @@ class Feed
       @parser.parse(data)
     end
 
+    # Best-effort feed title for a URL, used to auto-name a newly added feed.
+    # Returns nil on any HTTP/parse failure (the caller falls back to the host).
+    def title(url)
+      response = @client.get(url)
+      return unless response&.ok?
+
+      data = response.body.to_s.lstrip
+      return unless looks_like_feed?(data)
+
+      @parser.title(data)
+    rescue StandardError
+      nil
+    end
+
     private
       def default_client
         RestrictedHTTP::Client.new(user_agent: USER_AGENT, max_body_size: MAX_FEED_SIZE)

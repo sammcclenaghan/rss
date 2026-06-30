@@ -57,7 +57,8 @@ class Feed
             url: url,
             color: @config.color_for(url),
             tags: @config.tags_for(url),
-            hidden: @config.hidden?(url)
+            hidden: @config.hidden?(url),
+            proxy: @config.proxy_for(url)
           )
         end
       end

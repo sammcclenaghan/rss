@@ -2,16 +2,17 @@ class Feed
   # Wraps a Feed record together with its configured presentation metadata
   # (name, color, tags, visibility) and transient reloading state.
   class ConfiguredFeed
-    attr_reader :feed, :name, :url, :color, :tags, :hidden
+    attr_reader :feed, :name, :url, :color, :tags, :hidden, :proxy
     attr_accessor :reloading
 
-    def initialize(feed:, name:, url:, color: "", tags: [], hidden: false)
+    def initialize(feed:, name:, url:, color: "", tags: [], hidden: false, proxy: "")
       @feed = feed
       @name = name
       @url = url
       @color = color
       @tags = tags
       @hidden = hidden
+      @proxy = proxy
       @reloading = false
     end
 

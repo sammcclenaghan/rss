@@ -1,0 +1,62 @@
+<%# One row on the Manage Feeds page: feed summary + an inline edit form
+    (revealed via <details>) and a delete button. `feed` is a ConfiguredFeed. %>
+<% groups = local_assigns[:groups] || [] %>
+<% current_group = feed.tags.first.to_s.delete_prefix("#") %>
+<details class="group">
+  <summary class="list-none flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-accent/50">
+    <span class="shrink-0 w-2.5 h-2.5 rounded-sm" style="background-color: <%= legible_feed_color(feed.color) %>"></span>
+    <span class="min-w-0 flex-1">
+      <span class="flex items-center gap-1.5">
+        <span class="font-medium truncate"><%= feed.name %></span>
+        <% if feed.hidden %><%= icon "eye-off", class: "size-3.5 text-muted-foreground shrink-0" %><% end %>
+      </span>
+      <span class="block text-xs text-muted-foreground truncate"><%= feed.url %></span>
+    </span>
+    <%= link_to feed.url, target: "_blank", rel: "noopener", class: "shrink-0 text-muted-foreground hover:text-foreground p-1", title: "Open feed" do %>
+      <%= icon "external-link", class: "size-4" %>
+    <% end %>
+    <span class="shrink-0 text-muted-foreground p-1" title="Edit"><%= icon "pencil", class: "size-4" %></span>
+  </summary>
+
+  <%# Edit form %>
+  <div class="px-4 pb-4 pt-1 bg-muted/30">
+    <% edit_form_id = "edit-feed-#{feed.feed.id}" %>
+    <%= form_with url: feed_path(feed.feed.id), method: :patch, id: edit_form_id, class: "grid gap-3 sm:grid-cols-2" do %>
+      <label class="block">
+        <span class="block text-xs font-medium text-muted-foreground mb-1">Name</span>
+        <input type="text" name="name" value="<%= feed.name %>"
+               class="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm">
+      </label>
+      <label class="block">
+        <span class="block text-xs font-medium text-muted-foreground mb-1">Group</span>
+        <input type="text" name="tag" value="<%= current_group %>" list="group-options"
+               class="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm">
+      </label>
+      <div>
+        <span class="block text-xs font-medium text-muted-foreground mb-1">Colour</span>
+        <%= render "feeds/color_field", value: feed.color %>
+      </div>
+      <label class="flex items-center gap-2 text-sm">
+        <input type="checkbox" name="hidden" value="1" <%= "checked" if feed.hidden %> class="rounded border-input">
+        <span>Hide from the default view</span>
+      </label>
+      <label class="sm:col-span-2 block">
+        <span class="block text-xs font-medium text-muted-foreground mb-1">Library proxy host <span class="font-normal">(optional)</span></span>
+        <input type="text" name="proxy" value="<%= feed.proxy %>" placeholder="ezproxy.library.uvic.ca"
+               class="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm placeholder:text-muted-foreground">
+      </label>
+    <% end %>
+
+    <%# Delete is its own form — kept OUTSIDE the edit form above so its
+        _method=delete can't leak into the edit submit (nested forms are
+        invalid HTML and merge). Save targets the edit form via `form:`. %>
+    <div class="flex items-center justify-between pt-3">
+      <%= button_to feed_path(feed.feed.id), method: :delete,
+            data: { turbo_confirm: "Remove “#{feed.name}” and all its posts?" },
+            class: "inline-flex items-center gap-1.5 rounded-md border border-red-500/40 px-3 py-1.5 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-500/10 cursor-pointer" do %>
+        <%= icon "trash-2", class: "size-4" %> Remove
+      <% end %>
+      <%= submit_tag "Save", form: edit_form_id, class: "rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90 cursor-pointer" %>
+    </div>
+  </div>
+</details>

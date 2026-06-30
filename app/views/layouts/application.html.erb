@@ -42,6 +42,17 @@
   </head>
 
   <body class="h-full">
+    <% if notice.present? || alert.present? %>
+      <div class="fixed top-4 right-4 z-50 max-w-sm" data-controller="flash">
+        <% message = notice.presence || alert %>
+        <div data-action="click->flash#dismiss"
+             class="flex items-start gap-2 rounded-lg border px-4 py-3 text-sm shadow-lg cursor-pointer
+                    <%= notice.present? ? 'border-border bg-popover text-popover-foreground' : 'border-red-500/40 bg-red-500/10 text-red-600 dark:text-red-400' %>">
+          <%= icon(notice.present? ? "circle-check" : "circle-alert", class: "size-4 shrink-0 mt-0.5") %>
+          <span class="flex-1"><%= message %></span>
+        </div>
+      </div>
+    <% end %>
     <%= yield %>
   </body>
 </html>

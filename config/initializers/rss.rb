@@ -13,7 +13,21 @@ Rails.application.configure do
     # Number of posts shown per page.
     rss.posts_per_page = Integer(ENV.fetch("POSTS_PER_PAGE", 100))
 
-    # Path to the feeds configuration file.
-    rss.config_file = ENV.fetch("RSS_CONFIG_FILE", Rails.root.join("config/feeds.txt").to_s)
+    # Path to the feeds configuration file. In production this points at a
+    # volume-backed path (RSS_CONFIG_FILE=/rails/storage/feeds.txt) so feeds
+    # added through the UI survive redeploys; in development it defaults to the
+    # repo's config/feeds.txt.
+    bundled_feeds = Rails.root.join("config/feeds.txt").to_s
+    rss.config_file = ENV.fetch("RSS_CONFIG_FILE", bundled_feeds)
+
+    # First-boot seeding: when the configured file lives somewhere other than
+    # the bundled default (i.e. a fresh volume) and doesn't exist yet, seed it
+    # from the bundled feed list so a new deployment starts with the defaults
+    # and is immediately editable.
+    if rss.config_file != bundled_feeds && !File.exist?(rss.config_file) && File.exist?(bundled_feeds)
+      require "fileutils"
+      FileUtils.mkdir_p(File.dirname(rss.config_file))
+      FileUtils.cp(bundled_feeds, rss.config_file)
+    end
   end
 end

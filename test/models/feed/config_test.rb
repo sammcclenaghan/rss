@@ -56,6 +56,47 @@ class Feed::ConfigTest < ActiveSupport::TestCase
     assert_empty Feed::Config.new.decode_from_url("").feed_urls
   end
 
+  test "include? reports whether a url is configured" do
+    @config.parse("https://example.com/feed.xml Blog")
+    assert @config.include?("https://example.com/feed.xml")
+    assert_not @config.include?("https://other.com/feed.xml")
+  end
+
+  test "add overwrites an existing entry in place" do
+    @config.add("https://example.com/feed.xml", name: "Old", tags: %w[#a])
+    @config.add("https://example.com/feed.xml", name: "New", tags: %w[#b])
+
+    assert_equal [ "https://example.com/feed.xml" ], @config.feed_urls
+    assert_equal "New", @config.name_for("https://example.com/feed.xml")
+    assert_equal %w[#b], @config.tags_for("https://example.com/feed.xml")
+  end
+
+  test "prepend puts a new entry first" do
+    @config.add("https://a.com/feed.xml", name: "A")
+    @config.prepend("https://b.com/feed.xml", name: "B")
+
+    assert_equal [ "https://b.com/feed.xml", "https://a.com/feed.xml" ], @config.feed_urls
+  end
+
+  test "remove deletes an entry" do
+    @config.add("https://a.com/feed.xml", name: "A")
+    @config.remove("https://a.com/feed.xml")
+
+    assert_empty @config.feed_urls
+  end
+
+  test "save! writes the config back to disk and reparses identically" do
+    Tempfile.create([ "feeds", ".txt" ]) do |file|
+      @config.add("https://example.com/feed.xml", name: "My Blog", tags: %w[#news], color: "#abc")
+      @config.save!(file.path)
+
+      reparsed = Feed::Config.new.parse(File.read(file.path))
+      assert_equal @config.feed_urls, reparsed.feed_urls
+      assert_equal "My Blog", reparsed.name_for("https://example.com/feed.xml")
+      assert_equal %w[#news], reparsed.tags_for("https://example.com/feed.xml")
+    end
+  end
+
   test "from_app_config loads the configured feeds file" do
     Tempfile.create([ "feeds", ".txt" ]) do |file|
       file.write("https://example.com/from-file.xml FromFile #x")

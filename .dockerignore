@@ -36,6 +36,11 @@
 !/app/assets/builds/.keep
 /public/assets
 
+# Ignore runtime-generated post thumbnails (persisted via a volume at runtime,
+# never baked into the image).
+/public/storage/*
+!/public/storage/.keep
+
 # Ignore development files
 /.devcontainer
 

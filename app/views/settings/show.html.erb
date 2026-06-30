@@ -1,0 +1,84 @@
+<% content_for :title, "Settings" %>
+
+<div class="min-h-full bg-background text-foreground">
+  <div class="mx-auto max-w-3xl px-6 py-8">
+
+    <%# Header %>
+    <div class="flex items-center gap-3 mb-8">
+      <%= link_to root_path, class: "shrink-0 rounded-md border border-border p-1.5 text-muted-foreground hover:bg-accent hover:text-accent-foreground", title: "Back to reader" do %>
+        <%= icon "arrow-left", class: "size-4" %>
+      <% end %>
+      <h1 class="text-xl font-bold">Settings</h1>
+    </div>
+
+    <%# Appearance %>
+    <section class="mb-10" data-controller="theme">
+      <h2 class="text-sm font-semibold mb-1 flex items-center gap-2"><%= icon "palette", class: "size-4" %> Appearance</h2>
+      <p class="text-xs text-muted-foreground mb-3">Theme is stored in this browser.</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <% [
+             [ "system",  "Auto",    "linear-gradient(135deg, #ffffff 50%, #18181b 50%)" ],
+             [ "light",   "Light",   "#ffffff" ],
+             [ "sepia",   "Sepia",   "#f4ecd7" ],
+             [ "latte",   "Latte",   "#eff1f5" ],
+             [ "minimal", "Minimal", "#faf9f7" ],
+             [ "dark",    "Dark",    "#18181b" ],
+             [ "vercel",  "Vercel",  "#0a0a0a" ],
+             [ "gruvbox", "Gruvbox", "#282828" ]
+           ].each do |value, label, swatch| %>
+          <button type="button"
+                  data-theme-target="option"
+                  data-theme="<%= value %>"
+                  data-action="theme#select"
+                  aria-pressed="false"
+                  class="flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer aria-pressed:border-primary aria-pressed:font-semibold">
+            <span class="shrink-0 size-4 rounded-full border border-border" style="background: <%= swatch %>"></span>
+            <span class="flex-1 text-left"><%= label %></span>
+            <%= icon "check", class: "theme-check size-4 hidden" %>
+          </button>
+        <% end %>
+      </div>
+    </section>
+
+    <%# Feed behaviour (read-only) %>
+    <section class="mb-10">
+      <h2 class="text-sm font-semibold mb-1 flex items-center gap-2"><%= icon "settings", class: "size-4" %> Feed behaviour</h2>
+      <p class="text-xs text-muted-foreground mb-3">Configured via environment variables, set at deploy time.</p>
+      <dl class="rounded-xl border border-border divide-y divide-border text-sm">
+        <% [
+             [ "Feeds configured", @feed_count.to_s, nil ],
+             [ "Refresh interval", "#{@rss.feed_update_frequency / 60} min", "FEED_UPDATE_FREQUENCY_MINUTES" ],
+             [ "Fetch thumbnails", @rss.load_post_thumbnails ? "On" : "Off", "LOAD_POST_THUMBNAILS" ],
+             [ "Prune posts after", @rss.prune_posts_after_days ? "#{@rss.prune_posts_after_days} days" : "Never", "PRUNE_POSTS_AFTER_DAYS" ],
+             [ "Posts per page", @rss.posts_per_page.to_s, "POSTS_PER_PAGE" ]
+           ].each do |label, value, env| %>
+          <div class="flex items-center justify-between gap-4 px-4 py-2.5">
+            <dt class="text-muted-foreground">
+              <%= label %>
+              <% if env %><code class="ml-1 text-xs opacity-60"><%= env %></code><% end %>
+            </dt>
+            <dd class="font-medium tabular-nums"><%= value %></dd>
+          </div>
+        <% end %>
+      </dl>
+    </section>
+
+    <%# Links %>
+    <section>
+      <h2 class="text-sm font-semibold mb-3 flex items-center gap-2"><%= icon "rss", class: "size-4" %> Manage</h2>
+      <div class="space-y-2">
+        <%= link_to feeds_path, class: "flex items-center gap-3 rounded-lg border border-border px-4 py-3 text-sm hover:bg-accent hover:text-accent-foreground" do %>
+          <%= icon "rss", class: "size-4 text-muted-foreground" %>
+          <span class="flex-1">Manage feeds</span>
+          <%= icon "chevron-right", class: "size-4 text-muted-foreground" %>
+        <% end %>
+        <a href="/jobs" class="flex items-center gap-3 rounded-lg border border-border px-4 py-3 text-sm hover:bg-accent hover:text-accent-foreground">
+          <%= icon "refresh-cw", class: "size-4 text-muted-foreground" %>
+          <span class="flex-1">Background jobs dashboard</span>
+          <%= icon "external-link", class: "size-4 text-muted-foreground" %>
+        </a>
+      </div>
+    </section>
+
+  </div>
+</div>
