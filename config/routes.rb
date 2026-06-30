@@ -4,29 +4,28 @@ Rails.application.routes.draw do
   mount RailsIcons::Engine, at: "/rails_icons"
   root "posts#index"
 
-  # Feed info JSON endpoint (used by the sidebar reload poller)
-  get "feeds/info", to: "feeds#show"
+  namespace :feeds do
+    resource :information, only: :show
+    resource :export, only: :show, controller: :exports
+    resource :import, only: :create, controller: :imports
+  end
 
-  # Feed management (add / edit / remove) and OPML import/export.
-  get  "feeds/export", to: "feeds#export", as: :feeds_export
-  post "feeds/import", to: "feeds#import", as: :feeds_import
   resources :feeds, only: %i[index create update destroy]
 
-  # Settings (appearance + read-only behaviour config)
-  get "settings", to: "settings#show"
+  resource :settings, only: :show
 
   # Post listing with filters
   get "tag/:tag", to: "posts#tag", as: :tag_posts
   get "feed/*feed", to: "posts#feed", as: :feed_posts, format: false
 
-  # Read/unread state
-  post "posts/read_all", to: "reads#create_all", as: :read_all_posts
-  post "posts/:id/read", to: "reads#create", as: :post_read
-  delete "posts/:id/read", to: "reads#destroy"
+  resources :posts, only: [] do
+    resource :reading, module: :posts, only: %i[create destroy]
+    resource :star, module: :posts, only: %i[create destroy]
+  end
 
-  # Starred state
-  post "posts/:id/star", to: "stars#create", as: :post_star
-  delete "posts/:id/star", to: "stars#destroy"
+  namespace :posts do
+    resource :bulk_reading, only: :create
+  end
 
   # Background job dashboard (Solid Queue)
   mount MissionControl::Jobs::Engine, at: "/jobs"

@@ -2,7 +2,7 @@
 <% description = format_post_description(post) %>
 <div class="rss-post group relative px-4 py-4 border-b border-border hover:bg-muted/50 <%= "is-read" if post.read? %> <%= "is-starred" if post.starred? %>"
      data-controller="post-read star"
-     data-post-read-url-value="<%= post_read_path(post.id) %>"
+     data-post-read-url-value="<%= post_reading_path(post) %>"
      data-post-read-read-value="<%= post.read? %>"
      data-post-read-feed-id-value="<%= post.feed_id %>"
      data-star-url-value="<%= post_star_path(post.id) %>"

@@ -22,7 +22,7 @@ class FeedsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "returns feed metadata as json" do
-    get feeds_info_path, params: { url: feeds(:xkcd).url }
+    get feeds_information_path, params: { url: feeds(:xkcd).url }
     assert_response :success
 
     body = JSON.parse(response.body)
@@ -31,7 +31,7 @@ class FeedsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "returns 404 for an unknown feed" do
-    get feeds_info_path, params: { url: "https://unknown.test/feed.xml" }
+    get feeds_information_path, params: { url: "https://unknown.test/feed.xml" }
     assert_response :not_found
   end
 

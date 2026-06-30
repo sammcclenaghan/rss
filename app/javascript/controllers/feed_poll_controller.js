@@ -32,7 +32,7 @@ export default class extends Controller {
 
   async poll() {
     try {
-      const resp = await fetch(`/feeds/info?url=${encodeURIComponent(this.urlValue)}`)
+      const resp = await fetch(`/feeds/information?url=${encodeURIComponent(this.urlValue)}`)
       const data = await resp.json()
 
       if (data && !data.outdated) {

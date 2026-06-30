@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class ReadsControllerTest < ActionDispatch::IntegrationTest
+class Posts::ReadingsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @previous_config_file = Rails.configuration.x.rss.config_file
     Rails.configuration.x.rss.config_file = file_fixture("feeds.txt").to_s
@@ -14,7 +14,7 @@ class ReadsControllerTest < ActionDispatch::IntegrationTest
     target = posts(:recent_xkcd)
 
     assert_difference -> { ReadPost.count }, 1 do
-      post post_read_path(target.id)
+      post post_reading_path(target)
     end
     assert_response :no_content
     assert target.reload.read?
@@ -25,7 +25,7 @@ class ReadsControllerTest < ActionDispatch::IntegrationTest
     ReadPost.create!(post: target)
 
     assert_no_difference -> { ReadPost.count } do
-      post post_read_path(target.id)
+      post post_reading_path(target)
     end
     assert_response :no_content
   end
@@ -35,28 +35,28 @@ class ReadsControllerTest < ActionDispatch::IntegrationTest
     ReadPost.create!(post: target)
 
     assert_difference -> { ReadPost.count }, -1 do
-      delete post_read_path(target.id)
+      delete post_reading_path(target)
     end
     assert_response :no_content
     assert_not target.reload.read?
   end
 
   test "create_all marks every post in the visible scope read" do
-    post read_all_posts_path
+    post posts_bulk_reading_path
 
     assert_redirected_to root_path
     assert_equal feeds(:xkcd).posts.pluck(:id).sort, ReadPost.pluck(:post_id).sort
   end
 
   test "create_all respects the active search query" do
-    post read_all_posts_path, params: { query: "Ancient" }
+    post posts_bulk_reading_path, params: { query: "Ancient" }
 
     read_titles = Post.where(id: ReadPost.select(:post_id)).pluck(:title)
     assert_equal [ "An Ancient Comic" ], read_titles
   end
 
   test "create_all scopes to a single feed" do
-    post read_all_posts_path, params: { feed: feeds(:xkcd).url }
+    post posts_bulk_reading_path, params: { feed: feeds(:xkcd).url }
 
     assert_equal feeds(:xkcd).posts.pluck(:id).sort, ReadPost.pluck(:post_id).sort
   end

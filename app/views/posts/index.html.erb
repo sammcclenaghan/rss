@@ -102,7 +102,7 @@
     <div class="flex items-center justify-between gap-4 px-6 md:px-10 py-3 border-b border-border">
       <h1 class="text-xl font-bold text-foreground truncate"><%= current_view_title %></h1>
       <div class="shrink-0 flex items-center gap-2">
-        <%= button_to read_all_posts_path,
+        <%= button_to posts_bulk_reading_path,
               params: { tag: @tag, feed: @selected_feed, query: @query },
               data: { keyboard_target: "markAll" },
               class: "inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground cursor-pointer" do %>

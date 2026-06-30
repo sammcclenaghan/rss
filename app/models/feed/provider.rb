@@ -32,6 +32,16 @@ class Feed
       get(url)&.then { |feed| List.new([ feed ]) } || List.new
     end
 
+    def list_for(tag: nil, url: nil)
+      if tag.present?
+        for_tag(tag)
+      elsif url.present?
+        for_url(url)
+      else
+        visible
+      end
+    end
+
     def get(url)
       @configured_feeds.find { |feed| feed.url == url }&.tap { |feed| touch_accessed([ feed ]) }
     end

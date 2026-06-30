@@ -13,6 +13,10 @@ class Feed
   class Config
     Entry = Struct.new(:name, :tags, :color, :hidden, :proxy, keyword_init: true)
 
+    BlankUrl = Class.new(StandardError)
+    InvalidUrl = Class.new(StandardError)
+    DuplicateUrl = Class.new(StandardError)
+
     NAME_COLOR = /\A(?<name>.*)\[(?<color>.*)\]\z/
 
     def self.from_app_config
@@ -50,6 +54,37 @@ class Feed
     # RSS_CONFIG_FILE (see config/initializers/rss.rb); volume-backed in
     # production so feed edits survive redeploys.
     def self.config_path = Rails.configuration.x.rss.config_file
+
+    def add_feed(url: nil, name: nil, tag: nil, color: "", hidden: false, proxy: "")
+      url = normalized_url(url)
+      raise DuplicateUrl if include?(url)
+
+      name = normalized_name(name, url)
+      prepend(url, name: name, tags: tags_from_group(tag), color: color.to_s.strip,
+                   hidden: ActiveModel::Type::Boolean.new.cast(hidden), proxy: normalize_proxy(proxy))
+      save_and_refresh
+      name
+    end
+
+    def update_feed(feed, name: nil, tag: nil, color: "", hidden: false, proxy: "", **)
+      name = name.to_s.strip.presence || feed.url
+      add(feed.url, name: name, tags: tags_from_group(tag), color: color.to_s.strip,
+                    hidden: ActiveModel::Type::Boolean.new.cast(hidden), proxy: normalize_proxy(proxy))
+      save_and_refresh
+      name
+    end
+
+    def remove_feed(feed)
+      remove(feed.url)
+      save!
+      feed.destroy
+    end
+
+    def import_opml(contents)
+      Feed::Opml.import(contents, into: self).tap do |count|
+        save_and_refresh if count.positive?
+      end
+    end
 
     def add(url, name:, tags: [], color: "", hidden: false, proxy: "")
       @entries[url] = Entry.new(name: name, tags: tags, color: color, hidden: hidden, proxy: proxy)
@@ -113,6 +148,38 @@ class Feed
     end
 
     private
+
+    def normalized_url(url)
+      url.to_s.strip.tap do |normalized|
+        raise BlankUrl if normalized.blank?
+        raise InvalidUrl unless normalized.match?(%r{\Ahttps?://}i)
+      end
+    end
+
+    def normalized_name(name, url)
+      name.to_s.strip.presence || Feed.discover_name_for(url)
+    end
+
+    # A single group field becomes one "#tag"; blank means the Default folder.
+    def tags_from_group(group)
+      tag = group.to_s.strip.delete_prefix("#").downcase.gsub(/\s+/, "-")
+      tag.blank? ? [] : [ "##{tag}" ]
+    end
+
+    # An optional library EZProxy host for routing this feed's article links
+    # through institutional access. Accepts a bare host or a pasted URL; we keep
+    # just the host (no scheme, no path), and strip any leading "login." so the
+    # host-mangled article URL resolves rather than hitting the login endpoint.
+    def normalize_proxy(proxy)
+      proxy.to_s.strip.sub(%r{\Ahttps?://}i, "").split("/").first.to_s.delete_prefix("login.")
+    end
+
+    # Rebuilds the provider so newly-configured feeds get a DB record and an
+    # initial refresh enqueued.
+    def save_and_refresh
+      save!
+      Feed::Provider.from_app_config
+    end
 
     def parse_line(line)
       return if line.blank? || line.start_with?("#")

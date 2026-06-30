@@ -37,6 +37,32 @@ class Post < ApplicationRecord
   scope :unread, -> { where.not(id: ReadPost.select(:post_id)) }
   scope :starred, -> { where(id: StarredPost.select(:post_id)) }
 
+  def self.mark_read_in(feed_list, query: nil)
+    posts = for_feeds(feed_list.feed_ids).unread
+    posts = posts.matching(query) if query.present?
+    ids = posts.pluck(:id)
+
+    now = Time.current
+    rows = ids.map { |post_id| { post_id: post_id, created_at: now, updated_at: now } }
+    ReadPost.insert_all(rows, unique_by: :post_id) if rows.any?
+  end
+
+  def mark_read
+    ReadPost.create_or_find_by!(post: self)
+  end
+
+  def mark_unread
+    ReadPost.where(post: self).delete_all
+  end
+
+  def star
+    StarredPost.create_or_find_by!(post: self)
+  end
+
+  def unstar
+    StarredPost.where(post: self).delete_all
+  end
+
   def read?
     read_state.nil? ? read_post.present? : read_state
   end
