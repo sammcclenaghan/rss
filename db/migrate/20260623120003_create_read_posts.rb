@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class CreateReadPosts < ActiveRecord::Migration[8.1]
   def change
     create_table :read_posts do |t|
       t.references :post, null: false,
-                   foreign_key: { on_delete: :cascade },
-                   index: { unique: true }
+                          foreign_key: { on_delete: :cascade },
+                          index: { unique: true }
 
       t.timestamps
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Configuration for the RSS reader, tunable via environment variables.
 Rails.application.configure do
   config.x.rss.tap do |rss|

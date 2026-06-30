@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RestrictedHTTP
   # The outcome of an HTTP GET: the status, the (size-limited) body, and the
   # response content type. Returned by every RestrictedHTTP client.

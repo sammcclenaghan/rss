@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ReadsController < ApplicationController
   before_action :set_provider, only: :create_all
 
@@ -28,17 +30,18 @@ class ReadsController < ApplicationController
   end
 
   private
-    def set_provider
-      @provider = Feed::Provider.from_app_config
-    end
 
-    def scoped_feed_list
-      if params[:tag].present?
-        @provider.for_tag(params[:tag])
-      elsif params[:feed].present?
-        @provider.for_url(params[:feed])
-      else
-        @provider.visible
-      end
+  def set_provider
+    @provider = Feed::Provider.from_app_config
+  end
+
+  def scoped_feed_list
+    if params[:tag].present?
+      @provider.for_tag(params[:tag])
+    elsif params[:feed].present?
+      @provider.for_url(params[:feed])
+    else
+      @provider.visible
     end
+  end
 end

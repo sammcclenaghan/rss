@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Feed
   # Loads feed configuration, ensures a Feed record exists for each configured
   # URL, and exposes filtered views (all / visible / by tag / by url).
@@ -35,46 +37,47 @@ class Feed
     end
 
     private
-      def select(&block)
-        feeds = @configured_feeds.select(&block)
-        touch_accessed(feeds)
-        List.new(feeds)
+
+    def select(&block)
+      feeds = @configured_feeds.select(&block)
+      touch_accessed(feeds)
+      List.new(feeds)
+    end
+
+    def reject_hidden
+      @configured_feeds.reject(&:hidden?)
+    end
+
+    def build_configured_feeds
+      existing = Feed.where(url: @config.feed_urls).index_by(&:url)
+
+      @config.feed_urls.map do |url|
+        feed = existing[url] || create_feed(url)
+
+        ConfiguredFeed.new(
+          feed: feed,
+          name: @config.name_for(url),
+          url: url,
+          color: @config.color_for(url),
+          tags: @config.tags_for(url),
+          hidden: @config.hidden?(url),
+          proxy: @config.proxy_for(url)
+        )
       end
+    end
 
-      def reject_hidden
-        @configured_feeds.reject(&:hidden?)
-      end
+    # Creates a Feed record for a URL that wasn't in the database, and kicks
+    # off a refresh so the new feed's first fetch happens automatically
+    # instead of waiting for the next scheduled RefreshOutdatedFeedsJob tick.
+    def create_feed(url)
+      feed = Feed.create!(url: url)
+      RefreshFeedJob.perform_later(feed) if @refresh_new_feeds
+      feed
+    end
 
-      def build_configured_feeds
-        existing = Feed.where(url: @config.feed_urls).index_by(&:url)
-
-        @config.feed_urls.map do |url|
-          feed = existing[url] || create_feed(url)
-
-          ConfiguredFeed.new(
-            feed: feed,
-            name: @config.name_for(url),
-            url: url,
-            color: @config.color_for(url),
-            tags: @config.tags_for(url),
-            hidden: @config.hidden?(url),
-            proxy: @config.proxy_for(url)
-          )
-        end
-      end
-
-      # Creates a Feed record for a URL that wasn't in the database, and kicks
-      # off a refresh so the new feed's first fetch happens automatically
-      # instead of waiting for the next scheduled RefreshOutdatedFeedsJob tick.
-      def create_feed(url)
-        feed = Feed.create!(url: url)
-        RefreshFeedJob.perform_later(feed) if @refresh_new_feeds
-        feed
-      end
-
-      def touch_accessed(configured_feeds)
-        ids = configured_feeds.map { |feed| feed.feed.id }
-        Feed.where(id: ids).update_all(last_accessed_at: Time.current.to_i) if ids.any?
-      end
+    def touch_accessed(configured_feeds)
+      ids = configured_feeds.map { |feed| feed.feed.id }
+      Feed.where(id: ids).update_all(last_accessed_at: Time.current.to_i) if ids.any?
+    end
   end
 end

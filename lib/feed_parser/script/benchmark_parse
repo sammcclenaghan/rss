@@ -29,7 +29,7 @@ abort "No fixtures found at #{FIXTURE_GLOB}" if fixtures.empty?
 
 PARSERS = {
   "feed_parser" => ->(xml) { FeedParser.parse(xml) },
-  "rss_stdlib" => ->(xml) { RSS::Parser.parse(xml, false) },
+  "rss_stdlib" => ->(xml) { RSS::Parser.parse(xml, false) }
 }.freeze
 
 def benchmark_parser(label, parser, fixture, seconds:, warmup:)
@@ -71,12 +71,8 @@ fixtures.each do |fixture|
   fastest = results.map(&:ips).max
   results.sort_by { |result| -result.ips }.each do |result|
     relative = fastest ? fastest / result.ips : 1
-    puts "  %-12s %10.1f i/s  %8.1f allocs/i  %5.2fx slower" % [
-      result.label,
-      result.ips,
-      result.allocations_per_iteration,
-      relative,
-    ]
+    puts format("  %-12s %10.1f i/s  %8.1f allocs/i  %5.2fx slower", result.label, result.ips,
+                result.allocations_per_iteration, relative)
   end
   puts
 end

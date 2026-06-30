@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Post
   # Deletes posts older than a retention window, along with their thumbnails.
   class Pruner
@@ -16,11 +18,12 @@ class Post
     end
 
     private
-      def delete_thumbnails(posts)
-        posts.where.not(thumbnail: "").pluck(:thumbnail).each do |path|
-          file = Rails.root.join("public/storage", path)
-          file.delete if file.exist?
-        end
+
+    def delete_thumbnails(posts)
+      posts.where.not(thumbnail: "").pluck(:thumbnail).each do |path|
+        file = Rails.root.join("public/storage", path)
+        file.delete if file.exist?
       end
+    end
   end
 end

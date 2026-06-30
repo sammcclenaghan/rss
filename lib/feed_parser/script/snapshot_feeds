@@ -24,16 +24,17 @@ def feed_lines
     next unless url&.start_with?("http")
 
     if name.nil? && url.include?("[")
-      url, name = url.split("[", 2)
+      url, = url.split("[", 2)
       name = URI(url).host
     end
 
-    [url, name || URI(url).host]
+    [ url, name || URI(url).host ]
   end
 end
 
 def fetch(uri, redirects: 3)
-  Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https", open_timeout: TIMEOUT, read_timeout: TIMEOUT) do |http|
+  Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https", open_timeout: TIMEOUT,
+                                      read_timeout: TIMEOUT) do |http|
     request = Net::HTTP::Get.new(uri)
     request["User-Agent"] = "feed_parser fixture snapshotter"
     response = http.request(request)
@@ -69,7 +70,7 @@ feed_lines.first(LIMIT).each do |url, name|
   file = "#{slug}_#{Digest::SHA256.hexdigest(url)[0, 8]}.#{ext}"
 
   File.binwrite(File.join(OUT, file), response.body)
-  rows << [file, name, url]
+  rows << [ file, name, url ]
   puts "#{file}\t#{name}\t#{url}"
 rescue StandardError => e
   warn "skip #{url}: #{e.class}: #{e.message}"

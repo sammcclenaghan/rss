@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Feed
   # Refreshes a feed: fetches its current posts, upserts them, optionally
   # enqueues thumbnail fetches for new posts, and stamps the feed as fetched.
@@ -31,23 +33,24 @@ class Feed
     end
 
     private
-      # Returns [post, created?] where created? is true for new records.
-      def upsert(feed, incoming)
-        post = feed.posts.find_or_initialize_by(guid: incoming.guid)
-        created = post.new_record?
 
-        post.update!(
-          title: incoming.title,
-          description: incoming.description,
-          url: incoming.url,
-          published_at: incoming.published_at
-        )
+    # Returns [post, created?] where created? is true for new records.
+    def upsert(feed, incoming)
+      post = feed.posts.find_or_initialize_by(guid: incoming.guid)
+      created = post.new_record?
 
-        [ post, created ]
-      end
+      post.update!(
+        title: incoming.title,
+        description: incoming.description,
+        url: incoming.url,
+        published_at: incoming.published_at
+      )
 
-      def enqueue_thumbnail(post, incoming)
-        FetchPostThumbnailJob.perform_later(post, incoming.feed_image_url.presence)
-      end
+      [ post, created ]
+    end
+
+    def enqueue_thumbnail(post, incoming)
+      FetchPostThumbnailJob.perform_later(post, incoming.feed_image_url.presence)
+    end
   end
 end

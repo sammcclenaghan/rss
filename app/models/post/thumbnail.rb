@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "restricted_http/client"
 require "digest"
 require "marcel"
@@ -30,40 +32,41 @@ class Post
     end
 
     private
-      def default_client
-        RestrictedHTTP::Client.new(user_agent: USER_AGENT, max_body_size: MAX_PAGE_SIZE)
-      end
 
-      def discover_image_url(page_url)
-        response = @client.get(page_url)
-        return unless response&.ok?
+    def default_client
+      RestrictedHTTP::Client.new(user_agent: USER_AGENT, max_body_size: MAX_PAGE_SIZE)
+    end
 
-        meta = response.body.match(OG_IMAGE) or return
-        content = meta[0].match(CONTENT_URL) or return
+    def discover_image_url(page_url)
+      response = @client.get(page_url)
+      return unless response&.ok?
 
-        url = CGI.unescapeHTML(content[1])
-        url if url.match?(%r{\Ahttps?://})
-      end
+      meta = response.body.match(OG_IMAGE) or return
+      content = meta[0].match(CONTENT_URL) or return
 
-      def download_image(url)
-        response = @client.get(url)
-        return unless response&.ok?
+      url = CGI.unescapeHTML(content[1])
+      url if url.match?(%r{\Ahttps?://})
+    end
 
-        content_type = Marcel::MimeType.for(StringIO.new(response.body))
-        return unless content_type.start_with?("image/")
+    def download_image(url)
+      response = @client.get(url)
+      return unless response&.ok?
 
-        { data: response.body, extension: content_type.split("/").last }
-      end
+      content_type = Marcel::MimeType.for(StringIO.new(response.body))
+      return unless content_type.start_with?("image/")
 
-      def store(post, image)
-        fingerprint = Digest::SHA256.hexdigest(post.guid.to_s)[0, 8]
-        path = "thumbs/#{post.feed_id}/#{post.id}-#{fingerprint}.#{image[:extension]}"
-        destination = Rails.root.join("public/storage", path)
+      { data: response.body, extension: content_type.split("/").last }
+    end
 
-        destination.dirname.mkpath
-        destination.binwrite(image[:data])
+    def store(post, image)
+      fingerprint = Digest::SHA256.hexdigest(post.guid.to_s)[0, 8]
+      path = "thumbs/#{post.feed_id}/#{post.id}-#{fingerprint}.#{image[:extension]}"
+      destination = Rails.root.join("public/storage", path)
 
-        post.update!(thumbnail: path)
-      end
+      destination.dirname.mkpath
+      destination.binwrite(image[:data])
+
+      post.update!(thumbnail: path)
+    end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Feed < ApplicationRecord
   has_many :posts, dependent: :delete_all
 

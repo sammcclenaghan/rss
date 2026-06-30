@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A fake DNS resolver responding to #getaddresses, for exercising
 # RestrictedHTTP::PrivateNetworkGuard without touching real DNS.
 class FakeNameResolver

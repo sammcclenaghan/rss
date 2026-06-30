@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ContentFilters
   class Pipeline
     def initialize(*filters)

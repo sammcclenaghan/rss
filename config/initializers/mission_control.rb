@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Authentication for the Mission Control — Jobs dashboard (mounted at /jobs).
 #
 # Open locally in development; HTTP Basic auth everywhere else, with credentials

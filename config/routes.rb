@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
-  mount RailsIcons::Engine, at: '/rails_icons'
+  mount RailsIcons::Engine, at: "/rails_icons"
   root "posts#index"
 
   # Feed info JSON endpoint (used by the sidebar reload poller)

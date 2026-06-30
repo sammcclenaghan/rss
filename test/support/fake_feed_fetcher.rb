@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A fake feed fetcher returning a fixed set of posts, for driving
 # Feed::Refresher without real HTTP.
 class FakeFeedFetcher

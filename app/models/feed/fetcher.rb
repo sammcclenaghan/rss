@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "restricted_http/client"
 
 class Feed
@@ -39,12 +41,13 @@ class Feed
     end
 
     private
-      def default_client
-        RestrictedHTTP::Client.new(user_agent: USER_AGENT, max_body_size: MAX_FEED_SIZE)
-      end
 
-      def looks_like_feed?(data)
-        VALID_OPENINGS.include?(data[0, 20].split.first)
-      end
+    def default_client
+      RestrictedHTTP::Client.new(user_agent: USER_AGENT, max_body_size: MAX_FEED_SIZE)
+    end
+
+    def looks_like_feed?(data)
+      VALID_OPENINGS.include?(data[0, 20].split.first)
+    end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Feed
   # Wraps a Feed record together with its configured presentation metadata
   # (name, color, tags, visibility) and transient reloading state.

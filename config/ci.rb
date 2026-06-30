@@ -1,9 +1,13 @@
+# frozen_string_literal: true
+
 # Run using bin/ci
 
 CI.run do
   step "Setup", "bin/setup --skip-server"
 
+  step "Style: Ruby", "bin/rubocop -f simple"
   step "Security: Importmap vulnerability audit", "bin/importmap audit"
+  step "Assets: Vite test build", "bin/vite build --clear --mode=test"
   step "Tests: Rails", "bin/rails test"
   step "Tests: Seeds", "env RAILS_ENV=test bin/rails db:seed:replant"
 

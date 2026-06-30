@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :rss do
   desc "Trigger a refresh of all outdated feeds"
   task update_outdated_feeds: :environment do
@@ -23,9 +25,7 @@ namespace :rss do
 
     posts = Feed::Fetcher.new.fetch(Feed.new(url: args[:url]))
 
-    if posts.empty?
-      abort "No posts fetched. The feed could not be reached or was not valid."
-    end
+    abort "No posts fetched. The feed could not be reached or was not valid." if posts.empty?
 
     puts "Found #{posts.size} post(s):"
     posts.each { |post| puts "  [#{post.url}] #{post.title}" }

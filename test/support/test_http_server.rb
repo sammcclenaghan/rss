@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "socket"
 
 # A minimal, real HTTP server bound to a random loopback port. Routes are
@@ -32,30 +34,31 @@ class TestHTTPServer
   end
 
   private
-    def serve
-      loop do
-        client = @server.accept
-        handle(client)
-        client.close
-      end
-    rescue IOError, Errno::EBADF
-      # Server shutting down.
+
+  def serve
+    loop do
+      client = @server.accept
+      handle(client)
+      client.close
     end
+  rescue IOError, Errno::EBADF
+    # Server shutting down.
+  end
 
-    def handle(client)
-      request_line = client.gets or return
-      path = request_line.split(" ")[1]
-      while (line = client.gets) && line != "\r\n"; end # drain request headers
+  def handle(client)
+    request_line = client.gets or return
+    path = request_line.split(" ")[1]
+    while (line = client.gets) && line != "\r\n"; end # drain request headers
 
-      write(client, @routes.fetch(path, Route.new(404, {}, "")))
-    end
+    write(client, @routes.fetch(path, Route.new(404, {}, "")))
+  end
 
-    def write(client, route)
-      headers = { "Content-Length" => route.body.bytesize, "Connection" => "close" }.merge(route.headers)
+  def write(client, route)
+    headers = { "Content-Length" => route.body.bytesize, "Connection" => "close" }.merge(route.headers)
 
-      client.write("HTTP/1.1 #{route.status} #{STATUS_TEXT.fetch(route.status, "OK")}\r\n")
-      headers.each { |name, value| client.write("#{name}: #{value}\r\n") }
-      client.write("\r\n")
-      client.write(route.body)
-    end
+    client.write("HTTP/1.1 #{route.status} #{STATUS_TEXT.fetch(route.status, 'OK')}\r\n")
+    headers.each { |name, value| client.write("#{name}: #{value}\r\n") }
+    client.write("\r\n")
+    client.write(route.body)
+  end
 end

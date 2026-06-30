@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StarsController < ApplicationController
   # Star a single post (idempotent).
   def create

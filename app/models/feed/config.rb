@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "zlib"
 require "base64"
 
@@ -72,7 +74,7 @@ class Feed
     # blank lines from the source file are not preserved — grouping is by tag.
     def save!(path = self.class.config_path)
       tmp = "#{path}.#{Process.pid}.tmp"
-      File.write(tmp, "#{to_s}\n")
+      File.write(tmp, "#{self}\n")
       File.rename(tmp, path)
       self
     end
@@ -92,8 +94,8 @@ class Feed
     # prefixed with "t" or "c" respectively.
     def encode_for_url
       text = to_s
-      url_encoded = "t" + CGI.escape(text)
-      compressed = "c" + Base64.urlsafe_encode64(Zlib::Deflate.deflate(text), padding: false)
+      url_encoded = "t#{CGI.escape(text)}"
+      compressed = "c#{Base64.urlsafe_encode64(Zlib::Deflate.deflate(text), padding: false)}"
       [ url_encoded, compressed ].min_by(&:bytesize)
     end
 
@@ -111,36 +113,37 @@ class Feed
     end
 
     private
-      def parse_line(line)
-        return if line.blank? || line.start_with?("#")
 
-        hidden = line.start_with?("-")
-        line = line.delete_prefix("-").strip if hidden
+    def parse_line(line)
+      return if line.blank? || line.start_with?("#")
 
-        url, raw_name, *rest = line.split(/\s+/)
-        return unless raw_name && url&.match?(%r{\Ahttps?://})
+      hidden = line.start_with?("-")
+      line = line.delete_prefix("-").strip if hidden
 
-        name, color = split_name_and_color(raw_name)
-        tags = rest.select { |part| part.start_with?("#") }
-        proxy = rest.find { |part| part.start_with?("proxy=") }&.delete_prefix("proxy=").to_s
+      url, raw_name, *rest = line.split(/\s+/)
+      return unless raw_name && url&.match?(%r{\Ahttps?://})
 
-        add(url, name: name.tr("_", " "), tags: tags, color: color, hidden: hidden, proxy: proxy)
+      name, color = split_name_and_color(raw_name)
+      tags = rest.select { |part| part.start_with?("#") }
+      proxy = rest.find { |part| part.start_with?("proxy=") }&.delete_prefix("proxy=").to_s
+
+      add(url, name: name.tr("_", " "), tags: tags, color: color, hidden: hidden, proxy: proxy)
+    end
+
+    def split_name_and_color(raw_name)
+      if (match = raw_name.match(NAME_COLOR))
+        [ match[:name], match[:color] ]
+      else
+        [ raw_name, "" ]
       end
+    end
 
-      def split_name_and_color(raw_name)
-        if (match = raw_name.match(NAME_COLOR))
-          [ match[:name], match[:color] ]
-        else
-          [ raw_name, "" ]
-        end
-      end
-
-      def serialize_entry(url, entry)
-        line = +"#{url} #{entry.name.tr(" ", "_")}"
-        line << "[#{entry.color}]" if entry.color.present?
-        entry.tags.each { |tag| line << " #{tag}" }
-        line << " proxy=#{entry.proxy}" if entry.proxy.present?
-        entry.hidden ? "-#{line}" : line
-      end
+    def serialize_entry(url, entry)
+      line = +"#{url} #{entry.name.tr(' ', '_')}"
+      line << "[#{entry.color}]" if entry.color.present?
+      entry.tags.each { |tag| line << " #{tag}" }
+      line << " proxy=#{entry.proxy}" if entry.proxy.present?
+      entry.hidden ? "-#{line}" : line
+    end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "net/http"
 require "restricted_http/private_network_guard"
 require "restricted_http/response"
@@ -36,46 +38,50 @@ module RestrictedHTTP
     end
 
     private
-      def follow(url, redirects_left)
-        return nil if redirects_left.negative?
 
-        ip = @resolver.resolve(url.host)
+    def follow(url, redirects_left)
+      return nil if redirects_left.negative?
 
-        Net::HTTP.start(url.host, url.port, ipaddr: ip, use_ssl: url.scheme == "https",
-          open_timeout: OPEN_TIMEOUT, read_timeout: READ_TIMEOUT) do |http|
-          request = Net::HTTP::Get.new(url)
-          request["User-Agent"] = @user_agent
+      ip = @resolver.resolve(url.host)
 
-          http.request(request) do |response|
-            return handle(response, url, redirects_left)
-          end
+      Net::HTTP.start(url.host, url.port, ipaddr: ip, use_ssl: url.scheme == "https",
+                                          open_timeout: OPEN_TIMEOUT, read_timeout: READ_TIMEOUT) do |http|
+        request = Net::HTTP::Get.new(url)
+        request["User-Agent"] = @user_agent
+
+        http.request(request) do |response|
+          return handle(response, url, redirects_left)
         end
       end
+    end
 
-      def handle(response, url, redirects_left)
-        if response.is_a?(Net::HTTPRedirection)
-          location = url.merge(response["location"].to_s)
-          return nil unless location.is_a?(URI::HTTP)
-          follow(location, redirects_left - 1)
-        else
-          body = read_limited_body(response)
-          return nil if body.nil?
-          Response.new(status: response.code.to_i, body: body, content_type: response.content_type)
+    def handle(response, url, redirects_left)
+      if response.is_a?(Net::HTTPRedirection)
+        location = url.merge(response["location"].to_s)
+        return nil unless location.is_a?(URI::HTTP)
+
+        follow(location, redirects_left - 1)
+      else
+        body = read_limited_body(response)
+        return nil if body.nil?
+
+        Response.new(status: response.code.to_i, body: body, content_type: response.content_type)
+      end
+    end
+
+    # Reads the body in chunks, bailing (nil) if it exceeds max_body_size.
+    def read_limited_body(response)
+      StringIO.new.tap do |buffer|
+        response.read_body do |chunk|
+          return nil if buffer.size + chunk.bytesize > @max_body_size
+
+          buffer << chunk
         end
-      end
+      end.string
+    end
 
-      # Reads the body in chunks, bailing (nil) if it exceeds max_body_size.
-      def read_limited_body(response)
-        StringIO.new.tap do |buffer|
-          response.read_body do |chunk|
-            return nil if buffer.size + chunk.bytesize > @max_body_size
-            buffer << chunk
-          end
-        end.string
-      end
-
-      def normalize(url)
-        url.is_a?(URI) ? url : URI.parse(url)
-      end
+    def normalize(url)
+      url.is_a?(URI) ? url : URI.parse(url)
+    end
   end
 end

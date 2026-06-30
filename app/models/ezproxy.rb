@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "uri"
 
 # Rewrites an outbound article link to route through a library EZProxy host, so a

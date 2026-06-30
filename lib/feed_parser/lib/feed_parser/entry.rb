@@ -12,7 +12,7 @@ module FeedParser
     :updated,
     :authors,
     :categories,
-    :links,
+    :links
   ) do
     def initialize(id: nil, title: nil, url: nil, summary: nil, content: nil,
                    image: nil, published: nil, updated: nil, authors: EMPTY_ARRAY,

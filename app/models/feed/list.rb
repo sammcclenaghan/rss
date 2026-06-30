@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Feed
   # An enumerable collection of ConfiguredFeed objects.
   class List
@@ -9,7 +11,7 @@ class Feed
 
     def each(&) = @feeds.each(&)
     def size = @feeds.size
-    alias_method :length, :size
+    alias length size
 
     def feed_ids
       map { |feed| feed.feed.id }

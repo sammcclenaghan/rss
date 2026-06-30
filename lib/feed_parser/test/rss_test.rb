@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class RSSTest < Minitest::Test
   SAMPLE = <<~XML
@@ -35,16 +35,16 @@ class RSSTest < Minitest::Test
   def test_parses_rss_feed_metadata
     feed = FeedParser.parse(SAMPLE)
 
-    assert_equal 'Example RSS', feed.title
-    assert_equal 'A small RSS feed', feed.description
-    assert_equal 'https://example.com/', feed.url
-    assert_equal 'https://example.com/feed.xml', feed.feed_url
-    assert_equal 'https://example.com/feed.png', feed.image
+    assert_equal "Example RSS", feed.title
+    assert_equal "A small RSS feed", feed.description
+    assert_equal "https://example.com/", feed.url
+    assert_equal "https://example.com/feed.xml", feed.feed_url
+    assert_equal "https://example.com/feed.png", feed.image
     assert_equal [
-      FeedParser::Person.new(name: 'Channel Podcast Author'),
-      FeedParser::Person.new(email: 'ada@example.com')
+      FeedParser::Person.new(name: "Channel Podcast Author"),
+      FeedParser::Person.new(email: "ada@example.com")
     ], feed.authors
-    assert_equal [FeedParser::Category.new(term: 'ruby', scheme: 'https://example.com/tags')], feed.categories
+    assert_equal [ FeedParser::Category.new(term: "ruby", scheme: "https://example.com/tags") ], feed.categories
   end
 
   def test_rss_content_does_not_fall_back_to_description
@@ -60,7 +60,7 @@ class RSSTest < Minitest::Test
 
     entry = FeedParser.parse(rss).entries.fetch(0)
 
-    assert_equal 'Short teaser only.', entry.summary
+    assert_equal "Short teaser only.", entry.summary
     assert_nil entry.content
   end
 
@@ -78,8 +78,8 @@ class RSSTest < Minitest::Test
 
     entry = FeedParser.parse(rss).entries.fetch(0)
 
-    assert_equal 'Short teaser.', entry.summary
-    assert_equal 'Full content from Atom namespace.', entry.content
+    assert_equal "Short teaser.", entry.summary
+    assert_equal "Full content from Atom namespace.", entry.content
   end
 
   def test_rss_supports_dc_creator_author
@@ -95,7 +95,7 @@ class RSSTest < Minitest::Test
 
     entry = FeedParser.parse(rss).entries.fetch(0)
 
-    assert_equal [FeedParser::Person.new(name: 'Jane Creator')], entry.authors
+    assert_equal [ FeedParser::Person.new(name: "Jane Creator") ], entry.authors
   end
 
   def test_rss_item_inherits_channel_author
@@ -113,7 +113,7 @@ class RSSTest < Minitest::Test
 
     entry = FeedParser.parse(rss).entries.fetch(0)
 
-    assert_equal [FeedParser::Person.new(email: 'editor@example.com')], entry.authors
+    assert_equal [ FeedParser::Person.new(email: "editor@example.com") ], entry.authors
   end
 
   def test_rss_uses_image_enclosure_as_entry_image
@@ -129,20 +129,20 @@ class RSSTest < Minitest::Test
 
     entry = FeedParser.parse(rss).entries.fetch(0)
 
-    assert_equal 'https://example.com/image.jpg', entry.image
+    assert_equal "https://example.com/image.jpg", entry.image
   end
 
   def test_parses_rss_items
     entry = FeedParser.parse(SAMPLE).entries.fetch(0)
 
-    assert_equal 'tag:example.com,2026:entry-1', entry.id
-    assert_equal 'First RSS post', entry.title
-    assert_equal 'https://example.com/first', entry.url
-    assert_equal 'Hello summary', entry.summary
-    assert_equal '<p>Hello</p>', entry.content
-    assert_equal 'https://example.com/thumb.jpg', entry.image
-    assert_equal [FeedParser::Person.new(name: 'RSS Author', email: 'author@example.com')], entry.authors
-    assert_equal [FeedParser::Category.new(term: 'rss')], entry.categories
-    assert_equal 'https://example.com/audio.mp3', entry.links.find { |link| link.rel == 'enclosure' }.href
+    assert_equal "tag:example.com,2026:entry-1", entry.id
+    assert_equal "First RSS post", entry.title
+    assert_equal "https://example.com/first", entry.url
+    assert_equal "Hello summary", entry.summary
+    assert_equal "<p>Hello</p>", entry.content
+    assert_equal "https://example.com/thumb.jpg", entry.image
+    assert_equal [ FeedParser::Person.new(name: "RSS Author", email: "author@example.com") ], entry.authors
+    assert_equal [ FeedParser::Category.new(term: "rss") ], entry.categories
+    assert_equal "https://example.com/audio.mp3", entry.links.find { |link| link.rel == "enclosure" }.href
   end
 end

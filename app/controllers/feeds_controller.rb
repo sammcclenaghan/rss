@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "uri"
 
 class FeedsController < ApplicationController
@@ -88,45 +90,46 @@ class FeedsController < ApplicationController
   end
 
   private
-    def load_config
-      @config = Feed::Config.from_app_config
-    end
 
-    # Rebuilds the provider so newly-configured feeds get a DB record and an
-    # initial refresh enqueued.
-    def refresh_provider
-      Feed::Provider.from_app_config
-    end
+  def load_config
+    @config = Feed::Config.from_app_config
+  end
 
-    def valid_url?(url)
-      url.match?(%r{\Ahttps?://}i)
-    end
+  # Rebuilds the provider so newly-configured feeds get a DB record and an
+  # initial refresh enqueued.
+  def refresh_provider
+    Feed::Provider.from_app_config
+  end
 
-    # An optional library EZProxy host for routing this feed's article links
-    # through institutional access. Accepts a bare host or a pasted URL; we keep
-    # just the host (no scheme, no path), and strip any leading "login." so the
-    # host-mangled article URL resolves rather than hitting the login endpoint.
-    def normalize_proxy(proxy)
-      host = proxy.to_s.strip.sub(%r{\Ahttps?://}i, "").split("/").first.to_s
-      host.delete_prefix("login.")
-    end
+  def valid_url?(url)
+    url.match?(%r{\Ahttps?://}i)
+  end
 
-    # A single group field becomes one "#tag"; blank means the Default folder.
-    def normalize_tags(group)
-      tag = group.to_s.strip.delete_prefix("#").downcase.gsub(/\s+/, "-")
-      tag.blank? ? [] : [ "##{tag}" ]
-    end
+  # An optional library EZProxy host for routing this feed's article links
+  # through institutional access. Accepts a bare host or a pasted URL; we keep
+  # just the host (no scheme, no path), and strip any leading "login." so the
+  # host-mangled article URL resolves rather than hitting the login endpoint.
+  def normalize_proxy(proxy)
+    host = proxy.to_s.strip.sub(%r{\Ahttps?://}i, "").split("/").first.to_s
+    host.delete_prefix("login.")
+  end
 
-    # Auto-name a feed: prefer its channel title, fall back to the host.
-    def discover_name(url)
-      Feed::Fetcher.new.title(url).presence || name_from_host(url)
-    end
+  # A single group field becomes one "#tag"; blank means the Default folder.
+  def normalize_tags(group)
+    tag = group.to_s.strip.delete_prefix("#").downcase.gsub(/\s+/, "-")
+    tag.blank? ? [] : [ "##{tag}" ]
+  end
 
-    def name_from_host(url)
-      host = URI.parse(url).host.to_s.sub(/\Awww\./, "")
-      label = host.split(".").first.to_s
-      label.empty? ? url : label.tr("-_", "  ").split.map(&:capitalize).join(" ")
-    rescue URI::InvalidURIError
-      url
-    end
+  # Auto-name a feed: prefer its channel title, fall back to the host.
+  def discover_name(url)
+    Feed::Fetcher.new.title(url).presence || name_from_host(url)
+  end
+
+  def name_from_host(url)
+    host = URI.parse(url).host.to_s.sub(/\Awww\./, "")
+    label = host.split(".").first.to_s
+    label.empty? ? url : label.tr("-_", "  ").split.map(&:capitalize).join(" ")
+  rescue URI::InvalidURIError
+    url
+  end
 end

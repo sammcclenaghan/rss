@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
@@ -16,19 +18,20 @@ module ActiveSupport
     fixtures :all
 
     private
-      # Reads a fixture file from test/fixtures/files.
-      def file_fixture_content(name)
-        file_fixture(name).read
-      end
 
-      # Temporarily points the RSS config file at a given path, restoring it after.
-      def with_config_file(path)
-        rss = Rails.configuration.x.rss
-        previous = rss.config_file
-        rss.config_file = path
-        yield
-      ensure
-        rss.config_file = previous
-      end
+    # Reads a fixture file from test/fixtures/files.
+    def file_fixture_content(name)
+      file_fixture(name).read
+    end
+
+    # Temporarily points the RSS config file at a given path, restoring it after.
+    def with_config_file(path)
+      rss = Rails.configuration.x.rss
+      previous = rss.config_file
+      rss.config_file = path
+      yield
+    ensure
+      rss.config_file = previous
+    end
   end
 end

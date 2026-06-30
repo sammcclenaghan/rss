@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Post < ApplicationRecord
   include Pagination
 
@@ -28,7 +30,7 @@ class Post < ApplicationRecord
   scope :latest_first, -> { order(published_at: :desc) }
   scope :for_feeds, ->(feed_ids) { where(feed_id: feed_ids) }
   scope :published_before, ->(timestamp) { where(published_at: ...timestamp.to_i) }
-  scope :matching, ->(query) {
+  scope :matching, lambda { |query|
     where("title LIKE :q OR description LIKE :q", q: "%#{sanitize_sql_like(query)}%")
   }
   scope :read, -> { where(id: ReadPost.select(:post_id)) }

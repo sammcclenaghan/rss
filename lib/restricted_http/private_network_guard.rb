@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "resolv"
 require "ipaddr"
 
@@ -37,10 +39,11 @@ module RestrictedHTTP
     end
 
     private
-      def ipv4?(address)
-        IPAddr.new(address).ipv4?
-      rescue IPAddr::InvalidAddressError
-        false
-      end
+
+    def ipv4?(address)
+      IPAddr.new(address).ipv4?
+    rescue IPAddr::InvalidAddressError
+      false
+    end
   end
 end

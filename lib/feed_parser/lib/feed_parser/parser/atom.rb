@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'nokogiri'
-require 'time'
+require "nokogiri"
+require "time"
 
 module FeedParser
   module Parser
     module Atom
-      ATOM_NAMESPACES = ['http://www.w3.org/2005/Atom', 'http://purl.org/atom/ns#'].freeze
+      ATOM_NAMESPACES = [ "http://www.w3.org/2005/Atom", "http://purl.org/atom/ns#" ].freeze
 
       module_function
 
@@ -17,42 +17,42 @@ module FeedParser
       def parse(xml)
         document = Nokogiri::XML(xml) { |config| config.recover.nonet }
         root = document.root
-        raise ParseError, 'not an Atom feed' unless root&.name == 'feed' && atom_namespace?(root)
+        raise ParseError, "not an Atom feed" unless root&.name == "feed" && atom_namespace?(root)
 
-        feed_authors = people(root, 'author')
+        feed_authors = people(root, "author")
         feed_links = links(root)
 
         Feed.new(
-          id: text(root, 'id'),
-          title: text(root, 'title'),
-          description: text(root, 'subtitle'),
-          url: href_for(feed_links, rel: 'alternate') || href_for(feed_links),
-          feed_url: href_for(feed_links, rel: 'self'),
+          id: text(root, "id"),
+          title: text(root, "title"),
+          description: text(root, "subtitle"),
+          url: href_for(feed_links, rel: "alternate") || href_for(feed_links),
+          feed_url: href_for(feed_links, rel: "self"),
           image: feed_image(root),
-          updated: time(text(root, 'updated')),
+          updated: time(text(root, "updated")),
           authors: feed_authors,
           categories: categories(root),
           links: feed_links,
-          entries: children(root, 'entry').map { |entry| parse_entry(entry, inherited_authors: feed_authors) }.freeze
+          entries: children(root, "entry").map { |entry| parse_entry(entry, inherited_authors: feed_authors) }.freeze
         )
       rescue Nokogiri::XML::SyntaxError => e
         raise ParseError, e.message
       end
 
       def parse_entry(node, inherited_authors: EMPTY_ARRAY)
-        entry_authors = people(node, 'author')
+        entry_authors = people(node, "author")
         entry_links = links(node)
-        summary = text(node, 'summary')
+        summary = text(node, "summary")
 
         Entry.new(
-          id: text(node, 'id'),
-          title: text(node, 'title'),
-          url: href_for(entry_links, rel: 'alternate') || href_for(entry_links),
+          id: text(node, "id"),
+          title: text(node, "title"),
+          url: href_for(entry_links, rel: "alternate") || href_for(entry_links),
           summary: summary,
-          content: text(node, 'content') || summary,
+          content: text(node, "content") || summary,
           image: entry_image(node),
-          published: time(text(node, 'published')),
-          updated: time(text(node, 'updated')),
+          published: time(text(node, "published")),
+          updated: time(text(node, "updated")),
           authors: entry_authors.empty? ? inherited_authors : entry_authors,
           categories: categories(node),
           links: entry_links
@@ -77,7 +77,7 @@ module FeedParser
       end
 
       def links(node)
-        children(node, 'link').filter_map { |element| build_link(element) }.freeze
+        children(node, "link").filter_map { |element| build_link(element) }.freeze
       end
 
       def href_for(links, rel: nil)
@@ -90,12 +90,12 @@ module FeedParser
       end
 
       def feed_image(node)
-        text(node, 'logo') || text(node, 'icon')
+        text(node, "logo") || text(node, "icon")
       end
 
       def entry_image(node)
-        attribute(child_with_prefix(node, 'media', 'thumbnail'), 'url') ||
-          attribute(child_with_prefix(node, 'media', 'content'), 'url')
+        attribute(child_with_prefix(node, "media", "thumbnail"), "url") ||
+          attribute(child_with_prefix(node, "media", "content"), "url")
       end
 
       def child_with_prefix(node, prefix, name)
@@ -103,16 +103,16 @@ module FeedParser
       end
 
       def build_link(element)
-        href = element['href']&.strip
+        href = element["href"]&.strip
         return if href.nil? || href.empty?
 
         Link.new(
           href: href,
-          rel: present_attribute(element, 'rel'),
-          type: present_attribute(element, 'type'),
-          hreflang: present_attribute(element, 'hreflang'),
-          title: present_attribute(element, 'title'),
-          length: integer_attribute(element, 'length')
+          rel: present_attribute(element, "rel"),
+          type: present_attribute(element, "type"),
+          hreflang: present_attribute(element, "hreflang"),
+          title: present_attribute(element, "title"),
+          length: integer_attribute(element, "length")
         )
       end
 
@@ -134,9 +134,9 @@ module FeedParser
 
       def people(node, element_name)
         children(node, element_name).filter_map do |person|
-          name = text(person, 'name')
-          email = text(person, 'email')
-          uri = text(person, 'uri')
+          name = text(person, "name")
+          email = text(person, "email")
+          uri = text(person, "uri")
           next if name.nil? && email.nil? && uri.nil?
 
           Person.new(name: name, email: email, uri: uri)
@@ -144,14 +144,14 @@ module FeedParser
       end
 
       def categories(node)
-        children(node, 'category').filter_map do |element|
-          term = present_attribute(element, 'term')
+        children(node, "category").filter_map do |element|
+          term = present_attribute(element, "term")
           next unless term
 
           Category.new(
             term: term,
-            scheme: present_attribute(element, 'scheme'),
-            label: present_attribute(element, 'label')
+            scheme: present_attribute(element, "scheme"),
+            label: present_attribute(element, "label")
           )
         end.freeze
       end

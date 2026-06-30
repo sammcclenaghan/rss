@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "restricted_http/response"
 
 # A fake HTTP client that returns canned RestrictedHTTP::Response objects
