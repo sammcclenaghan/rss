@@ -18,18 +18,17 @@
     <span class="shrink-0 text-muted-foreground p-1" title="Edit"><%= icon "pencil", class: "size-4" %></span>
   </summary>
 
-  <%# Edit form %>
   <div class="px-4 pb-4 pt-1 bg-muted/30">
     <% edit_form_id = "edit-feed-#{feed.feed.id}" %>
     <%= form_with url: feed_path(feed.feed.id), method: :patch, id: edit_form_id, class: "grid gap-3 sm:grid-cols-2" do %>
       <label class="block">
         <span class="block text-xs font-medium text-muted-foreground mb-1">Name</span>
-        <input type="text" name="name" value="<%= feed.name %>"
+        <input type="text" name="name" autocomplete="off" value="<%= feed.name %>"
                class="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm">
       </label>
       <label class="block">
         <span class="block text-xs font-medium text-muted-foreground mb-1">Group</span>
-        <input type="text" name="tag" value="<%= current_group %>" list="group-options"
+        <input type="text" name="tag" value="<%= current_group %>" list="group-options" autocomplete="off"
                class="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm">
       </label>
       <div>
@@ -37,12 +36,12 @@
         <%= render "feeds/color_field", value: feed.color %>
       </div>
       <label class="flex items-center gap-2 text-sm">
-        <input type="checkbox" name="hidden" value="1" <%= "checked" if feed.hidden %> class="rounded border-input">
+        <%= tag.input type: "checkbox", name: "hidden", value: "1", checked: feed.hidden, autocomplete: "off", class: "rounded border-input" %>
         <span>Hide from the default view</span>
       </label>
       <label class="sm:col-span-2 block">
         <span class="block text-xs font-medium text-muted-foreground mb-1">Library proxy host <span class="font-normal">(optional)</span></span>
-        <input type="text" name="proxy" value="<%= feed.proxy %>" placeholder="ezproxy.library.uvic.ca"
+        <input type="text" name="proxy" value="<%= feed.proxy %>" placeholder="ezproxy.library.uvic.ca" autocomplete="off"
                class="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm placeholder:text-muted-foreground">
       </label>
     <% end %>

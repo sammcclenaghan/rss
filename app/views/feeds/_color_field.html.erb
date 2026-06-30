@@ -2,12 +2,12 @@
     The text input ("color") is what's submitted; blank = use the default. %>
 <% value = local_assigns.fetch(:value, "").to_s %>
 <div class="flex items-center gap-2" data-controller="color-field">
-  <input type="color" data-color-field-target="swatch"
+  <input type="color" data-color-field-target="swatch" autocomplete="off"
          value="<%= value.presence || "#888888" %>"
          data-action="input->color-field#fromSwatch"
          aria-label="Pick a colour"
          class="h-8 w-9 shrink-0 rounded border border-input bg-background p-0.5 cursor-pointer">
-  <input type="text" name="color" value="<%= value %>" placeholder="#FF9500 (optional)"
+  <input type="text" name="color" value="<%= value %>" placeholder="#FF9500 (optional)" autocomplete="off"
          data-color-field-target="text"
          data-action="input->color-field#fromText"
          class="flex-1 min-w-0 rounded-md border border-input bg-background px-3 py-1.5 text-sm placeholder:text-muted-foreground">

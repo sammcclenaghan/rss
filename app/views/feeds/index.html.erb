@@ -25,7 +25,7 @@
           <%= form_with url: feeds_import_path, method: :post, multipart: true,
                 class: "absolute right-0 mt-1.5 z-30 w-72 rounded-lg border border-border bg-popover text-popover-foreground shadow-lg p-3 space-y-2" do %>
             <p class="text-sm text-muted-foreground">Import feeds from an OPML file.</p>
-            <input type="file" name="file" accept=".opml,.xml,text/xml,application/xml" required
+            <input type="file" name="file" accept=".opml,.xml,text/xml,application/xml" autocomplete="off" required
                    class="block w-full text-sm file:mr-2 file:rounded-md file:border file:border-border file:bg-background file:px-2 file:py-1 file:text-sm file:text-foreground">
             <%= submit_tag "Import", class: "w-full rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90 cursor-pointer" %>
           <% end %>
@@ -39,17 +39,17 @@
       <div class="grid gap-3 sm:grid-cols-2">
         <label class="sm:col-span-2 block">
           <span class="block text-xs font-medium text-muted-foreground mb-1">Feed URL</span>
-          <input type="url" name="url" required placeholder="https://example.com/feed.xml"
+          <input type="url" name="url" required placeholder="https://example.com/feed.xml" autocomplete="url"
                  class="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm placeholder:text-muted-foreground">
         </label>
         <label class="block">
           <span class="block text-xs font-medium text-muted-foreground mb-1">Name <span class="font-normal">(optional — auto-detected)</span></span>
-          <input type="text" name="name" placeholder="The Verge"
+          <input type="text" name="name" placeholder="The Verge" autocomplete="off"
                  class="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm placeholder:text-muted-foreground">
         </label>
         <label class="block">
           <span class="block text-xs font-medium text-muted-foreground mb-1">Group <span class="font-normal">(optional)</span></span>
-          <input type="text" name="tag" list="group-options" placeholder="news"
+          <input type="text" name="tag" list="group-options" placeholder="news" autocomplete="off"
                  class="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm placeholder:text-muted-foreground">
         </label>
         <div>
@@ -57,12 +57,12 @@
           <%= render "feeds/color_field" %>
         </div>
         <label class="flex items-center gap-2 text-sm">
-          <input type="checkbox" name="hidden" value="1" class="rounded border-input">
+          <input type="checkbox" name="hidden" value="1" autocomplete="off" class="rounded border-input">
           <span>Hide from the default view</span>
         </label>
         <label class="sm:col-span-2 block">
           <span class="block text-xs font-medium text-muted-foreground mb-1">Library proxy host <span class="font-normal">(optional)</span></span>
-          <input type="text" name="proxy" placeholder="ezproxy.library.uvic.ca"
+          <input type="text" name="proxy" placeholder="ezproxy.library.uvic.ca" autocomplete="off"
                  class="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm placeholder:text-muted-foreground">
           <span class="block text-xs text-muted-foreground mt-1">Opens this feed's articles through your library's EZProxy so you read them with institutional access. Leave blank for normal links.</span>
         </label>
