@@ -1,0 +1,76 @@
+<%# Feed navigation. A static column on desktop; on small screens it slides in
+    from the left as a full-height overlay, driven by the `sidebar-open` class
+    the toggle-class controller flips on the page wrapper. %>
+
+<%# Scrim behind the mobile overlay; tapping it closes the sidebar. %>
+<div class="fixed inset-0 z-30 hidden bg-black/30 backdrop-blur-sm md:hidden [.sidebar-open_&]:block"
+     data-action="click->toggle-class#toggle" aria-hidden="true"></div>
+
+<aside class="fixed inset-y-0 left-0 z-40 flex w-80 max-w-[85vw] shrink-0 -translate-x-full flex-col overflow-y-auto
+              bg-sidebar px-4 py-4 text-sidebar-foreground shadow-2xl transition-transform duration-300
+              [.sidebar-open_&]:translate-x-0
+              md:static md:z-auto md:h-full md:w-72 md:max-w-none md:translate-x-0 md:border-r md:border-sidebar-border
+              md:px-3 md:pt-6 md:shadow-none xl:w-80"
+       data-controller="refresh-status"
+       data-refresh-status-url-value="<%= feeds_status_path %>">
+
+  <div class="mb-2 flex justify-end md:hidden">
+    <button type="button" data-action="click->toggle-class#toggle" aria-label="Close menu"
+            class="rounded-full p-2 text-muted-foreground hover:bg-sidebar-accent cursor-pointer">
+      <%= icon "x", class: "size-5" %>
+    </button>
+  </div>
+
+  <%# Search %>
+  <%= form_tag search_scope_path, method: :get, data: { controller: "search", action: "input->search#submit submit->search#cancel", turbo_frame: "posts" }, class: "relative mb-5" do %>
+    <%= icon "search", class: "size-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" %>
+    <%= text_field_tag :query, @query, placeholder: "Search",
+          class: "w-full rounded-lg border border-sidebar-border bg-card py-2 pl-10 pr-9 text-sm text-foreground placeholder:text-muted-foreground",
+          data: { search_target: "input" } %>
+    <kbd class="absolute right-3 top-1/2 -translate-y-1/2 rounded-md bg-muted px-1.5 text-xs text-muted-foreground font-mono">/</kbd>
+    <%= hidden_field_tag :unread, "1" if @unread_only %>
+    <%= hidden_field_tag :starred, "1" if @starred_only %>
+  <% end %>
+
+  <%# Global views %>
+  <% global_scope = @tag.blank? && @selected_feed.blank? %>
+  <% home_active = global_scope && !@unread_only && !@starred_only %>
+  <nav class="space-y-0.5 mb-6">
+    <%= link_to root_path(unread: 1), class: sidebar_nav_class(global_scope && @unread_only) do %>
+      <%= icon "inbox", class: "size-4" %>
+      <span>Unread</span>
+      <span data-counts-target="total" class="ml-auto text-xs text-muted-foreground tabular-nums <%= "hidden" if @unread_total.to_i == 0 %>"><%= @unread_total.to_i %></span>
+    <% end %>
+
+    <%= link_to root_path(starred: 1), class: sidebar_nav_class(global_scope && @starred_only) do %>
+      <%= icon "star", class: "size-4" %>
+      <span>Starred</span>
+      <% if @starred_count.to_i > 0 %><span class="ml-auto text-xs text-muted-foreground tabular-nums"><%= @starred_count %></span><% end %>
+    <% end %>
+
+    <%= link_to root_path, class: sidebar_nav_class(home_active) do %>
+      <%= icon "list", class: "size-4" %>
+      <span>All</span>
+      <span data-counts-target="total" class="ml-auto text-xs text-muted-foreground tabular-nums <%= "hidden" if @unread_total.to_i == 0 %>"><%= @unread_total.to_i %></span>
+    <% end %>
+  </nav>
+
+  <%# Feeds, grouped into collapsible folders by tag %>
+  <h2 class="px-3 mb-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Feeds</h2>
+  <% grouped_feeds(@sidebar_feeds, @sidebar_unread_counts).each do |group| %>
+    <%= render "posts/folder", group: group %>
+  <% end %>
+
+  <%# Manage / settings — pinned below the feed list %>
+  <nav class="mt-auto pt-6 space-y-0.5">
+    <%= link_to feeds_path, class: sidebar_nav_class(false) do %>
+      <%= icon "rss", class: "size-4" %>
+      <span>Manage feeds</span>
+    <% end %>
+    <%= link_to settings_path, class: sidebar_nav_class(false) do %>
+      <%= icon "settings", class: "size-4" %>
+      <span>Settings</span>
+    <% end %>
+  </nav>
+
+</aside>

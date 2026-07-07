@@ -25,9 +25,11 @@ class Feed
       flat_map(&:tags).uniq.sort
     end
 
-    # Triggers a refresh for every outdated feed. Returns the number refreshed.
+    # Enqueues a refresh for every outdated feed. Returns the number enqueued.
+    # Called from the scheduled RefreshOutdatedFeedsJob — never on the request
+    # path, where it used to pile duplicate jobs onto the queue.
     def reload_outdated
-      select(&:outdated?).each(&:start_reloading).size
+      select(&:outdated?).each { |feed| RefreshFeedJob.perform_later(feed.feed) }.size
     end
 
     def as_json(*)

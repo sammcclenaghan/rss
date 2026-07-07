@@ -35,6 +35,24 @@ class FeedsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  test "status lists configured feeds still waiting on a fetch" do
+    get feeds_status_path
+    assert_response :success
+
+    body = JSON.parse(response.body)
+    assert_equal [ feeds(:xkcd).id ], body["outdated_feed_ids"]
+  end
+
+  test "status is empty once configured feeds are fresh" do
+    feeds(:xkcd).mark_fetched
+
+    get feeds_status_path
+    assert_response :success
+
+    body = JSON.parse(response.body)
+    assert_empty body["outdated_feed_ids"]
+  end
+
   test "index renders the manage page" do
     get feeds_path
     assert_response :success

@@ -1,8 +1,17 @@
 # frozen_string_literal: true
 
 module PostsHelper
+  # Short, glanceable dates: time of day for today, month + day within the
+  # year, and the year only once it matters.
   def post_date(timestamp)
-    Time.at(timestamp).strftime("%Y/%-m/%-d")
+    time = Time.at(timestamp)
+    if time.to_date == Date.current
+      time.strftime("%-l:%M %p")
+    elsif time.year == Date.current.year
+      time.strftime("%b %-d")
+    else
+      time.strftime("%b %-d, %Y")
+    end
   end
 
   def current_view_title
@@ -38,17 +47,17 @@ module PostsHelper
 
   def content_tab_class(filter)
     class_names(
-      "rounded-md px-3 py-1 transition-colors",
-      "bg-background font-semibold text-foreground shadow-sm": filter_active?(filter),
+      "rounded-md px-3.5 py-1.5 transition-colors",
+      "bg-card font-semibold text-foreground shadow-sm": filter_active?(filter),
       "text-muted-foreground hover:text-foreground": !filter_active?(filter)
     )
   end
 
   def sidebar_nav_class(active)
     class_names(
-      "flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm font-medium transition-colors",
+      "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
       "bg-sidebar-accent text-sidebar-accent-foreground": active,
-      "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground": !active
+      "text-sidebar-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground": !active
     )
   end
 

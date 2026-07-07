@@ -2,29 +2,15 @@
 <html class="h-full">
   <head>
     <title><%= content_for(:title) || "Rss" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Rss">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#faf8f4" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#211e1a" media="(prefers-color-scheme: dark)">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
-    <%# Apply the saved theme before first paint to avoid a flash of the wrong
-        theme. Must run synchronously, ahead of the stylesheet. Mirrors the
-        resolution in theme_controller.js. %>
-    <script>
-      (function () {
-        try {
-          var t = localStorage.getItem('theme') || 'system'
-          var effective = t === 'system'
-            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-            : t
-          var el = document.documentElement
-          el.dataset.theme = effective
-          el.classList.toggle('dark', ['dark', 'vercel', 'gruvbox'].indexOf(effective) !== -1)
-        } catch (e) {}
-      })()
-    </script>
 
     <%= yield :head %>
 
@@ -42,17 +28,7 @@
   </head>
 
   <body class="h-full">
-    <% if notice.present? || alert.present? %>
-      <div class="fixed top-4 right-4 z-50 max-w-sm" data-controller="flash">
-        <% message = notice.presence || alert %>
-        <div data-action="click->flash#dismiss"
-             class="flex items-start gap-2 rounded-lg border px-4 py-3 text-sm shadow-lg cursor-pointer
-                    <%= notice.present? ? 'border-border bg-popover text-popover-foreground' : 'border-red-500/40 bg-red-500/10 text-red-600 dark:text-red-400' %>">
-          <%= icon(notice.present? ? "circle-check" : "circle-alert", class: "size-4 shrink-0 mt-0.5") %>
-          <span class="flex-1"><%= message %></span>
-        </div>
-      </div>
-    <% end %>
+    <%= render "layouts/flash" %>
     <%= yield %>
   </body>
 </html>

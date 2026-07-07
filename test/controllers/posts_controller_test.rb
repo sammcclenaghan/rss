@@ -17,11 +17,21 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".rss-post", minimum: 1
   end
 
-  test "index refreshes outdated feeds" do
+  # Refreshing belongs to the scheduled RefreshOutdatedFeedsJob alone. Page
+  # loads used to enqueue a job per outdated feed, which piled duplicates onto
+  # the queue and made the app unusable during a refresh cycle.
+  test "index does not enqueue refreshes for outdated feeds" do
     feeds(:xkcd).update!(last_fetched_at: 0)
-    assert_enqueued_with(job: RefreshFeedJob) do
+    assert_no_enqueued_jobs only: RefreshFeedJob do
       get root_path
     end
+  end
+
+  test "index shows a refreshing indicator for outdated feeds" do
+    feeds(:xkcd).update!(last_fetched_at: 0)
+    get root_path
+    assert_response :success
+    assert_select "[data-refresh-status-target='status'][data-feed-id='#{feeds(:xkcd).id}']"
   end
 
   test "starred filter shows only starred posts" do

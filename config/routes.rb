@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   namespace :feeds do
     resource :information, only: :show
+    resource :status, only: :show, controller: :statuses
     resource :export, only: :show, controller: :exports
     resource :import, only: :create, controller: :imports
   end

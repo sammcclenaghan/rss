@@ -1,6 +1,6 @@
 <% feed_cfg = post.respond_to?(:feed_config) ? post.feed_config : nil %>
 <% description = format_post_description(post) %>
-<div class="rss-post group relative px-4 py-4 border-b border-border hover:bg-muted/50 <%= "is-read" if post.read? %> <%= "is-starred" if post.starred? %>"
+<article class="rss-post group relative rounded-2xl px-4 py-4 transition-colors hover:bg-muted/60 <%= "is-read" if post.read? %> <%= "is-starred" if post.starred? %>"
      data-controller="post-read star"
      data-post-read-url-value="<%= post_reading_path(post) %>"
      data-post-read-read-value="<%= post.read? %>"
@@ -8,43 +8,43 @@
      data-star-url-value="<%= post_star_path(post.id) %>"
      data-star-starred-value="<%= post.starred? %>">
 
-  <%# Title — full emphasis when unread, muted once read (driven by .is-read) %>
-  <h3 class="post-title text-foreground font-medium text-[15px] leading-snug pr-24 line-clamp-2">
-    <a href="<%= post_link(post) %>" target="_blank" rel="noopener" data-action="post-read#markRead" data-post-open class="hover:underline"><%= post.title %></a>
+  <%# Title — an ember dot marks unread; reading mutes the title (.is-read) %>
+  <h3 class="post-title pr-24 text-[15px] font-semibold leading-snug text-foreground line-clamp-2">
+    <span class="unread-dot mr-1.5 inline-block size-2 rounded-full bg-primary align-[0.1em]" aria-hidden="true"></span><a href="<%= post_link(post) %>" target="_blank" rel="noopener" data-action="post-read#markRead" data-post-open class="hover:underline"><%= post.title %></a>
   </h3>
 
   <%# Excerpt %>
   <% if description.present? %>
-    <p class="text-muted-foreground mt-1 line-clamp-2"><%= description %></p>
+    <p class="mt-1 text-sm text-muted-foreground line-clamp-2"><%= description %></p>
   <% end %>
 
   <%# Meta row %>
-  <div class="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+  <div class="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
     <% if feed_cfg %>
-      <span class="shrink-0 w-2.5 h-2.5 rounded-sm" style="background-color: <%= legible_feed_color(feed_cfg.color) %>"></span>
+      <span class="size-2 shrink-0 rounded-full" style="background-color: <%= legible_feed_color(feed_cfg.color) %>"></span>
       <span class="min-w-0 truncate font-medium"><%= feed_cfg.name %></span>
       <span aria-hidden="true" class="shrink-0">&middot;</span>
     <% end %>
     <time class="shrink-0" title="<%= Time.at(post.published_at).iso8601 %>"><%= post_date(post.published_at) %></time>
   </div>
 
-  <%# Hover actions: mark read, star, open original %>
+  <%# Actions: mark read, star, open original — circular, tactile %>
   <div class="post-actions absolute right-3 top-3 flex items-center gap-1">
     <button type="button" data-post-read-target="toggle" data-action="post-read#toggle"
             title="Toggle read" aria-label="Toggle read"
-            class="read-btn inline-flex items-center justify-center rounded-md p-1.5 text-muted-foreground bg-muted hover:bg-accent hover:text-accent-foreground cursor-pointer">
+            class="read-btn inline-flex items-center justify-center rounded-full bg-card p-2 text-muted-foreground shadow-sm hover:bg-accent hover:text-accent-foreground cursor-pointer">
       <%= icon "circle", class: "read-undone size-4", stroke_width: 2.5 %>
       <%= icon "circle-check", class: "read-done size-4", stroke_width: 2.5 %>
     </button>
     <button type="button" data-action="star#toggle"
             title="Star" aria-label="Star"
-            class="star-btn inline-flex items-center justify-center rounded-md p-1.5 text-muted-foreground bg-muted hover:bg-accent hover:text-accent-foreground cursor-pointer">
+            class="star-btn inline-flex items-center justify-center rounded-full bg-card p-2 text-muted-foreground shadow-sm hover:bg-accent hover:text-accent-foreground cursor-pointer">
       <%= icon "star", class: "star-icon size-4", stroke_width: 2.5 %>
     </button>
     <a href="<%= post_link(post) %>" target="_blank" rel="noopener" data-action="post-read#markRead"
        title="Open original" aria-label="Open original"
-       class="inline-flex items-center justify-center rounded-md p-1.5 text-muted-foreground bg-muted hover:bg-accent hover:text-accent-foreground">
+       class="inline-flex items-center justify-center rounded-full bg-card p-2 text-muted-foreground shadow-sm hover:bg-accent hover:text-accent-foreground">
       <%= icon "external-link", class: "size-4", stroke_width: 2.5 %>
     </a>
   </div>
-</div>
+</article>

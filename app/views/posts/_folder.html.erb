@@ -1,0 +1,24 @@
+<%# One collapsible sidebar folder: a tag heading plus its feeds. Open/closed
+    state persists per-folder in localStorage via the folder controller. %>
+<% folder_active = group[:tag].present? && @tag == group[:tag] %>
+<div class="mb-1" data-controller="folder" data-folder-key-value="<%= group[:name] %>" data-counts-folder>
+  <div class="flex items-center rounded-lg px-3 py-1.5 <%= "bg-sidebar-accent" if folder_active %>">
+    <button type="button" data-action="folder#toggle"
+            class="shrink-0 mr-1.5 text-muted-foreground hover:text-foreground cursor-pointer">
+      <%= icon "chevron-down", class: "size-3.5 transition-transform", data: { folder_target: "chevron" } %>
+    </button>
+    <% if group[:tag] %>
+      <%= link_to group[:name].capitalize, tag_posts_path(group[:tag]),
+            class: "flex-1 min-w-0 truncate text-sm text-sidebar-foreground hover:text-sidebar-accent-foreground" %>
+    <% else %>
+      <button type="button" data-action="folder#toggle"
+              class="flex-1 min-w-0 truncate text-left text-sm text-sidebar-foreground cursor-pointer"><%= group[:name].capitalize %></button>
+    <% end %>
+    <span data-counts-target="folder" class="ml-2 shrink-0 text-xs text-muted-foreground tabular-nums <%= "hidden" if group[:unread] == 0 %>"><%= group[:unread] %></span>
+  </div>
+  <div data-folder-target="content">
+    <% group[:feeds].each do |feed| %>
+      <%= render "feeds/feed", feed: feed, unread_counts: @sidebar_unread_counts %>
+    <% end %>
+  </div>
+</div>

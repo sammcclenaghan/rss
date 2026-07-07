@@ -6,11 +6,11 @@
          value="<%= value.presence || "#888888" %>"
          data-action="input->color-field#fromSwatch"
          aria-label="Pick a colour"
-         class="h-8 w-9 shrink-0 rounded border border-input bg-background p-0.5 cursor-pointer">
+         class="h-9 w-10 shrink-0 cursor-pointer rounded-xl border border-input bg-background p-1">
   <input type="text" name="color" value="<%= value %>" placeholder="#FF9500 (optional)" autocomplete="off"
          data-color-field-target="text"
          data-action="input->color-field#fromText"
-         class="flex-1 min-w-0 rounded-md border border-input bg-background px-3 py-1.5 text-sm placeholder:text-muted-foreground">
+         class="min-w-0 flex-1 rounded-xl border border-input bg-background px-3.5 py-2 text-sm placeholder:text-muted-foreground">
   <button type="button" data-action="color-field#clear"
-          class="shrink-0 text-xs text-muted-foreground hover:text-foreground px-1.5 py-1 cursor-pointer">Default</button>
+          class="shrink-0 cursor-pointer rounded-md px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground">Default</button>
 </div>

@@ -5,7 +5,6 @@ class PostsController < ApplicationController
 
   def index
     @display_feeds = @provider.all
-    @display_feeds.reload_outdated unless turbo_frame_request?
 
     render_posts_for @provider.visible
   end
@@ -13,7 +12,6 @@ class PostsController < ApplicationController
   def tag
     @tag = params[:tag]
     @display_feeds = @provider.for_tag(@tag)
-    @display_feeds.reload_outdated unless turbo_frame_request?
 
     render_posts_for @display_feeds
   end
@@ -21,7 +19,6 @@ class PostsController < ApplicationController
   def feed
     @selected_feed = Feed::Config.decode_feed_url(params[:feed])
     @display_feeds = @provider.for_url(@selected_feed)
-    @display_feeds.reload_outdated unless turbo_frame_request?
 
     render_posts_for @display_feeds
   end

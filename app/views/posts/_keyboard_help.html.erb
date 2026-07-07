@@ -1,0 +1,25 @@
+<%# Keyboard shortcuts overlay, toggled with "?" by the keyboard controller. %>
+<div data-keyboard-target="help" data-action="click->keyboard#closeHelp"
+     class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+  <div class="w-full max-w-sm rounded-3xl bg-popover p-6 text-popover-foreground shadow-2xl">
+    <h2 class="mb-4 font-bold">Keyboard shortcuts</h2>
+    <dl class="space-y-2 text-sm">
+      <% [
+           [ "j / k", "Next / previous post" ],
+           [ "o / Enter", "Open original article (marks read)" ],
+           [ "m", "Toggle read / unread" ],
+           [ "u", "Toggle unread-only filter" ],
+           [ "Shift + A", "Mark all read" ],
+           [ "g g / G", "First / last post" ],
+           [ "/", "Focus search" ],
+           [ "?", "Toggle this help" ],
+           [ "Esc", "Close help / leave search" ]
+         ].each do |keys, label| %>
+        <div class="flex items-center justify-between gap-4">
+          <span><%= label %></span>
+          <kbd class="shrink-0 rounded-md bg-muted px-1.5 py-0.5 font-mono text-xs text-muted-foreground"><%= keys %></kbd>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+</div>

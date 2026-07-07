@@ -1,0 +1,11 @@
+<% if notice.present? || alert.present? %>
+  <% message = notice.presence || alert %>
+  <div class="fixed inset-x-4 top-4 z-50 flex justify-center sm:inset-x-auto sm:right-6" data-controller="flash">
+    <div data-action="click->flash#dismiss"
+         class="flex max-w-sm items-start gap-2.5 rounded-2xl px-4 py-3 text-sm shadow-lg cursor-pointer
+                <%= notice.present? ? "bg-popover text-popover-foreground" : "bg-destructive text-primary-foreground" %>">
+      <%= icon(notice.present? ? "circle-check" : "circle-alert", class: "size-4 shrink-0 mt-0.5") %>
+      <span class="flex-1"><%= message %></span>
+    </div>
+  </div>
+<% end %>
